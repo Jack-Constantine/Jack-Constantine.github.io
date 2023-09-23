@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>一些名词解释</title>
+    <link href="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/"/>
+    <url>/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/</url>
+    
+    <content type="html"><![CDATA[<h1 id="一些名词解释">一些名词解释</h1><p><strong><em>大部分的解释都来自网上</em></strong></p><h2 id="latent-space">Latent Space</h2><p>隐空间/潜在空间</p><p>隐空间是<strong>压缩数据的一个表示</strong>。隐空间的作用是为了找到 <strong>模式</strong>(<code>pattern</code>)而学习数据特征并且简化数据表示。</p><img src="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/0.jpg" class="" title="一些名词解释"><p>简单来讲呢就是在低维度的空间下，同类型的东西会十分接近。比如下面三个图的两把椅子在潜空间下便十分相似，与桌子将有十分大的差别。</p><img src="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/1.jpg" class="" title="一些名词解释"><img src="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/2.jpg" class="" title="一些名词解释"><img src="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/3.jpg" class="" title="一些名词解释">]]></content>
+    
+    
+    <categories>
+      
+      <category>名词解释</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>图像编辑</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>DragGAN(交互的基于点的图像操作)</title>
     <link href="/2023/09/21/DragGAN-%E4%BA%A4%E4%BA%92%E7%9A%84%E5%9F%BA%E4%BA%8E%E7%82%B9%E7%9A%84%E5%9B%BE%E5%83%8F%E6%93%8D%E4%BD%9C/"/>
     <url>/2023/09/21/DragGAN-%E4%BA%A4%E4%BA%92%E7%9A%84%E5%9F%BA%E4%BA%8E%E7%82%B9%E7%9A%84%E5%9B%BE%E5%83%8F%E6%93%8D%E4%BD%9C/</url>
