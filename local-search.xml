@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>基于AWTRIX改造的智能机器人</title>
+    <link href="/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/"/>
+    <url>/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/</url>
+    
+    <content type="html"><![CDATA[<h1 id="AWTRIX-Project"><a href="#AWTRIX-Project" class="headerlink" title="AWTRIX Project"></a>AWTRIX Project</h1><p>本项目基于 <strong><a href="https://awtrixdocs.blueforcer.de/#/en-en/awtrix_family">AWTRIX</a></strong> 制作</p><h2 id="项目要实现的目标有："><a href="#项目要实现的目标有：" class="headerlink" title="项目要实现的目标有："></a>项目要实现的目标有：</h2><ol><li>连接ChatGPT</li><li>进行STT(Speech to Text) 与TTS(Text to Speech)功能的实现</li><li>与原始项目AWTRIX的显示屏进行对接</li></ol><h2 id="涉及到的技术栈"><a href="#涉及到的技术栈" class="headerlink" title="涉及到的技术栈"></a>涉及到的技术栈</h2><p><strong>开发板、传感器</strong> 如：ESP32、d1mini(ESP8266)、麦克风、喇叭</p><p><strong>IDE</strong>: Arduino IDE 、B4J、VScode</p><p><strong>编程语言</strong>：C、Python、VB</p><p><strong>后端框架</strong>：Flask</p><h2 id="连接ChatGPT"><a href="#连接ChatGPT" class="headerlink" title="连接ChatGPT"></a>连接ChatGPT</h2><p>通过创建OpenAI账号、申请到免费的额度然后利用其提供的API_key来调用ChatGPT的API。唯一不足就是调用设备需要挂梯子才能使用\</p><p>这里后端采用的是Flask框架，是一个非常简单的Web框架，利用Python可以非常迅速的上手写接口</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, request<br><span class="hljs-keyword">import</span> openai<br><br>app = Flask(__name__)<br><br>openai.api_key = <span class="hljs-string">&quot;我的APIkey&quot;</span><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/ChatGPT&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">ChatGPT</span>():<br>    prompt = request.args.get(<span class="hljs-string">&#x27;prompt&#x27;</span>)<br>    model_engine = <span class="hljs-string">&quot;text-davinci-003&quot;</span><br><br>    completions = openai.Completion.create(<br>        engine=model_engine,<br>        prompt=prompt,<br>        max_tokens=<span class="hljs-number">1024</span>,<br>        n=<span class="hljs-number">1</span>,<br>        stop=<span class="hljs-literal">None</span>,<br>        temperature=<span class="hljs-number">0.5</span>,<br>    )<br>    message = completions.choices[<span class="hljs-number">0</span>].text<br>    <span class="hljs-keyword">return</span> message<br></code></pre></td></tr></table></figure><p>通过Postman去测试这个API可以得到理想的答案</p><img src="/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/1.jpg" class="" title="基于AWTRIX改造的智能机器人"><p>这样的话，连接ChatGPT的功能模块就做完了</p><h2 id="TTS-Text-to-Speech-功能"><a href="#TTS-Text-to-Speech-功能" class="headerlink" title="TTS(Text to Speech)功能"></a>TTS(Text to Speech)功能</h2><p><em><strong>(敬请期待)</strong></em></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>项目</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>物联网</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>一些名词解释</title>
     <link href="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/"/>
     <url>/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/</url>
