@@ -16,24 +16,22 @@
   <meta name="author" content="JackConstantine">
   <meta name="keywords" content="">
   
-    <meta name="description" content="AWTRIX Project本项目基于 AWTRIX 制作 项目要实现的目标有： 连接ChatGPT 进行STT(Speech to Text) 与TTS(Text to Speech)功能的实现 与原始项目AWTRIX的显示屏进行对接  涉及到的技术栈开发板、传感器 如：ESP32、d1mini(ESP8266)、麦克风、喇叭 IDE: Arduino IDE 、B4J、VScode 编程语言：">
+    <meta name="description" content="HTML学习之路 1️⃣学习前端知识的第一步，学习HTML! 初始代码 1&lt;!DOCTYPE html&gt; 最开始都需要这两行代码 标签 html标签 1234&lt;!DOCTYPE html&gt;&lt;html&gt;...&lt;&#x2F;html&gt; html标签用来限定整个文档的开始和结束 head标签 123456&lt;!DOCTYPE html&gt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="基于AWTRIX改造的智能机器人">
-<meta property="og:url" content="http://jack-constantine.github.io/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/index.html">
+<meta property="og:title" content="HTML学习之路">
+<meta property="og:url" content="http://jack-constantine.github.io/2023/10/05/HTML%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/index.html">
 <meta property="og:site_name" content="JackConstantine&#39;s Blog">
-<meta property="og:description" content="AWTRIX Project本项目基于 AWTRIX 制作 项目要实现的目标有： 连接ChatGPT 进行STT(Speech to Text) 与TTS(Text to Speech)功能的实现 与原始项目AWTRIX的显示屏进行对接  涉及到的技术栈开发板、传感器 如：ESP32、d1mini(ESP8266)、麦克风、喇叭 IDE: Arduino IDE 、B4J、VScode 编程语言：">
+<meta property="og:description" content="HTML学习之路 1️⃣学习前端知识的第一步，学习HTML! 初始代码 1&lt;!DOCTYPE html&gt; 最开始都需要这两行代码 标签 html标签 1234&lt;!DOCTYPE html&gt;&lt;html&gt;...&lt;&#x2F;html&gt; html标签用来限定整个文档的开始和结束 head标签 123456&lt;!DOCTYPE html&gt;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://jack-constantine.github.io/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/1.jpg">
-<meta property="article:published_time" content="2023-09-30T08:23:17.000Z">
-<meta property="article:modified_time" content="2023-09-30T08:38:24.307Z">
+<meta property="article:published_time" content="2023-10-04T18:12:03.000Z">
+<meta property="article:modified_time" content="2023-10-04T18:12:50.843Z">
 <meta property="article:author" content="JackConstantine">
-<meta property="article:tag" content="物联网">
+<meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://jack-constantine.github.io/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/1.jpg">
   
   
   
-  <title>基于AWTRIX改造的智能机器人 - JackConstantine&#39;s Blog</title>
+  <title>HTML学习之路 - JackConstantine&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -241,7 +239,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="基于AWTRIX改造的智能机器人"></span>
+            <span id="subtitle" data-typed-text="HTML学习之路"></span>
           
         </div>
 
@@ -252,8 +250,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-09-30 16:23" pubdate>
-          2023年9月30日 下午
+        <time datetime="2023-10-05 02:12" pubdate>
+          2023年10月5日 凌晨
         </time>
       </span>
     
@@ -264,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          855 字
+          733 字
         
       </span>
     
@@ -275,7 +273,7 @@
         
         
         
-          8 分钟
+          7 分钟
         
       </span>
     
@@ -312,30 +310,32 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">基于AWTRIX改造的智能机器人</h1>
+            <h1 id="seo-header">HTML学习之路</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="AWTRIX-Project"><a href="#AWTRIX-Project" class="headerlink" title="AWTRIX Project"></a>AWTRIX Project</h1><p>本项目基于 <strong><a target="_blank" rel="noopener" href="https://awtrixdocs.blueforcer.de/#/en-en/awtrix_family">AWTRIX</a></strong> 制作</p>
-<h2 id="项目要实现的目标有："><a href="#项目要实现的目标有：" class="headerlink" title="项目要实现的目标有："></a>项目要实现的目标有：</h2><ol>
-<li>连接ChatGPT</li>
-<li>进行STT(Speech to Text) 与TTS(Text to Speech)功能的实现</li>
-<li>与原始项目AWTRIX的显示屏进行对接</li>
-</ol>
-<h2 id="涉及到的技术栈"><a href="#涉及到的技术栈" class="headerlink" title="涉及到的技术栈"></a>涉及到的技术栈</h2><p><strong>开发板、传感器</strong> 如：ESP32、d1mini(ESP8266)、麦克风、喇叭</p>
-<p><strong>IDE</strong>: Arduino IDE 、B4J、VScode</p>
-<p><strong>编程语言</strong>：C、Python、VB</p>
-<p><strong>后端框架</strong>：Flask</p>
-<h2 id="连接ChatGPT"><a href="#连接ChatGPT" class="headerlink" title="连接ChatGPT"></a>连接ChatGPT</h2><p>通过创建OpenAI账号、申请到免费的额度然后利用其提供的API_key来调用ChatGPT的API。唯一不足就是调用设备需要挂梯子才能使用\</p>
-<p>这里后端采用的是Flask框架，是一个非常简单的Web框架，利用Python可以非常迅速的上手写接口</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask, request<br><span class="hljs-keyword">import</span> openai<br><br>app = Flask(__name__)<br><br>openai.api_key = <span class="hljs-string">&quot;我的APIkey&quot;</span><br><br><span class="hljs-meta">@app.route(<span class="hljs-params"><span class="hljs-string">&#x27;/ChatGPT&#x27;</span>, methods=[<span class="hljs-string">&#x27;GET&#x27;</span>]</span>)</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">ChatGPT</span>():<br>    prompt = request.args.get(<span class="hljs-string">&#x27;prompt&#x27;</span>)<br>    model_engine = <span class="hljs-string">&quot;text-davinci-003&quot;</span><br><br>    completions = openai.Completion.create(<br>        engine=model_engine,<br>        prompt=prompt,<br>        max_tokens=<span class="hljs-number">1024</span>,<br>        n=<span class="hljs-number">1</span>,<br>        stop=<span class="hljs-literal">None</span>,<br>        temperature=<span class="hljs-number">0.5</span>,<br>    )<br>    message = completions.choices[<span class="hljs-number">0</span>].text<br>    <span class="hljs-keyword">return</span> message<br></code></pre></td></tr></table></figure>
-
-<p>通过Postman去测试这个API可以得到理想的答案</p>
-<img src="/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/1.jpg" srcset="/img/loading.gif" lazyload class="" title="基于AWTRIX改造的智能机器人">
-
-<p>这样的话，连接ChatGPT的功能模块就做完了</p>
-<h2 id="TTS-Text-to-Speech-功能"><a href="#TTS-Text-to-Speech-功能" class="headerlink" title="TTS(Text to Speech)功能"></a>TTS(Text to Speech)功能</h2><p><em><strong>(敬请期待)</strong></em></p>
+                <h1 id="html学习之路">HTML学习之路</h1>
+<p>1️⃣学习前端知识的第一步，学习HTML!</p>
+<h2 id="初始代码">初始代码</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>最开始都需要这两行代码</p>
+<h2 id="标签">标签</h2>
+<h3 id="html标签">html标签</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>html标签用来限定整个文档的开始和结束</p>
+<h3 id="head标签">head标签</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>		...<br>	<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>head标签用来描述文档的信息，不会给用户看</p>
+<h3 id="body标签">body标签</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>		...<br>	<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>body标签用来定义文档主体，包含所有内容，直接展示给用户</p>
+<h3 id="tittle标签">tittle标签</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>My website<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>title标签会显示在浏览器的标题栏中，是head标签中唯一要求包含的东西，写head必须写title</p>
+<h3 id="meta标签">meta标签</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>My website<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>meta标签用于描述一个HTML网页的属性，关键词等。比如UTF-8就是编码格式</p>
 
                 
               </div>
@@ -354,7 +354,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/" class="category-chain-item">学习之路</a>
   
   
 
@@ -369,7 +369,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/" class="print-no-link">#物联网</a>
+        <a href="/tags/%E5%89%8D%E7%AB%AF/" class="print-no-link">#前端</a>
       
     </div>
   
@@ -381,8 +381,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>基于AWTRIX改造的智能机器人</div>
-      <div>http://jack-constantine.github.io/2023/09/30/基于AWTRIX改造的智能机器人/</div>
+      <div>HTML学习之路</div>
+      <div>http://jack-constantine.github.io/2023/10/05/HTML学习之路/</div>
     </div>
     <div class="license-meta">
       
@@ -394,7 +394,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年9月30日</div>
+          <div>2023年10月5日</div>
         </div>
       
       
@@ -426,18 +426,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/05/HTML%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/" title="HTML学习之路">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">HTML学习之路</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/09/23/%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/" title="一些名词解释">
-                        <span class="hidden-mobile">一些名词解释</span>
+                      <a href="/2023/09/30/%E5%9F%BA%E4%BA%8EAWTRIX%E6%94%B9%E9%80%A0%E7%9A%84%E6%99%BA%E8%83%BD%E6%9C%BA%E5%99%A8%E4%BA%BA/" title="基于AWTRIX改造的智能机器人">
+                        <span class="hidden-mobile">基于AWTRIX改造的智能机器人</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
