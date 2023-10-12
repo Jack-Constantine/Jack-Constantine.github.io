@@ -16,16 +16,20 @@
   <meta name="author" content="JackConstantine">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="CSS学习之路 2️⃣ 学习前端知识的第一步，学习CSS! 使用CSS的目的: 使网页变得美观！ 语法 CSS规则由两个主要的部分组成: 选择器，以及一条或多条声明(样式)  123456&lt;style&gt;    h1&amp;#123;        color: blue;        font-size: 12px;    &amp;#125;&lt;&#x2F;style&gt; 引入方式">
+<meta property="og:type" content="article">
 <meta property="og:title" content="CSS学习之路">
 <meta property="og:url" content="http://jack-constantine.github.io/2023/10/06/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/index.html">
 <meta property="og:site_name" content="JackConstantine&#39;s Blog">
+<meta property="og:description" content="CSS学习之路 2️⃣ 学习前端知识的第一步，学习CSS! 使用CSS的目的: 使网页变得美观！ 语法 CSS规则由两个主要的部分组成: 选择器，以及一条或多条声明(样式)  123456&lt;style&gt;    h1&amp;#123;        color: blue;        font-size: 12px;    &amp;#125;&lt;&#x2F;style&gt; 引入方式">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://jack-constantine.github.io/2023/10/06/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/1.jpg">
 <meta property="article:published_time" content="2023-10-05T17:41:07.000Z">
-<meta property="article:modified_time" content="2023-10-05T17:44:26.294Z">
+<meta property="article:modified_time" content="2023-10-12T14:28:10.266Z">
 <meta property="article:author" content="JackConstantine">
 <meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://jack-constantine.github.io/2023/10/06/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/1.jpg">
   
   
   
@@ -260,7 +264,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          2.4k 字
         
       </span>
     
@@ -271,7 +275,7 @@
         
         
         
-          1 分钟
+          20 分钟
         
       </span>
     
@@ -313,7 +317,254 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="css学习之路">CSS学习之路</h1>
+<p>2️⃣ 学习前端知识的第一步，学习CSS!</p>
+<p><strong>使用CSS的目的: 使网页变得美观！</strong></p>
+<h1 id="语法">语法</h1>
+<p>CSS规则由两个主要的部分组成: 选择器，以及一条或多条声明(样式)</p>
+<img src="/2023/10/06/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/1.jpg" srcset="/img/loading.gif" lazyload class="" title="CSS学习之路">
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">    <span class="hljs-selector-tag">h1</span>&#123;</span><br><span class="language-css">        <span class="hljs-attribute">color</span>: blue;</span><br><span class="language-css">        <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;</span><br><span class="language-css">    &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h1 id="引入方式">引入方式</h1>
+<h2 id="内联样式">内联样式</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: aqua; font-size: large&quot;</span>&gt;</span>Hello哈哈哈<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>不好</p>
+</blockquote>
+<h2 id="内部样式">内部样式</h2>
+<p>用style标签</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">    <span class="hljs-selector-tag">h1</span>&#123;</span><br><span class="language-css">        <span class="hljs-attribute">color</span>: blue;</span><br><span class="language-css">        <span class="hljs-attribute">font-size</span>: <span class="hljs-number">12px</span>;</span><br><span class="language-css">    &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>多个页面就不好了</p>
+</blockquote>
+<h2 id="外部样式推荐">外部样式(推荐)</h2>
+<p>有多个文件时，用外部样式很合理，每个HTML页面用link标签链接到样式表。link标签在文档head部分</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>My website<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./public.css&quot;</span> /&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h1 id="选择器">选择器</h1>
+<h2 id="全局选择器">全局选择器</h2>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">*&#123;<br>      <span class="hljs-attribute">font-size</span>: large;<br>      <span class="hljs-attribute">color</span>: red;<br> &#125;<br></code></pre></td></tr></table></figure>
+<h2 id="元素选择器">元素选择器</h2>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">p</span>&#123;<br>	<span class="hljs-attribute">font-size</span>: large;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="类选择器">类选择器</h2>
+<blockquote>
+<p>灵活 使用度高</p>
+</blockquote>
+<p>使用一个 . 来定义</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css">&lt;style&gt;<br>    <span class="hljs-selector-class">.content</span>&#123;<br>        size: <span class="hljs-number">500px</span>;<br>        <span class="hljs-attribute">color</span>: blue;<br>    &#125;<br>    <span class="hljs-selector-class">.content1</span>&#123;<br>        <span class="hljs-attribute">color</span>: blue;<br>    &#125;<br>&lt;/style&gt;<br>&lt;<span class="hljs-selector-tag">p</span> class=&quot;<span class="hljs-attribute">content</span>&quot;&gt;我是<span class="hljs-number">132</span>&lt;/<span class="hljs-selector-tag">p</span>&gt;<br><br></code></pre></td></tr></table></figure>
+<p>定义多个类可以加一个空格</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">&lt;<span class="hljs-selector-tag">p</span> class=&quot;<span class="hljs-attribute">content</span> size&quot;&gt;我是<span class="hljs-number">132</span>&lt;/<span class="hljs-selector-tag">p</span>&gt;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>这样他就同时是content类和size类 同时生效</p>
+</blockquote>
+<h2 id="id选择器">ID选择器</h2>
+<p>针对某一个特定的标签使用，只能使用一次。CSS中的ID选择器用#定义</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs css">&lt;style&gt;<br>	  <span class="hljs-selector-id">#test1</span>&#123;<br>	      <span class="hljs-attribute">font-size</span>: <span class="hljs-number">800px</span>;<br>	      <span class="hljs-attribute">color</span>: burlywood;<br>	  &#125;<br>&lt;/style&gt;<br>&lt;<span class="hljs-selector-tag">p</span> id=&quot;test1&quot;&gt;Hello&lt;/<span class="hljs-selector-tag">p</span>&gt;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>ID是唯一的 同时不能以数字开头</p>
+</blockquote>
+<h2 id="合并选择器">合并选择器</h2>
+<p>语法：选择器1，选择器2,…{}</p>
+<p>作用：提取共同的样式，减少重复代码</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.header</span>, <span class="hljs-selector-class">.footer</span>&#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">800px</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="选择器优先级">选择器优先级</h2>
+<p>权重用数字衡量</p>
+<p>权重：</p>
+<p>元素选择器 1</p>
+<p>class选择器 10</p>
+<p>id选择器 100</p>
+<p>内联样式 1000</p>
+<p>优先级： 行内样式&gt;ID选择器&gt;类选择器&gt;元素选择器</p>
+<h1 id="字体属性">字体属性</h1>
+<h2 id="颜色color">颜色(color)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html">color: red;<br>color:#ff0000;<br>color:rgb(255,0,0);<br>color:rgba(255,0,0,.5);<br></code></pre></td></tr></table></figure>
+<h2 id="字体大小font-size">字体大小(font-size)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">font-size:80px;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Chrome 最小字体是12px</p>
+</blockquote>
+<h2 id="字体粗细font-weight">字体粗细(font-weight)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>bold</th>
+<th>粗体字符</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>bolder</td>
+<td>更粗字符</td>
+</tr>
+<tr class="even">
+<td>lighter</td>
+<td>细体字符</td>
+</tr>
+<tr class="odd">
+<td>100-900</td>
+<td>由粗到细</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字体样式font-style">字体样式(font-style)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">font-style: italic;<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>normal</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>italic</td>
+<td>斜体</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字体font-family">字体(font-family)</h2>
+<blockquote>
+<p>每个值用逗号隔开，必须加上引号</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">font-family: &quot;Courier New&quot;, Courier, monospace;<br></code></pre></td></tr></table></figure>
+<h1 id="背景属性">背景属性</h1>
+<h2 id="背景颜色background-color">背景颜色(background-color)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">background-color: red;<br></code></pre></td></tr></table></figure>
+<h2 id="背景图片background-image">背景图片(background-image)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">background-image: url(&quot;rick.jpg&quot;);<br></code></pre></td></tr></table></figure>
+<h2 id="平铺方式background-repeat">平铺方式(background-repeat)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>repeat</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>repeat-x</td>
+<td>只向水平方向平铺</td>
+</tr>
+<tr class="even">
+<td>repeat-y</td>
+<td>只向垂直方向平铺</td>
+</tr>
+<tr class="odd">
+<td>no-repeat</td>
+<td>不平铺</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">background-repeat: no-repeat;<br></code></pre></td></tr></table></figure>
+<h2 id="背景图像大小background-size">背景图像大小(background-size)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>length</th>
+<th>设置图片宽高，第一个是宽</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>percentage</td>
+<td>计算相对位置区域百分比，第一个是宽</td>
+</tr>
+<tr class="even">
+<td>cover</td>
+<td>保持纵横比并将图片缩放成覆盖背景区域最小大小</td>
+</tr>
+<tr class="odd">
+<td>contain</td>
+<td>保持纵横比并将图片缩放成覆盖背景区域最大大小</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">background-size: 50% 40%;<br></code></pre></td></tr></table></figure>
+<h2
+id="背景图像起始位置background-position">背景图像起始位置(background-position)</h2>
+<p>默认为0% 0%</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">background-position: bottom center;<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>left top</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>right bottom</td>
+</tr>
+<tr class="even">
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>center top</td>
+</tr>
+<tr class="even">
+<td>center center</td>
+</tr>
+<tr class="odd">
+<td>center bottom</td>
+</tr>
+<tr class="even">
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>x% y%</td>
+</tr>
+<tr class="even">
+<td>xpos ypos</td>
+</tr>
+</tbody>
+</table>
+<h1 id="文本属性">文本属性</h1>
+<h2 id="文本水平对齐方式text-align">文本水平对齐方式(text-align)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">text-align: center;<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>left</th>
+<th>居左对齐，默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>right</td>
+<td>排列到右边</td>
+</tr>
+<tr class="even">
+<td>center</td>
+<td>排列到中间</td>
+</tr>
+</tbody>
+</table>
+<h2 id="文本修饰text-decoration">文本修饰(text-decoration)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">text-decoration: overline;<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>underline</th>
+<th>下划线</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>overline</td>
+<td>上划线</td>
+</tr>
+<tr class="even">
+<td>line-through</td>
+<td>删除线</td>
+</tr>
+</tbody>
+</table>
+<h2 id="文本大小写text-transform">文本大小写(text-transform)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">text-transform: capitalize;<br></code></pre></td></tr></table></figure>
+<h2
+id="文本块中首行文本缩进text-indent">文本块中首行文本缩进(text-indent)</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html">text-indent: 50px;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>可以是负值，就是往左移</p>
+</blockquote>
+
                 
               </div>
             
