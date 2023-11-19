@@ -4,6 +4,56 @@
   
   
   <entry>
+    <title>Git常用命令</title>
+    <link href="/2023/11/19/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <url>/2023/11/19/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="创建仓库时">创建仓库时</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git init<br>git remote add origin git@github.com:xxx.git<br></code></pre></td></tr></table></figure><h1 id="统计代码量">统计代码量</h1><h2 id="所有人代码量">所有人代码量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --format=<span class="hljs-string">&#x27;%aN&#x27;</span> | <span class="hljs-built_in">sort</span> -u | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> name; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -en <span class="hljs-string">&quot;<span class="hljs-variable">$name</span>\t&quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$name</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2; loc += $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#x27;</span> -; <span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure><h2 id="某个人代码量">某个人代码量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;xxx&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2; loc += $1 - $2 &#125; END &#123; printf &quot;added lines: %s, removed lines: %s, total lines: %s\n&quot;, add, subs, loc &#125;&#x27;</span> -<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>常用工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>实用</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Vue学习之路</title>
+    <link href="/2023/11/05/Vue%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/"/>
+    <url>/2023/11/05/Vue%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/</url>
+    
+    <content type="html"><![CDATA[<h1 id="准备工作">准备工作</h1><h2 id="安装vue">安装vue</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g @vue/cli<br></code></pre></td></tr></table></figure><h2 id="测试安装">测试安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vue --version<br></code></pre></td></tr></table></figure><h2 id="创建项目">创建项目</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vue create vue-demo<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习之路</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>前端</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>JavaScript学习之路</title>
     <link href="/2023/10/22/JavaScript%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/"/>
     <url>/2023/10/22/JavaScript%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF/</url>
