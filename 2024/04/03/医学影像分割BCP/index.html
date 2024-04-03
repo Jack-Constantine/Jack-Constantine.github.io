@@ -16,16 +16,25 @@
   <meta name="author" content="JackConstantine">
   <meta name="keywords" content="">
   
-    <meta name="description" content="BCP代码https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整code&#x2F;ACDC_BCP_train.py 中 34行 改成这个 1">
+    <meta name="description" content="BCP代码 https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装 我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整 code&#x2F;ACDC_BCP_train.py 中">
 <meta property="og:type" content="article">
 <meta property="og:title" content="医学影像分割BCP">
 <meta property="og:url" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/index.html">
 <meta property="og:site_name" content="JackConstantine&#39;s Blog">
-<meta property="og:description" content="BCP代码https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整code&#x2F;ACDC_BCP_train.py 中 34行 改成这个 1">
+<meta property="og:description" content="BCP代码 https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装 我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整 code&#x2F;ACDC_BCP_train.py 中">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_1.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_2.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_3.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_4.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_5.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_6.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_7.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_8.jpg">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_9.jpg">
 <meta property="article:published_time" content="2024-04-03T11:00:40.000Z">
-<meta property="article:modified_time" content="2024-04-03T11:11:18.725Z">
+<meta property="article:modified_time" content="2024-04-03T11:13:53.614Z">
 <meta property="article:author" content="JackConstantine">
 <meta property="article:tag" content="半监督分割模型">
 <meta name="twitter:card" content="summary_large_image">
@@ -317,34 +326,55 @@
             
               <div class="markdown-body">
                 
-                <h1 id="BCP代码"><a href="#BCP代码" class="headerlink" title="BCP代码"></a>BCP代码</h1><p><a target="_blank" rel="noopener" href="https://github.com/DeepMed-Lab-ECNU/BCP">https://github.com/DeepMed-Lab-ECNU/BCP</a></p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04.</p>
+                <h1 id="bcp代码">BCP代码</h1>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/DeepMed-Lab-ECNU/BCP">https://github.com/DeepMed-Lab-ECNU/BCP</a></p>
+<h1 id="安装">安装</h1>
+<p>我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04.</p>
 <p>安装的时候一定有顺序</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">Pytorch1<span class="hljs-number">.8</span><span class="hljs-number">.0</span><br>medpy<br>matplotlib<br>h5py<br>imageio<br>scikit-image<br>tqdm<br></code></pre></td></tr></table></figure>
-<h1 id="代码调整"><a href="#代码调整" class="headerlink" title="代码调整"></a>代码调整</h1><p><code>code/ACDC_BCP_train.py</code> 中 34行 改成这个</p>
+<h1 id="代码调整">代码调整</h1>
+<p><code>code/ACDC_BCP_train.py</code> 中 34行 改成这个</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">parser.add_argument(<span class="hljs-string">&#x27;--root_path&#x27;</span>, <span class="hljs-built_in">type</span>=<span class="hljs-built_in">str</span>, default=<span class="hljs-string">&#x27;data/byh_data/SSNet_data/ACDC&#x27;</span>, <span class="hljs-built_in">help</span>=<span class="hljs-string">&#x27;Name of Experiment&#x27;</span>)<br></code></pre></td></tr></table></figure>
-<p>然后ACDC的数据需要放在 <code>data/byh_data/SSNet_data/ACDC</code> 中</p>
-<h1 id="数据格式ACDC"><a href="#数据格式ACDC" class="headerlink" title="数据格式ACDC"></a>数据格式ACDC</h1><h2 id="h5"><a href="#h5" class="headerlink" title=".h5"></a><code>.h5</code></h2><img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
-<p>每个frame都有10个slice,每个slice都有 <code>image</code> 和 <code>label</code> 两个</p>
-<p><code>image</code> 是原始图像， <code>label</code> 是分割的标注图像</p>
-
-
-<h2 id="已有的数据格式与维度"><a href="#已有的数据格式与维度" class="headerlink" title="已有的数据格式与维度"></a>已有的数据格式与维度</h2><p>BHSD的数据集格式为 <code>.nii.gz</code> 并且维度有很多不同</p>
-
-<p>将每一个图像与其ground truth合并为一个 <code>.h5</code> 文件，并且加上 <code>image</code>和 <code>label</code>标签</p>
-
-<p><code>slices</code> 中，是每层的图的单独图片，需要将所有的 <code>nii.gz</code> 中的图都提出来，并把对应的层 <code>ground truth</code> 和 <code>image</code> 对应上并保存为 <code>.h5</code></p>
-
-<h1 id="数据分类-训练集、测试集、验证集"><a href="#数据分类-训练集、测试集、验证集" class="headerlink" title="数据分类(训练集、测试集、验证集)"></a>数据分类(训练集、测试集、验证集)</h1><p>问题在于，它的训练集不知道具体是怎么进行选择的</p>
-
+<p>然后ACDC的数据需要放在 <code>data/byh_data/SSNet_data/ACDC</code>
+中</p>
+<h1 id="数据格式acdc">数据格式ACDC</h1>
+<h2 id="h5"><code>.h5</code></h2>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<p>每个frame都有10个slice,每个slice都有 <code>image</code> 和
+<code>label</code> 两个</p>
+<p><code>image</code> 是原始图像， <code>label</code>
+是分割的标注图像</p>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_1.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_2.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<h2 id="已有的数据格式与维度">已有的数据格式与维度</h2>
+<p>BHSD的数据集格式为 <code>.nii.gz</code> 并且维度有很多不同</p>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_3.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<p>将每一个图像与其ground truth合并为一个 <code>.h5</code>
+文件，并且加上 <code>image</code>和 <code>label</code>标签</p>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_4.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<p><code>slices</code> 中，是每层的图的单独图片，需要将所有的
+<code>nii.gz</code> 中的图都提出来，并把对应的层
+<code>ground truth</code> 和 <code>image</code> 对应上并保存为
+<code>.h5</code></p>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_5.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<h1
+id="数据分类训练集测试集验证集">数据分类(训练集、测试集、验证集)</h1>
+<p>问题在于，它的训练集不知道具体是怎么进行选择的</p>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_6.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
 <p>计算了一下，数据集的划分比例是：训练集：测试集：验证集=7:2:1</p>
 <p>我也把我的数据这么划分</p>
-<p>然后把不同数据集的文件都写在了对应的 <code>.list</code> 文件中，并且把属于 <code>train.list</code> 的所有 slices都写在了 <code>train_slices.list</code> 中</p>
+<p>然后把不同数据集的文件都写在了对应的 <code>.list</code>
+文件中，并且把属于 <code>train.list</code> 的所有 slices都写在了
+<code>train_slices.list</code> 中</p>
 <p>共大小39个GB</p>
-
-<h1 id="代码修改的地方"><a href="#代码修改的地方" class="headerlink" title="代码修改的地方"></a>代码修改的地方</h1><h2 id="code-dataloaders-dataset-py"><a href="#code-dataloaders-dataset-py" class="headerlink" title="./code/dataloaders/dataset.py"></a>./code/dataloaders/dataset.py</h2><h2 id="code-BHSD-BCP-train-py"><a href="#code-BHSD-BCP-train-py" class="headerlink" title="./code/BHSD_BCP_train.py"></a>./code/BHSD_BCP_train.py</h2>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_7.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<h1 id="代码修改的地方">代码修改的地方</h1>
+<h2 id="codedataloadersdataset.py">./code/dataloaders/dataset.py</h2>
+<h2 id="codebhsd_bcp_train.py">./code/BHSD_BCP_train.py</h2>
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_8.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
 <p>265行跳入了 <code>unet.py</code> 中255行</p>
-
+<img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled_9.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
 
                 
               </div>
