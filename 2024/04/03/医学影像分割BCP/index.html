@@ -16,24 +16,24 @@
   <meta name="author" content="JackConstantine">
   <meta name="keywords" content="">
   
-    <meta name="description" content="题目 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 points ，其中points[i] &#x3D; [xstart, xend] 表示水平直径在 xstart 和 xend之间的气球。你不知道气球的确切 y 坐标。 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满">
+    <meta name="description" content="BCP代码https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整code&#x2F;ACDC_BCP_train.py 中 34行 改成这个 1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 452 用最少数量的箭引爆气球">
-<meta property="og:url" content="http://jack-constantine.github.io/2023/12/24/LeetCode-452-%E7%94%A8%E6%9C%80%E5%B0%91%E6%95%B0%E9%87%8F%E7%9A%84%E7%AE%AD%E5%BC%95%E7%88%86%E6%B0%94%E7%90%83/index.html">
+<meta property="og:title" content="医学影像分割BCP">
+<meta property="og:url" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/index.html">
 <meta property="og:site_name" content="JackConstantine&#39;s Blog">
-<meta property="og:description" content="题目 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 points ，其中points[i] &#x3D; [xstart, xend] 表示水平直径在 xstart 和 xend之间的气球。你不知道气球的确切 y 坐标。 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满">
+<meta property="og:description" content="BCP代码https:&#x2F;&#x2F;github.com&#x2F;DeepMed-Lab-ECNU&#x2F;BCP 安装我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04. 安装的时候一定有顺序 1234567Pytorch1.8.0medpymatplotlibh5pyimageioscikit-imagetqdm 代码调整code&#x2F;ACDC_BCP_train.py 中 34行 改成这个 1">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://jack-constantine.github.io/2023/12/24/LeetCode-452-%E7%94%A8%E6%9C%80%E5%B0%91%E6%95%B0%E9%87%8F%E7%9A%84%E7%AE%AD%E5%BC%95%E7%88%86%E6%B0%94%E7%90%83/1.jpg">
-<meta property="article:published_time" content="2023-12-24T14:41:49.000Z">
-<meta property="article:modified_time" content="2023-12-24T14:46:35.438Z">
+<meta property="og:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg">
+<meta property="article:published_time" content="2024-04-03T11:00:40.000Z">
+<meta property="article:modified_time" content="2024-04-03T11:11:18.725Z">
 <meta property="article:author" content="JackConstantine">
-<meta property="article:tag" content="贪心算法">
+<meta property="article:tag" content="半监督分割模型">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://jack-constantine.github.io/2023/12/24/LeetCode-452-%E7%94%A8%E6%9C%80%E5%B0%91%E6%95%B0%E9%87%8F%E7%9A%84%E7%AE%AD%E5%BC%95%E7%88%86%E6%B0%94%E7%90%83/1.jpg">
+<meta name="twitter:image" content="http://jack-constantine.github.io/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg">
   
   
   
-  <title>LeetCode 452 用最少数量的箭引爆气球 - JackConstantine&#39;s Blog</title>
+  <title>医学影像分割BCP - JackConstantine&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -241,7 +241,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 452 用最少数量的箭引爆气球"></span>
+            <span id="subtitle" data-typed-text="医学影像分割BCP"></span>
           
         </div>
 
@@ -252,8 +252,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-12-24 22:41" pubdate>
-          2023年12月24日 晚上
+        <time datetime="2024-04-03 19:00" pubdate>
+          2024年4月3日 晚上
         </time>
       </span>
     
@@ -264,7 +264,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          844 字
         
       </span>
     
@@ -275,7 +275,7 @@
         
         
         
-          11 分钟
+          8 分钟
         
       </span>
     
@@ -312,35 +312,39 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">LeetCode 452 用最少数量的箭引爆气球</h1>
+            <h1 id="seo-header">医学影像分割BCP</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="题目">题目</h1>
-<p>有一些球形气球贴在一堵用 XY
-平面表示的墙面上。墙面上的气球记录在整数数组 <code>points</code> ，其中<code>points[i] = [xstart, xend]</code> 表示水平直径在 <code>xstart</code> 和 <code>xend</code>之间的气球。你不知道气球的确切
-y 坐标。</p>
-<p>一支弓箭可以沿着 x
-轴从不同点 <strong>完全垂直</strong> 地射出。在坐标 <code>x</code> 处射出一支箭，若有一个气球的直径的开始和结束坐标为 <code>xstart</code>，<code>xend</code>， 且满足
- <code>xstart ≤ x ≤ xend</code>，则该气球会被 <strong>引爆</strong> 。可以射出的弓箭的数量 <strong>没有限制</strong> 。
-弓箭一旦被射出之后，可以无限地前进。</p>
-<p>给你一个数组 <code>points</code> ，<em>返回引爆所有气球所必须射出的 <strong>最小</strong> 弓箭数</em> 。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：points = <span class="hljs-comment">[<span class="hljs-comment">[10,16]</span>,<span class="hljs-comment">[2,8]</span>,<span class="hljs-comment">[1,6]</span>,<span class="hljs-comment">[7,12]</span>]</span><br>输出：2<br>解释：气球可以用2支箭来爆破:<br>-在x = 6处射出箭，击破气球<span class="hljs-comment">[2,8]</span>和<span class="hljs-comment">[1,6]</span>。<br>-在x = 11处发射箭，击破气球<span class="hljs-comment">[10,16]</span>和<span class="hljs-comment">[7,12]</span>。<br></code></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：points = <span class="hljs-comment">[<span class="hljs-comment">[1,2]</span>,<span class="hljs-comment">[3,4]</span>,<span class="hljs-comment">[5,6]</span>,<span class="hljs-comment">[7,8]</span>]</span><br>输出：4<br>解释：每个气球需要射出一支箭，总共需要4支箭。<br></code></pre></td></tr></table></figure>
-<p><strong>示例 3：</strong></p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：points = <span class="hljs-comment">[<span class="hljs-comment">[1,2]</span>,<span class="hljs-comment">[2,3]</span>,<span class="hljs-comment">[3,4]</span>,<span class="hljs-comment">[4,5]</span>]</span><br>输出：2<br>解释：气球可以用2支箭来爆破:<br>- 在x = 2处发射箭，击破气球<span class="hljs-comment">[1,2]</span>和<span class="hljs-comment">[2,3]</span>。<br>- 在x = 4处射出箭，击破气球<span class="hljs-comment">[3,4]</span>和<span class="hljs-comment">[4,5]</span>。<br></code></pre></td></tr></table></figure>
-<h1 id="思路">思路</h1>
-<img src="/2023/12/24/LeetCode-452-%E7%94%A8%E6%9C%80%E5%B0%91%E6%95%B0%E9%87%8F%E7%9A%84%E7%AE%AD%E5%BC%95%E7%88%86%E6%B0%94%E7%90%83/1.jpg" srcset="/img/loading.gif" lazyload class="" title="LeetCode-452-用最少数量的箭引爆气球">
-<p>我们可以随机射出一支箭，实际上把这支箭使劲往右移指导移到其中一个重叠气球区间的右边界就是箭向右移动的临界值。所以我们只需要先确定一个气球
-<code>A</code>的结尾，并加入下一个气球 <code>B</code>，如果新加的气球
-<code>A</code>的头大于 <code>B</code>
-的尾那么箭就需要再射一支，如果不大于那么就可以一箭双雕。</p>
-<p>所以我们首先对气球区间根据气球的结尾进行排序，然后进行上述操作。最终得到结果</p>
-<h1 id="代码">代码</h1>
-<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * @lc app=leetcode.cn id=452 lang=javascript</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * [452] 用最少数量的箭引爆气球</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-comment">// @lc code=start</span><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @param &#123;number[][]&#125; points</span><br><span class="hljs-comment"> * @return &#123;number&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> findMinArrowShots = <span class="hljs-keyword">function</span> (<span class="hljs-params">points</span>) &#123;<br>    points.<span class="hljs-built_in">sort</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">a, b</span>) &#123;<br>        <span class="hljs-keyword">return</span> a[<span class="hljs-number">1</span>] - b[<span class="hljs-number">1</span>];<br>    &#125;)<br>    let pos=points[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>];<br>    let ans=<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span> (let balloon of points) &#123;<br>        <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(<span class="hljs-string">&quot;ballon[0] is &quot;</span>+ balloon[<span class="hljs-number">0</span>]);<br>        <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(<span class="hljs-string">&quot;pos is &quot;</span>+ pos);<br>        <span class="hljs-keyword">if</span>(balloon[<span class="hljs-number">0</span>]&gt;pos)<br>        &#123;<br>            pos=balloon[<span class="hljs-number">1</span>];<br>            ans++;<br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(points);<br>    <span class="hljs-keyword">return</span> ans;<br>    <br>&#125;;<br><span class="hljs-comment">// @lc code=end</span><br></code></pre></td></tr></table></figure>
+                <h1 id="BCP代码"><a href="#BCP代码" class="headerlink" title="BCP代码"></a>BCP代码</h1><p><a target="_blank" rel="noopener" href="https://github.com/DeepMed-Lab-ECNU/BCP">https://github.com/DeepMed-Lab-ECNU/BCP</a></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>我的环境是Nvidian A10, CUDA11.2， Ubuntu20.04.</p>
+<p>安装的时候一定有顺序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">Pytorch1<span class="hljs-number">.8</span><span class="hljs-number">.0</span><br>medpy<br>matplotlib<br>h5py<br>imageio<br>scikit-image<br>tqdm<br></code></pre></td></tr></table></figure>
+<h1 id="代码调整"><a href="#代码调整" class="headerlink" title="代码调整"></a>代码调整</h1><p><code>code/ACDC_BCP_train.py</code> 中 34行 改成这个</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">parser.add_argument(<span class="hljs-string">&#x27;--root_path&#x27;</span>, <span class="hljs-built_in">type</span>=<span class="hljs-built_in">str</span>, default=<span class="hljs-string">&#x27;data/byh_data/SSNet_data/ACDC&#x27;</span>, <span class="hljs-built_in">help</span>=<span class="hljs-string">&#x27;Name of Experiment&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<p>然后ACDC的数据需要放在 <code>data/byh_data/SSNet_data/ACDC</code> 中</p>
+<h1 id="数据格式ACDC"><a href="#数据格式ACDC" class="headerlink" title="数据格式ACDC"></a>数据格式ACDC</h1><h2 id="h5"><a href="#h5" class="headerlink" title=".h5"></a><code>.h5</code></h2><img src="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/Untitled.jpg" srcset="/img/loading.gif" lazyload class="" title="医学影像分割BCP">
+<p>每个frame都有10个slice,每个slice都有 <code>image</code> 和 <code>label</code> 两个</p>
+<p><code>image</code> 是原始图像， <code>label</code> 是分割的标注图像</p>
+
+
+<h2 id="已有的数据格式与维度"><a href="#已有的数据格式与维度" class="headerlink" title="已有的数据格式与维度"></a>已有的数据格式与维度</h2><p>BHSD的数据集格式为 <code>.nii.gz</code> 并且维度有很多不同</p>
+
+<p>将每一个图像与其ground truth合并为一个 <code>.h5</code> 文件，并且加上 <code>image</code>和 <code>label</code>标签</p>
+
+<p><code>slices</code> 中，是每层的图的单独图片，需要将所有的 <code>nii.gz</code> 中的图都提出来，并把对应的层 <code>ground truth</code> 和 <code>image</code> 对应上并保存为 <code>.h5</code></p>
+
+<h1 id="数据分类-训练集、测试集、验证集"><a href="#数据分类-训练集、测试集、验证集" class="headerlink" title="数据分类(训练集、测试集、验证集)"></a>数据分类(训练集、测试集、验证集)</h1><p>问题在于，它的训练集不知道具体是怎么进行选择的</p>
+
+<p>计算了一下，数据集的划分比例是：训练集：测试集：验证集=7:2:1</p>
+<p>我也把我的数据这么划分</p>
+<p>然后把不同数据集的文件都写在了对应的 <code>.list</code> 文件中，并且把属于 <code>train.list</code> 的所有 slices都写在了 <code>train_slices.list</code> 中</p>
+<p>共大小39个GB</p>
+
+<h1 id="代码修改的地方"><a href="#代码修改的地方" class="headerlink" title="代码修改的地方"></a>代码修改的地方</h1><h2 id="code-dataloaders-dataset-py"><a href="#code-dataloaders-dataset-py" class="headerlink" title="./code/dataloaders/dataset.py"></a>./code/dataloaders/dataset.py</h2><h2 id="code-BHSD-BCP-train-py"><a href="#code-BHSD-BCP-train-py" class="headerlink" title="./code/BHSD_BCP_train.py"></a>./code/BHSD_BCP_train.py</h2>
+<p>265行跳入了 <code>unet.py</code> 中255行</p>
+
 
                 
               </div>
@@ -359,7 +363,7 @@ y 坐标。</p>
     
       <span class="category-chain">
         
-  <a href="/categories/LeetCode%E9%A2%98%E8%A7%A3/" class="category-chain-item">LeetCode题解</a>
+  <a href="/categories/%E7%A7%91%E7%A0%94%E8%AE%BA%E6%96%87/" class="category-chain-item">科研论文</a>
   
   
 
@@ -374,7 +378,7 @@ y 坐标。</p>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" class="print-no-link">#贪心算法</a>
+        <a href="/tags/%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%88%86%E5%89%B2%E6%A8%A1%E5%9E%8B/" class="print-no-link">#半监督分割模型</a>
       
     </div>
   
@@ -386,8 +390,8 @@ y 坐标。</p>
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 452 用最少数量的箭引爆气球</div>
-      <div>http://jack-constantine.github.io/2023/12/24/LeetCode-452-用最少数量的箭引爆气球/</div>
+      <div>医学影像分割BCP</div>
+      <div>http://jack-constantine.github.io/2024/04/03/医学影像分割BCP/</div>
     </div>
     <div class="license-meta">
       
@@ -399,7 +403,7 @@ y 坐标。</p>
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年12月24日</div>
+          <div>2024年4月3日</div>
         </div>
       
       
@@ -431,18 +435,12 @@ y 坐标。</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/04/03/%E5%8C%BB%E5%AD%A6%E5%BD%B1%E5%83%8F%E5%88%86%E5%89%B2BCP/" title="医学影像分割BCP">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">医学影像分割BCP</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/24/LeetCode-435-%E6%97%A0%E9%87%8D%E5%8F%A0%E5%8C%BA%E9%97%B4/" title="LeetCode 435 无重叠区间">
-                        <span class="hidden-mobile">LeetCode 435 无重叠区间</span>
+                      <a href="/2023/12/24/LeetCode-452-%E7%94%A8%E6%9C%80%E5%B0%91%E6%95%B0%E9%87%8F%E7%9A%84%E7%AE%AD%E5%BC%95%E7%88%86%E6%B0%94%E7%90%83/" title="LeetCode 452 用最少数量的箭引爆气球">
+                        <span class="hidden-mobile">LeetCode 452 用最少数量的箭引爆气球</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
