@@ -8,7 +8,7 @@
     <link href="/2025/01/31/England-Trip/"/>
     <url>/2025/01/31/England-Trip/</url>
     
-    <content type="html"><![CDATA[<h2>伦敦及周边旅行路线</h2><iframe src="/route_map.html" width="100%" height="600px" style="border:none;"></iframe>]]></content>
+    <content type="html"><![CDATA[<h1 id="整体规划">整体规划</h1><iframe src="/route_map_full.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="伦敦">伦敦</h1><iframe src="/route_map_Lodon.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="曼彻斯特">曼彻斯特</h1><iframe src="/route_map_Manchester.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="牛津">牛津</h1><iframe src="/route_map_Oxford.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="剑桥">剑桥</h1><iframe src="/route_map_Cambridge.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="约克">约克</h1><iframe src="/route_map_York.html" width="100%" height="600px" style="border:none;"></iframe><h1 id="巴斯">巴斯</h1><iframe src="/route_map_Bath.html" width="100%" height="600px" style="border:none;"></iframe>]]></content>
     
     
     
