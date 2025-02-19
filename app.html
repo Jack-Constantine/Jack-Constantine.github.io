@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考研英语单词词频统计</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #search-input {
+            margin-bottom: 20px;
+            padding: 5px;
+            width: 300px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+        .table-container {
+            height: 400px; /* 定义表格的高度 */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>考研英语单词词频统计</h1>
+
+    <input type="text" id="search-input" placeholder="输入要查找的单词" oninput="searchWords()" />
+
+    <div class="table-container" id="table-container">
+        <table id="words-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('word')">单词</th>
+                    <th onclick="sortTable('frequency')">频率</th>
+                    <th>位置</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- 行数据会在 JavaScript 中填充 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let wordsData = [];
+        let visibleData = [];
+        const pageSize = 20; // 每页显示 20 行数据
+        let sortOrder = { word: true, frequency: true }; // 默认按升序排序
+
+        // 检查localStorage中是否有数据
+        if (localStorage.getItem('wordsData')) {
+            wordsData = JSON.parse(localStorage.getItem('wordsData'));
+            initializeTable();
+        } else {
+            // 读取CSV文件并解析
+            fetch('data.csv')  // 假设文件放在服务器上，路径为 data.csv
+                .then(response => response.text())
+                .then(csvContent => {
+                    parseCSV(csvContent);
+                })
+                .catch(error => {
+                    console.error('读取 CSV 文件时出错:', error);
+                });
+        }
+
+        // 解析CSV数据
+        function parseCSV(csvContent) {
+            const lines = csvContent.split('\n');
+            wordsData = [];
+            const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+
+            for (let line of lines) {
+                const columns = line.match(regex);
+                if (columns && columns.length === 3) {
+                    wordsData.push({
+                        word: columns[0].trim(),
+                        frequency: parseInt(columns[1].trim(), 10),
+                        position: columns[2].trim().replace(/(^"|"$)/g, '') // 去掉引号
+                    });
+                }
+            }
+            // 将数据存储到localStorage中
+            localStorage.setItem('wordsData', JSON.stringify(wordsData));
+            console.log(wordsData.length);
+            initializeTable();
+        }
+
+        // 初始化表格
+        function initializeTable() {
+            // 使用 Intersection Observer 来监听表格滚动
+            const observer = new IntersectionObserver(handleScroll, {
+                root: document.getElementById('table-container'),
+                rootMargin: '0px',
+                threshold: 1.0
+            });
+
+            const sentinel = document.createElement('div');
+            sentinel.style.height = '1px';
+            document.getElementById('table-body').appendChild(sentinel);
+
+            observer.observe(sentinel);
+            loadVisibleData(0, pageSize); // 初始加载第一页数据
+        }
+
+        // 处理滚动事件，懒加载数据
+        function handleScroll(entries, observer) {
+            const tableContainer = document.getElementById('table-container');
+            const sentinel = entries[0];
+
+            if (sentinel.isIntersecting) {
+                const currentLength = visibleData.length;
+                loadVisibleData(currentLength, currentLength + pageSize);
+            }
+        }
+
+        // 加载可见区域的数据
+        function loadVisibleData(start, end) {
+            const tableBody = document.getElementById('table-body');
+            const newData = wordsData.slice(start, end);
+            newData.forEach((data) => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = data.word;
+                row.insertCell(1).textContent = data.frequency;
+                row.insertCell(2).textContent = data.position;
+            });
+            visibleData = [...visibleData, ...newData];
+        }
+
+        // 查找并过滤显示单词，联想搜索功能
+        function searchWords() {
+            const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+            const filteredWords = wordsData.filter((data) => data.word.toLowerCase().includes(searchTerm));
+            updateTable(filteredWords);
+        }
+
+        // 更新表格显示内容
+        function updateTable(filteredWords) {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';  // 清空当前表格内容
+            filteredWords.forEach((data) => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = data.word;
+                row.insertCell(1).textContent = data.frequency;
+                row.insertCell(2).textContent = data.position;
+            });
+        }
+
+        // 按列排序功能
+        function sortTable(column) {
+            const order = sortOrder[column];
+
+            let sortedWords = [...wordsData];  // 复制数据，避免修改原数据
+
+            if (column === 'word') {
+                sortedWords = sortedWords.sort((a, b) => {
+                    return order ? a.word.localeCompare(b.word) : b.word.localeCompare(a.word);
+                });
+            } else if (column === 'frequency') {
+                sortedWords = sortedWords.sort((a, b) => {
+                    return order ? a.frequency - b.frequency : b.frequency - a.frequency;
+                });
+            }
+
+            // 只对当前显示的数据排序
+            updateTable(sortedWords);
+
+            // 更新排序状态
+            sortOrder[column] = !order;  // 切换排序顺序
+        }
+    </script>
+</body>
+</html>
