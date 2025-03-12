@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配料相似性数据查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        .summary {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .substring-nav {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .substring-nav h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .substring-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .substring-item {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        
+        .substring-item:hover {
+            background-color: #2980b9;
+        }
+        
+        .group-container {
+            margin-bottom: 30px;
+        }
+        
+        .group-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .group-header {
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .group-content {
+            padding: 15px;
+        }
+        
+        .ingredient-list {
+            list-style-type: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .ingredient-item {
+            background-color: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .search-container {
+            margin-bottom: 15px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="home_bar.html" class="back-btn">← 返回鸡尾酒大全</a>
+        
+        <header>
+            <h1>配料相似性数据查看器</h1>
+            <p>查看具有公共子串的配料组</p>
+        </header>
+        
+        <div class="summary">
+            <h2>数据摘要</h2>
+            <p>共发现 <strong id="totalGroups">0</strong> 组具有公共子串的配料。</p>
+        </div>
+        
+        <div class="substring-nav">
+            <h2>公共子串导航</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="搜索公共子串...">
+            </div>
+            <div class="substring-list" id="substringList">
+                <div class="loading">正在加载数据...</div>
+            </div>
+        </div>
+        
+        <div class="group-container" id="groupContainer">
+            <div class="loading">正在加载数据...</div>
+        </div>
+        
+        <footer>
+            <p>鸡尾酒配料相似性数据查看器 &copy; 2023</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const substringList = document.getElementById('substringList');
+            const groupContainer = document.getElementById('groupContainer');
+            const totalGroupsElement = document.getElementById('totalGroups');
+            const searchInput = document.getElementById('searchInput');
+            
+            let similarityData = null;
+            
+            // 加载JSON数据
+            fetch('ingredient_similarity.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络响应不正常');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    similarityData = data;
+                    renderData(data);
+                    
+                    // 添加搜索功能
+                    searchInput.addEventListener('input', function() {
+                        filterSubstrings(this.value);
+                    });
+                })
+                .catch(error => {
+                    console.error('获取数据时出错:', error);
+                    substringList.innerHTML = `<div class="error">加载数据时出错: ${error.message}</div>`;
+                    groupContainer.innerHTML = '';
+                });
+            
+            // 渲染数据
+            function renderData(data) {
+                // 更新总组数
+                totalGroupsElement.textContent = data.total_groups;
+                
+                // 渲染子串导航
+                renderSubstringNav(data.groups);
+                
+                // 渲染组数据
+                renderGroups(data.groups);
+            }
+            
+            // 渲染子串导航
+            function renderSubstringNav(groups) {
+                // 按子串字母顺序排序
+                const sortedGroups = [...groups].sort((a, b) => 
+                    a.common_substring.localeCompare(b.common_substring)
+                );
+                
+                substringList.innerHTML = sortedGroups.map(group => 
+                    `<a href="#group-${encodeURIComponent(group.common_substring)}" 
+                        class="substring-item" 
+                        data-substring="${group.common_substring}">
+                        ${group.common_substring} (${group.ingredients.length})
+                    </a>`
+                ).join('');
+            }
+            
+            // 渲染组数据
+            function renderGroups(groups) {
+                // 按组内配料数量排序
+                const sortedGroups = [...groups].sort((a, b) => 
+                    b.ingredients.length - a.ingredients.length
+                );
+                
+                groupContainer.innerHTML = sortedGroups.map(group => `
+                    <div class="group-card" id="group-${encodeURIComponent(group.common_substring)}">
+                        <div class="group-header">
+                            <h2>公共子串: "${group.common_substring}" (出现在 ${group.ingredients.length} 个配料中)</h2>
+                        </div>
+                        <div class="group-content">
+                            <ul class="ingredient-list">
+                                ${group.ingredients.sort().map(ingredient => 
+                                    `<li class="ingredient-item">${ingredient}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // 过滤子串
+            function filterSubstrings(searchTerm) {
+                if (!similarityData) return;
+                
+                const term = searchTerm.toLowerCase();
+                const items = substringList.querySelectorAll('.substring-item');
+                
+                items.forEach(item => {
+                    const substring = item.getAttribute('data-substring').toLowerCase();
+                    if (substring.includes(term)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

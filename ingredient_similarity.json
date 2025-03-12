@@ -1,0 +1,722 @@
+{
+  "total_groups": 85,
+  "groups": [
+    {
+      "common_substring": "rum",
+      "ingredients": [
+        "151 proof rum",
+        "Añejo rum",
+        "Dark Rum",
+        "Dark rum",
+        "Gold rum",
+        "Light rum",
+        "Malibu rum",
+        "Rum",
+        "Spiced rum",
+        "White Rum",
+        "White rum",
+        "blackstrap rum"
+      ]
+    },
+    {
+      "common_substring": "absolut",
+      "ingredients": [
+        "Absolut Citron",
+        "Absolut Kurant",
+        "Absolut Peppar",
+        "Absolut Vodka"
+      ]
+    },
+    {
+      "common_substring": "vodka",
+      "ingredients": [
+        "Absolut Vodka",
+        "Cranberry vodka",
+        "Lime vodka",
+        "Peach Vodka",
+        "Raspberry vodka",
+        "Vodka"
+      ]
+    },
+    {
+      "common_substring": "syrup",
+      "ingredients": [
+        "Agave Syrup",
+        "Chocolate syrup",
+        "Coconut syrup",
+        "Corn syrup",
+        "Ginger Syrup",
+        "Honey syrup",
+        "Maple syrup",
+        "Mint syrup",
+        "Orgeat Syrup",
+        "Orgeat syrup",
+        "Passion fruit syrup",
+        "Pineapple Syrup",
+        "Raspberry syrup",
+        "Rosemary Syrup",
+        "Sugar Syrup",
+        "Sugar syrup",
+        "Vanilla syrup"
+      ]
+    },
+    {
+      "common_substring": "angostura",
+      "ingredients": [
+        "Angostura Bitters",
+        "Angostura bitters"
+      ]
+    },
+    {
+      "common_substring": "bitters",
+      "ingredients": [
+        "Angostura Bitters",
+        "Angostura bitters",
+        "Bitters",
+        "Orange Bitters",
+        "Orange bitters",
+        "Peach Bitters",
+        "Peychaud bitters"
+      ]
+    },
+    {
+      "common_substring": "apple",
+      "ingredients": [
+        "Apple",
+        "Apple Brandy",
+        "Apple brandy",
+        "Apple juice"
+      ]
+    },
+    {
+      "common_substring": "brandy",
+      "ingredients": [
+        "Apple Brandy",
+        "Apple brandy",
+        "Apricot Brandy",
+        "Apricot brandy",
+        "Blackberry brandy",
+        "Brandy",
+        "Cherry brandy",
+        "Coffee brandy",
+        "Peach brandy"
+      ]
+    },
+    {
+      "common_substring": "juice",
+      "ingredients": [
+        "Apple juice",
+        "Cherry Juice",
+        "Cranberry Juice",
+        "Cranberry juice",
+        "Fresh Lemon Juice",
+        "Fresh Lime Juice",
+        "Fruit juice",
+        "Grape juice",
+        "Grapefruit Juice",
+        "Grapefruit juice",
+        "Lemon Juice",
+        "Lemon juice",
+        "Lime Juice",
+        "Lime juice",
+        "Orange Juice",
+        "Orange juice",
+        "Passion fruit juice",
+        "Pineapple Juice",
+        "Pineapple juice",
+        "Pomegranate juice",
+        "Tomato Juice",
+        "Tomato juice",
+        "lemon juice",
+        "pineapple juice"
+      ]
+    },
+    {
+      "common_substring": "apricot",
+      "ingredients": [
+        "Apricot Brandy",
+        "Apricot Nectar",
+        "Apricot brandy"
+      ]
+    },
+    {
+      "common_substring": "nectar",
+      "ingredients": [
+        "Apricot Nectar",
+        "Peach nectar"
+      ]
+    },
+    {
+      "common_substring": "irish",
+      "ingredients": [
+        "Baileys irish cream",
+        "Irish Whiskey",
+        "Irish cream",
+        "Irish whiskey"
+      ]
+    },
+    {
+      "common_substring": "cream",
+      "ingredients": [
+        "Baileys irish cream",
+        "Cream",
+        "Cream of coconut",
+        "Heavy cream",
+        "Irish cream",
+        "Light cream",
+        "Vanilla ice-cream",
+        "Whipped cream",
+        "Whipping cream"
+      ]
+    },
+    {
+      "common_substring": "banana",
+      "ingredients": [
+        "Banana",
+        "Banana liqueur"
+      ]
+    },
+    {
+      "common_substring": "liqueur",
+      "ingredients": [
+        "Banana liqueur",
+        "Chambord raspberry liqueur",
+        "Cherry liqueur",
+        "Chocolate liqueur",
+        "Coconut Liqueur",
+        "Coffee liqueur",
+        "Godiva liqueur",
+        "Kiwi liqueur",
+        "Maraschino Liqueur",
+        "Maraschino liqueur",
+        "Melon Liqueur",
+        "Midori melon liqueur",
+        "Raspberry Liqueur",
+        "maraschino liqueur"
+      ]
+    },
+    {
+      "common_substring": "beer",
+      "ingredients": [
+        "Beer",
+        "Ginger Beer",
+        "Root beer"
+      ]
+    },
+    {
+      "common_substring": "lemon",
+      "ingredients": [
+        "Bitter lemon",
+        "Fresh Lemon Juice",
+        "Lemon",
+        "Lemon Juice",
+        "Lemon Peel",
+        "Lemon juice",
+        "Lemon peel",
+        "Lemon-lime soda",
+        "lemon",
+        "lemon juice"
+      ]
+    },
+    {
+      "common_substring": "sambuca",
+      "ingredients": [
+        "Black Sambuca",
+        "Sambuca"
+      ]
+    },
+    {
+      "common_substring": "pepper",
+      "ingredients": [
+        "Black pepper",
+        "Cayenne pepper",
+        "Dr. Pepper",
+        "Pepper"
+      ]
+    },
+    {
+      "common_substring": "cordial",
+      "ingredients": [
+        "Blackcurrant cordial",
+        "Elderflower cordial"
+      ]
+    },
+    {
+      "common_substring": "scotch",
+      "ingredients": [
+        "Blended Scotch",
+        "Islay single malt Scotch",
+        "Scotch"
+      ]
+    },
+    {
+      "common_substring": "blended",
+      "ingredients": [
+        "Blended Scotch",
+        "Blended whiskey"
+      ]
+    },
+    {
+      "common_substring": "whiskey",
+      "ingredients": [
+        "Blended whiskey",
+        "Irish Whiskey",
+        "Irish whiskey",
+        "Rye Whiskey",
+        "Rye whiskey",
+        "Tennessee whiskey",
+        "Whiskey"
+      ]
+    },
+    {
+      "common_substring": "orange",
+      "ingredients": [
+        "Blood Orange",
+        "Orange",
+        "Orange Bitters",
+        "Orange Curacao",
+        "Orange Juice",
+        "Orange Peel",
+        "Orange bitters",
+        "Orange juice",
+        "Orange peel",
+        "Orange spiral"
+      ]
+    },
+    {
+      "common_substring": "curacao",
+      "ingredients": [
+        "Blue Curacao",
+        "Orange Curacao"
+      ]
+    },
+    {
+      "common_substring": "sugar",
+      "ingredients": [
+        "Brown sugar",
+        "Powdered sugar",
+        "Sugar",
+        "Sugar Syrup",
+        "Sugar syrup",
+        "demerara Sugar"
+      ]
+    },
+    {
+      "common_substring": "schnapps",
+      "ingredients": [
+        "Butterscotch schnapps",
+        "Peach schnapps",
+        "Peachtree schnapps",
+        "Strawberry schnapps"
+      ]
+    },
+    {
+      "common_substring": "carbonated",
+      "ingredients": [
+        "Carbonated soft drink",
+        "Carbonated water"
+      ]
+    },
+    {
+      "common_substring": "salt",
+      "ingredients": [
+        "Celery salt",
+        "Salt"
+      ]
+    },
+    {
+      "common_substring": "raspberry",
+      "ingredients": [
+        "Chambord raspberry liqueur",
+        "Raspberry Liqueur",
+        "Raspberry syrup",
+        "Raspberry vodka"
+      ]
+    },
+    {
+      "common_substring": "cherry",
+      "ingredients": [
+        "Cherry",
+        "Cherry Heering",
+        "Cherry Juice",
+        "Cherry brandy",
+        "Cherry liqueur",
+        "Maraschino Cherry",
+        "Maraschino cherry"
+      ]
+    },
+    {
+      "common_substring": "chocolate",
+      "ingredients": [
+        "Chocolate",
+        "Chocolate liqueur",
+        "Chocolate syrup",
+        "Hot Chocolate"
+      ]
+    },
+    {
+      "common_substring": "soda",
+      "ingredients": [
+        "Club soda",
+        "Grape Soda",
+        "Lemon-lime soda",
+        "Soda Water",
+        "Soda water"
+      ]
+    },
+    {
+      "common_substring": "cola",
+      "ingredients": [
+        "Coca-Cola",
+        "Pepsi Cola"
+      ]
+    },
+    {
+      "common_substring": "coconut",
+      "ingredients": [
+        "Coconut Liqueur",
+        "Coconut milk",
+        "Coconut syrup",
+        "Cream of coconut"
+      ]
+    },
+    {
+      "common_substring": "milk",
+      "ingredients": [
+        "Coconut milk",
+        "Condensed milk",
+        "Milk"
+      ]
+    },
+    {
+      "common_substring": "coffee",
+      "ingredients": [
+        "Coffee",
+        "Coffee brandy",
+        "Coffee liqueur"
+      ]
+    },
+    {
+      "common_substring": "cranberry",
+      "ingredients": [
+        "Cranberry Juice",
+        "Cranberry juice",
+        "Cranberry vodka"
+      ]
+    },
+    {
+      "common_substring": "banane",
+      "ingredients": [
+        "Creme De Banane",
+        "Creme de Banane"
+      ]
+    },
+    {
+      "common_substring": "creme",
+      "ingredients": [
+        "Creme De Banane",
+        "Creme de Banane",
+        "Creme de Cacao",
+        "Creme de Cassis",
+        "Creme de Mure",
+        "Green Creme de Menthe",
+        "White Creme de Menthe"
+      ]
+    },
+    {
+      "common_substring": "mix",
+      "ingredients": [
+        "Daiquiri mix",
+        "Pina colada mix",
+        "Sour mix"
+      ]
+    },
+    {
+      "common_substring": "vermouth",
+      "ingredients": [
+        "Dry Vermouth",
+        "Rosso Vermouth",
+        "Sweet Vermouth",
+        "Vermouth"
+      ]
+    },
+    {
+      "common_substring": "egg",
+      "ingredients": [
+        "Egg",
+        "Egg White",
+        "Egg Yolk",
+        "Egg white",
+        "Egg yolk"
+      ]
+    },
+    {
+      "common_substring": "yolk",
+      "ingredients": [
+        "Egg Yolk",
+        "Egg yolk"
+      ]
+    },
+    {
+      "common_substring": "lime",
+      "ingredients": [
+        "Fresh Lime Juice",
+        "Lemon-lime soda",
+        "Lime",
+        "Lime Juice",
+        "Lime juice",
+        "Lime peel",
+        "Lime vodka"
+      ]
+    },
+    {
+      "common_substring": "fruit",
+      "ingredients": [
+        "Fruit",
+        "Fruit juice",
+        "Fruit punch",
+        "Passion fruit juice",
+        "Passion fruit syrup"
+      ]
+    },
+    {
+      "common_substring": "gin",
+      "ingredients": [
+        "Gin",
+        "Sloe gin",
+        "gin"
+      ]
+    },
+    {
+      "common_substring": "ginger",
+      "ingredients": [
+        "Ginger",
+        "Ginger Beer",
+        "Ginger Syrup",
+        "Ginger ale"
+      ]
+    },
+    {
+      "common_substring": "grape",
+      "ingredients": [
+        "Grape Soda",
+        "Grape juice"
+      ]
+    },
+    {
+      "common_substring": "grapefruit",
+      "ingredients": [
+        "Grapefruit Juice",
+        "Grapefruit juice"
+      ]
+    },
+    {
+      "common_substring": "chartreuse",
+      "ingredients": [
+        "Green Chartreuse",
+        "Yellow Chartreuse"
+      ]
+    },
+    {
+      "common_substring": "green",
+      "ingredients": [
+        "Green Chartreuse",
+        "Green Creme de Menthe"
+      ]
+    },
+    {
+      "common_substring": "menthe",
+      "ingredients": [
+        "Green Creme de Menthe",
+        "White Creme de Menthe"
+      ]
+    },
+    {
+      "common_substring": "honey",
+      "ingredients": [
+        "Honey",
+        "Honey syrup"
+      ]
+    },
+    {
+      "common_substring": "sauce",
+      "ingredients": [
+        "Hot Sauce",
+        "Soy Sauce",
+        "Tabasco sauce",
+        "Worcestershire Sauce"
+      ]
+    },
+    {
+      "common_substring": "jack",
+      "ingredients": [
+        "Jack Daniels",
+        "Yukon Jack"
+      ]
+    },
+    {
+      "common_substring": "kiwi",
+      "ingredients": [
+        "Kiwi",
+        "Kiwi liqueur"
+      ]
+    },
+    {
+      "common_substring": "peel",
+      "ingredients": [
+        "Lemon Peel",
+        "Lemon peel",
+        "Lime peel",
+        "Orange Peel",
+        "Orange peel"
+      ]
+    },
+    {
+      "common_substring": "lemonade",
+      "ingredients": [
+        "Lemonade",
+        "Pink lemonade"
+      ]
+    },
+    {
+      "common_substring": "lillet",
+      "ingredients": [
+        "Lillet",
+        "Lillet Blanc"
+      ]
+    },
+    {
+      "common_substring": "maraschino",
+      "ingredients": [
+        "Maraschino Cherry",
+        "Maraschino Liqueur",
+        "Maraschino cherry",
+        "Maraschino liqueur",
+        "maraschino liqueur"
+      ]
+    },
+    {
+      "common_substring": "melon",
+      "ingredients": [
+        "Melon Liqueur",
+        "Midori melon liqueur"
+      ]
+    },
+    {
+      "common_substring": "mint",
+      "ingredients": [
+        "Mint",
+        "Mint syrup"
+      ]
+    },
+    {
+      "common_substring": "olive",
+      "ingredients": [
+        "Olive",
+        "Olive Brine"
+      ]
+    },
+    {
+      "common_substring": "orgeat",
+      "ingredients": [
+        "Orgeat Syrup",
+        "Orgeat syrup"
+      ]
+    },
+    {
+      "common_substring": "passion",
+      "ingredients": [
+        "Passion fruit juice",
+        "Passion fruit syrup"
+      ]
+    },
+    {
+      "common_substring": "peach",
+      "ingredients": [
+        "Peach Bitters",
+        "Peach Vodka",
+        "Peach brandy",
+        "Peach nectar",
+        "Peach schnapps"
+      ]
+    },
+    {
+      "common_substring": "pineapple",
+      "ingredients": [
+        "Pineapple",
+        "Pineapple Juice",
+        "Pineapple Syrup",
+        "Pineapple juice",
+        "pineapple juice"
+      ]
+    },
+    {
+      "common_substring": "port",
+      "ingredients": [
+        "Port",
+        "Ruby Port"
+      ]
+    },
+    {
+      "common_substring": "wine",
+      "ingredients": [
+        "Red wine",
+        "White Wine",
+        "Wine"
+      ]
+    },
+    {
+      "common_substring": "rosemary",
+      "ingredients": [
+        "Rosemary",
+        "Rosemary Syrup"
+      ]
+    },
+    {
+      "common_substring": "sour",
+      "ingredients": [
+        "Sour mix",
+        "Sweet and Sour",
+        "Sweet and sour"
+      ]
+    },
+    {
+      "common_substring": "sweet",
+      "ingredients": [
+        "Sweet Vermouth",
+        "Sweet and Sour",
+        "Sweet and sour"
+      ]
+    },
+    {
+      "common_substring": "tomato",
+      "ingredients": [
+        "Tomato Juice",
+        "Tomato juice"
+      ]
+    },
+    {
+      "common_substring": "tonic",
+      "ingredients": [
+        "Tonic Water",
+        "Tonic water"
+      ]
+    },
+    {
+      "common_substring": "triple",
+      "ingredients": [
+        "Triple Sec",
+        "Triple sec"
+      ]
+    },
+    {
+      "common_substring": "vanilla",
+      "ingredients": [
+        "Vanilla",
+        "Vanilla extract",
+        "Vanilla ice-cream",
+        "Vanilla syrup"
+      ]
+    }
+  ]
+}

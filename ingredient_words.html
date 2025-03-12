@@ -1,0 +1,2260 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>鸡尾酒配料词汇分析</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Arial', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            header {
+                background-color: #fff;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            
+            h1 {
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+            
+            .back-btn {
+                display: inline-block;
+                padding: 8px 15px;
+                background-color: #2c3e50;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                margin-bottom: 20px;
+                font-weight: bold;
+                transition: background-color 0.3s;
+            }
+            
+            .back-btn:hover {
+                background-color: #1a252f;
+            }
+            
+            .summary {
+                background-color: #fff;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .word-table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: #fff;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+                overflow: hidden;
+                margin-bottom: 30px;
+            }
+            
+            .word-table th,
+            .word-table td {
+                padding: 12px 15px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .word-table th {
+                background-color: #2c3e50;
+                color: #fff;
+            }
+            
+            .word-table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            
+            .word-table tr:hover {
+                background-color: #f1f1f1;
+            }
+            
+            .ingredient-list {
+                list-style-type: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            
+            .ingredient-item {
+                background-color: #f1f1f1;
+                padding: 5px 10px;
+                border-radius: 3px;
+            }
+            
+            .toggle-btn {
+                background-color: #3498db;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 3px;
+                cursor: pointer;
+                margin-top: 5px;
+            }
+            
+            .toggle-btn:hover {
+                background-color: #2980b9;
+            }
+            
+            .ingredients-container {
+                display: none;
+                margin-top: 10px;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                background-color: #2c3e50;
+                color: white;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="home_bar.html" class="back-btn">← 返回鸡尾酒大全</a>
+            
+            <header>
+                <h1>鸡尾酒配料词汇分析</h1>
+                <p>分析配料名称中常见的词汇</p>
+            </header>
+            
+            <div class="summary">
+                <h2>分析摘要</h2>
+                <p>共分析了 <strong>94</strong> 个不同的词汇。</p>
+            </div>
+            
+            <table class="word-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>词汇</th>
+                        <th>出现次数</th>
+                        <th>配料列表</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td>1</td>
+                        <td>juice</td>
+                        <td>24</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-0')">显示/隐藏 24 个配料</button>
+                            <div id="ingredients-0" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Apple juice</li>
+            
+                                    <li class="ingredient-item">Cherry Juice</li>
+            
+                                    <li class="ingredient-item">Cranberry Juice</li>
+            
+                                    <li class="ingredient-item">Cranberry juice</li>
+            
+                                    <li class="ingredient-item">Fresh Lemon Juice</li>
+            
+                                    <li class="ingredient-item">Fresh Lime Juice</li>
+            
+                                    <li class="ingredient-item">Fruit juice</li>
+            
+                                    <li class="ingredient-item">Grape juice</li>
+            
+                                    <li class="ingredient-item">Grapefruit Juice</li>
+            
+                                    <li class="ingredient-item">Grapefruit juice</li>
+            
+                                    <li class="ingredient-item">Lemon Juice</li>
+            
+                                    <li class="ingredient-item">Lemon juice</li>
+            
+                                    <li class="ingredient-item">Lime Juice</li>
+            
+                                    <li class="ingredient-item">Lime juice</li>
+            
+                                    <li class="ingredient-item">Orange Juice</li>
+            
+                                    <li class="ingredient-item">Orange juice</li>
+            
+                                    <li class="ingredient-item">Passion fruit juice</li>
+            
+                                    <li class="ingredient-item">Pineapple Juice</li>
+            
+                                    <li class="ingredient-item">Pineapple juice</li>
+            
+                                    <li class="ingredient-item">Pomegranate juice</li>
+            
+                                    <li class="ingredient-item">Tomato Juice</li>
+            
+                                    <li class="ingredient-item">Tomato juice</li>
+            
+                                    <li class="ingredient-item">lemon juice</li>
+            
+                                    <li class="ingredient-item">pineapple juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>2</td>
+                        <td>syrup</td>
+                        <td>17</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-1')">显示/隐藏 17 个配料</button>
+                            <div id="ingredients-1" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Agave Syrup</li>
+            
+                                    <li class="ingredient-item">Chocolate syrup</li>
+            
+                                    <li class="ingredient-item">Coconut syrup</li>
+            
+                                    <li class="ingredient-item">Corn syrup</li>
+            
+                                    <li class="ingredient-item">Ginger Syrup</li>
+            
+                                    <li class="ingredient-item">Honey syrup</li>
+            
+                                    <li class="ingredient-item">Maple syrup</li>
+            
+                                    <li class="ingredient-item">Mint syrup</li>
+            
+                                    <li class="ingredient-item">Orgeat Syrup</li>
+            
+                                    <li class="ingredient-item">Orgeat syrup</li>
+            
+                                    <li class="ingredient-item">Passion fruit syrup</li>
+            
+                                    <li class="ingredient-item">Pineapple Syrup</li>
+            
+                                    <li class="ingredient-item">Raspberry syrup</li>
+            
+                                    <li class="ingredient-item">Rosemary Syrup</li>
+            
+                                    <li class="ingredient-item">Sugar Syrup</li>
+            
+                                    <li class="ingredient-item">Sugar syrup</li>
+            
+                                    <li class="ingredient-item">Vanilla syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>3</td>
+                        <td>liqueur</td>
+                        <td>14</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-2')">显示/隐藏 14 个配料</button>
+                            <div id="ingredients-2" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Banana liqueur</li>
+            
+                                    <li class="ingredient-item">Chambord raspberry liqueur</li>
+            
+                                    <li class="ingredient-item">Cherry liqueur</li>
+            
+                                    <li class="ingredient-item">Chocolate liqueur</li>
+            
+                                    <li class="ingredient-item">Coconut Liqueur</li>
+            
+                                    <li class="ingredient-item">Coffee liqueur</li>
+            
+                                    <li class="ingredient-item">Godiva liqueur</li>
+            
+                                    <li class="ingredient-item">Kiwi liqueur</li>
+            
+                                    <li class="ingredient-item">Maraschino Liqueur</li>
+            
+                                    <li class="ingredient-item">Maraschino liqueur</li>
+            
+                                    <li class="ingredient-item">Melon Liqueur</li>
+            
+                                    <li class="ingredient-item">Midori melon liqueur</li>
+            
+                                    <li class="ingredient-item">Raspberry Liqueur</li>
+            
+                                    <li class="ingredient-item">maraschino liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>4</td>
+                        <td>rum</td>
+                        <td>12</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-3')">显示/隐藏 12 个配料</button>
+                            <div id="ingredients-3" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">151 proof rum</li>
+            
+                                    <li class="ingredient-item">Añejo rum</li>
+            
+                                    <li class="ingredient-item">Dark Rum</li>
+            
+                                    <li class="ingredient-item">Dark rum</li>
+            
+                                    <li class="ingredient-item">Gold rum</li>
+            
+                                    <li class="ingredient-item">Light rum</li>
+            
+                                    <li class="ingredient-item">Malibu rum</li>
+            
+                                    <li class="ingredient-item">Rum</li>
+            
+                                    <li class="ingredient-item">Spiced rum</li>
+            
+                                    <li class="ingredient-item">White Rum</li>
+            
+                                    <li class="ingredient-item">White rum</li>
+            
+                                    <li class="ingredient-item">blackstrap rum</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>5</td>
+                        <td>lemon</td>
+                        <td>10</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-4')">显示/隐藏 10 个配料</button>
+                            <div id="ingredients-4" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Bitter lemon</li>
+            
+                                    <li class="ingredient-item">Fresh Lemon Juice</li>
+            
+                                    <li class="ingredient-item">Lemon</li>
+            
+                                    <li class="ingredient-item">Lemon Juice</li>
+            
+                                    <li class="ingredient-item">Lemon Peel</li>
+            
+                                    <li class="ingredient-item">Lemon juice</li>
+            
+                                    <li class="ingredient-item">Lemon peel</li>
+            
+                                    <li class="ingredient-item">Lemon-lime soda</li>
+            
+                                    <li class="ingredient-item">lemon</li>
+            
+                                    <li class="ingredient-item">lemon juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>6</td>
+                        <td>orange</td>
+                        <td>10</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-5')">显示/隐藏 10 个配料</button>
+                            <div id="ingredients-5" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blood Orange</li>
+            
+                                    <li class="ingredient-item">Orange</li>
+            
+                                    <li class="ingredient-item">Orange Bitters</li>
+            
+                                    <li class="ingredient-item">Orange Curacao</li>
+            
+                                    <li class="ingredient-item">Orange Juice</li>
+            
+                                    <li class="ingredient-item">Orange Peel</li>
+            
+                                    <li class="ingredient-item">Orange bitters</li>
+            
+                                    <li class="ingredient-item">Orange juice</li>
+            
+                                    <li class="ingredient-item">Orange peel</li>
+            
+                                    <li class="ingredient-item">Orange spiral</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>7</td>
+                        <td>brandy</td>
+                        <td>9</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-6')">显示/隐藏 9 个配料</button>
+                            <div id="ingredients-6" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Apple Brandy</li>
+            
+                                    <li class="ingredient-item">Apple brandy</li>
+            
+                                    <li class="ingredient-item">Apricot Brandy</li>
+            
+                                    <li class="ingredient-item">Apricot brandy</li>
+            
+                                    <li class="ingredient-item">Blackberry brandy</li>
+            
+                                    <li class="ingredient-item">Brandy</li>
+            
+                                    <li class="ingredient-item">Cherry brandy</li>
+            
+                                    <li class="ingredient-item">Coffee brandy</li>
+            
+                                    <li class="ingredient-item">Peach brandy</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>8</td>
+                        <td>cream</td>
+                        <td>9</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-7')">显示/隐藏 9 个配料</button>
+                            <div id="ingredients-7" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Baileys irish cream</li>
+            
+                                    <li class="ingredient-item">Cream</li>
+            
+                                    <li class="ingredient-item">Cream of coconut</li>
+            
+                                    <li class="ingredient-item">Heavy cream</li>
+            
+                                    <li class="ingredient-item">Irish cream</li>
+            
+                                    <li class="ingredient-item">Light cream</li>
+            
+                                    <li class="ingredient-item">Vanilla ice-cream</li>
+            
+                                    <li class="ingredient-item">Whipped cream</li>
+            
+                                    <li class="ingredient-item">Whipping cream</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>9</td>
+                        <td>bitters</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-8')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-8" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Angostura Bitters</li>
+            
+                                    <li class="ingredient-item">Angostura bitters</li>
+            
+                                    <li class="ingredient-item">Bitters</li>
+            
+                                    <li class="ingredient-item">Orange Bitters</li>
+            
+                                    <li class="ingredient-item">Orange bitters</li>
+            
+                                    <li class="ingredient-item">Peach Bitters</li>
+            
+                                    <li class="ingredient-item">Peychaud bitters</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>10</td>
+                        <td>whiskey</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-9')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-9" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blended whiskey</li>
+            
+                                    <li class="ingredient-item">Irish Whiskey</li>
+            
+                                    <li class="ingredient-item">Irish whiskey</li>
+            
+                                    <li class="ingredient-item">Rye Whiskey</li>
+            
+                                    <li class="ingredient-item">Rye whiskey</li>
+            
+                                    <li class="ingredient-item">Tennessee whiskey</li>
+            
+                                    <li class="ingredient-item">Whiskey</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>11</td>
+                        <td>cherry</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-10')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-10" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Cherry</li>
+            
+                                    <li class="ingredient-item">Cherry Heering</li>
+            
+                                    <li class="ingredient-item">Cherry Juice</li>
+            
+                                    <li class="ingredient-item">Cherry brandy</li>
+            
+                                    <li class="ingredient-item">Cherry liqueur</li>
+            
+                                    <li class="ingredient-item">Maraschino Cherry</li>
+            
+                                    <li class="ingredient-item">Maraschino cherry</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>12</td>
+                        <td>creme</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-11')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-11" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Creme De Banane</li>
+            
+                                    <li class="ingredient-item">Creme de Banane</li>
+            
+                                    <li class="ingredient-item">Creme de Cacao</li>
+            
+                                    <li class="ingredient-item">Creme de Cassis</li>
+            
+                                    <li class="ingredient-item">Creme de Mure</li>
+            
+                                    <li class="ingredient-item">Green Creme de Menthe</li>
+            
+                                    <li class="ingredient-item">White Creme de Menthe</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>13</td>
+                        <td>de</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-12')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-12" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Creme De Banane</li>
+            
+                                    <li class="ingredient-item">Creme de Banane</li>
+            
+                                    <li class="ingredient-item">Creme de Cacao</li>
+            
+                                    <li class="ingredient-item">Creme de Cassis</li>
+            
+                                    <li class="ingredient-item">Creme de Mure</li>
+            
+                                    <li class="ingredient-item">Green Creme de Menthe</li>
+            
+                                    <li class="ingredient-item">White Creme de Menthe</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>14</td>
+                        <td>lime</td>
+                        <td>7</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-13')">显示/隐藏 7 个配料</button>
+                            <div id="ingredients-13" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Fresh Lime Juice</li>
+            
+                                    <li class="ingredient-item">Lemon-lime soda</li>
+            
+                                    <li class="ingredient-item">Lime</li>
+            
+                                    <li class="ingredient-item">Lime Juice</li>
+            
+                                    <li class="ingredient-item">Lime juice</li>
+            
+                                    <li class="ingredient-item">Lime peel</li>
+            
+                                    <li class="ingredient-item">Lime vodka</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>15</td>
+                        <td>vodka</td>
+                        <td>6</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-14')">显示/隐藏 6 个配料</button>
+                            <div id="ingredients-14" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Absolut Vodka</li>
+            
+                                    <li class="ingredient-item">Cranberry vodka</li>
+            
+                                    <li class="ingredient-item">Lime vodka</li>
+            
+                                    <li class="ingredient-item">Peach Vodka</li>
+            
+                                    <li class="ingredient-item">Raspberry vodka</li>
+            
+                                    <li class="ingredient-item">Vodka</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>16</td>
+                        <td>sugar</td>
+                        <td>6</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-15')">显示/隐藏 6 个配料</button>
+                            <div id="ingredients-15" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Brown sugar</li>
+            
+                                    <li class="ingredient-item">Powdered sugar</li>
+            
+                                    <li class="ingredient-item">Sugar</li>
+            
+                                    <li class="ingredient-item">Sugar Syrup</li>
+            
+                                    <li class="ingredient-item">Sugar syrup</li>
+            
+                                    <li class="ingredient-item">demerara Sugar</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>17</td>
+                        <td>water</td>
+                        <td>6</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-16')">显示/隐藏 6 个配料</button>
+                            <div id="ingredients-16" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Carbonated water</li>
+            
+                                    <li class="ingredient-item">Soda Water</li>
+            
+                                    <li class="ingredient-item">Soda water</li>
+            
+                                    <li class="ingredient-item">Tonic Water</li>
+            
+                                    <li class="ingredient-item">Tonic water</li>
+            
+                                    <li class="ingredient-item">Water</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>18</td>
+                        <td>white</td>
+                        <td>6</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-17')">显示/隐藏 6 个配料</button>
+                            <div id="ingredients-17" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Egg White</li>
+            
+                                    <li class="ingredient-item">Egg white</li>
+            
+                                    <li class="ingredient-item">White Creme de Menthe</li>
+            
+                                    <li class="ingredient-item">White Rum</li>
+            
+                                    <li class="ingredient-item">White Wine</li>
+            
+                                    <li class="ingredient-item">White rum</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>19</td>
+                        <td>soda</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-18')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-18" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Club soda</li>
+            
+                                    <li class="ingredient-item">Grape Soda</li>
+            
+                                    <li class="ingredient-item">Lemon-lime soda</li>
+            
+                                    <li class="ingredient-item">Soda Water</li>
+            
+                                    <li class="ingredient-item">Soda water</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>20</td>
+                        <td>egg</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-19')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-19" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Egg</li>
+            
+                                    <li class="ingredient-item">Egg White</li>
+            
+                                    <li class="ingredient-item">Egg Yolk</li>
+            
+                                    <li class="ingredient-item">Egg white</li>
+            
+                                    <li class="ingredient-item">Egg yolk</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>21</td>
+                        <td>fruit</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-20')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-20" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Fruit</li>
+            
+                                    <li class="ingredient-item">Fruit juice</li>
+            
+                                    <li class="ingredient-item">Fruit punch</li>
+            
+                                    <li class="ingredient-item">Passion fruit juice</li>
+            
+                                    <li class="ingredient-item">Passion fruit syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>22</td>
+                        <td>peel</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-21')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-21" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Lemon Peel</li>
+            
+                                    <li class="ingredient-item">Lemon peel</li>
+            
+                                    <li class="ingredient-item">Lime peel</li>
+            
+                                    <li class="ingredient-item">Orange Peel</li>
+            
+                                    <li class="ingredient-item">Orange peel</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>23</td>
+                        <td>maraschino</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-22')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-22" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Maraschino Cherry</li>
+            
+                                    <li class="ingredient-item">Maraschino Liqueur</li>
+            
+                                    <li class="ingredient-item">Maraschino cherry</li>
+            
+                                    <li class="ingredient-item">Maraschino liqueur</li>
+            
+                                    <li class="ingredient-item">maraschino liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>24</td>
+                        <td>peach</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-23')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-23" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Peach Bitters</li>
+            
+                                    <li class="ingredient-item">Peach Vodka</li>
+            
+                                    <li class="ingredient-item">Peach brandy</li>
+            
+                                    <li class="ingredient-item">Peach nectar</li>
+            
+                                    <li class="ingredient-item">Peach schnapps</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>25</td>
+                        <td>pineapple</td>
+                        <td>5</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-24')">显示/隐藏 5 个配料</button>
+                            <div id="ingredients-24" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Pineapple</li>
+            
+                                    <li class="ingredient-item">Pineapple Juice</li>
+            
+                                    <li class="ingredient-item">Pineapple Syrup</li>
+            
+                                    <li class="ingredient-item">Pineapple juice</li>
+            
+                                    <li class="ingredient-item">pineapple juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>26</td>
+                        <td>absolut</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-25')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-25" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Absolut Citron</li>
+            
+                                    <li class="ingredient-item">Absolut Kurant</li>
+            
+                                    <li class="ingredient-item">Absolut Peppar</li>
+            
+                                    <li class="ingredient-item">Absolut Vodka</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>27</td>
+                        <td>apple</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-26')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-26" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Apple</li>
+            
+                                    <li class="ingredient-item">Apple Brandy</li>
+            
+                                    <li class="ingredient-item">Apple brandy</li>
+            
+                                    <li class="ingredient-item">Apple juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>28</td>
+                        <td>irish</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-27')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-27" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Baileys irish cream</li>
+            
+                                    <li class="ingredient-item">Irish Whiskey</li>
+            
+                                    <li class="ingredient-item">Irish cream</li>
+            
+                                    <li class="ingredient-item">Irish whiskey</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>29</td>
+                        <td>pepper</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-28')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-28" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Black pepper</li>
+            
+                                    <li class="ingredient-item">Cayenne pepper</li>
+            
+                                    <li class="ingredient-item">Dr. Pepper</li>
+            
+                                    <li class="ingredient-item">Pepper</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>30</td>
+                        <td>schnapps</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-29')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-29" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Butterscotch schnapps</li>
+            
+                                    <li class="ingredient-item">Peach schnapps</li>
+            
+                                    <li class="ingredient-item">Peachtree schnapps</li>
+            
+                                    <li class="ingredient-item">Strawberry schnapps</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>31</td>
+                        <td>raspberry</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-30')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-30" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Chambord raspberry liqueur</li>
+            
+                                    <li class="ingredient-item">Raspberry Liqueur</li>
+            
+                                    <li class="ingredient-item">Raspberry syrup</li>
+            
+                                    <li class="ingredient-item">Raspberry vodka</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>32</td>
+                        <td>chocolate</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-31')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-31" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Chocolate</li>
+            
+                                    <li class="ingredient-item">Chocolate liqueur</li>
+            
+                                    <li class="ingredient-item">Chocolate syrup</li>
+            
+                                    <li class="ingredient-item">Hot Chocolate</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>33</td>
+                        <td>coconut</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-32')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-32" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Coconut Liqueur</li>
+            
+                                    <li class="ingredient-item">Coconut milk</li>
+            
+                                    <li class="ingredient-item">Coconut syrup</li>
+            
+                                    <li class="ingredient-item">Cream of coconut</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>34</td>
+                        <td>vermouth</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-33')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-33" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Dry Vermouth</li>
+            
+                                    <li class="ingredient-item">Rosso Vermouth</li>
+            
+                                    <li class="ingredient-item">Sweet Vermouth</li>
+            
+                                    <li class="ingredient-item">Vermouth</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>35</td>
+                        <td>ginger</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-34')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-34" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Ginger</li>
+            
+                                    <li class="ingredient-item">Ginger Beer</li>
+            
+                                    <li class="ingredient-item">Ginger Syrup</li>
+            
+                                    <li class="ingredient-item">Ginger ale</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>36</td>
+                        <td>sauce</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-35')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-35" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Hot Sauce</li>
+            
+                                    <li class="ingredient-item">Soy Sauce</li>
+            
+                                    <li class="ingredient-item">Tabasco sauce</li>
+            
+                                    <li class="ingredient-item">Worcestershire Sauce</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>37</td>
+                        <td>vanilla</td>
+                        <td>4</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-36')">显示/隐藏 4 个配料</button>
+                            <div id="ingredients-36" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Vanilla</li>
+            
+                                    <li class="ingredient-item">Vanilla extract</li>
+            
+                                    <li class="ingredient-item">Vanilla ice-cream</li>
+            
+                                    <li class="ingredient-item">Vanilla syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>38</td>
+                        <td>apricot</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-37')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-37" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Apricot Brandy</li>
+            
+                                    <li class="ingredient-item">Apricot Nectar</li>
+            
+                                    <li class="ingredient-item">Apricot brandy</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>39</td>
+                        <td>beer</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-38')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-38" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Beer</li>
+            
+                                    <li class="ingredient-item">Ginger Beer</li>
+            
+                                    <li class="ingredient-item">Root beer</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>40</td>
+                        <td>scotch</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-39')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-39" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blended Scotch</li>
+            
+                                    <li class="ingredient-item">Islay single malt Scotch</li>
+            
+                                    <li class="ingredient-item">Scotch</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>41</td>
+                        <td>milk</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-40')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-40" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Coconut milk</li>
+            
+                                    <li class="ingredient-item">Condensed milk</li>
+            
+                                    <li class="ingredient-item">Milk</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>42</td>
+                        <td>coffee</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-41')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-41" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Coffee</li>
+            
+                                    <li class="ingredient-item">Coffee brandy</li>
+            
+                                    <li class="ingredient-item">Coffee liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>43</td>
+                        <td>cranberry</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-42')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-42" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Cranberry Juice</li>
+            
+                                    <li class="ingredient-item">Cranberry juice</li>
+            
+                                    <li class="ingredient-item">Cranberry vodka</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>44</td>
+                        <td>mix</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-43')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-43" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Daiquiri mix</li>
+            
+                                    <li class="ingredient-item">Pina colada mix</li>
+            
+                                    <li class="ingredient-item">Sour mix</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>45</td>
+                        <td>gin</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-44')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-44" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Gin</li>
+            
+                                    <li class="ingredient-item">Sloe gin</li>
+            
+                                    <li class="ingredient-item">gin</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>46</td>
+                        <td>and</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-45')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-45" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Half-and-half</li>
+            
+                                    <li class="ingredient-item">Sweet and Sour</li>
+            
+                                    <li class="ingredient-item">Sweet and sour</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>47</td>
+                        <td>hot</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-46')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-46" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Hot Chocolate</li>
+            
+                                    <li class="ingredient-item">Hot Damn</li>
+            
+                                    <li class="ingredient-item">Hot Sauce</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>48</td>
+                        <td>wine</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-47')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-47" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Red wine</li>
+            
+                                    <li class="ingredient-item">White Wine</li>
+            
+                                    <li class="ingredient-item">Wine</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>49</td>
+                        <td>sour</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-48')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-48" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Sour mix</li>
+            
+                                    <li class="ingredient-item">Sweet and Sour</li>
+            
+                                    <li class="ingredient-item">Sweet and sour</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>50</td>
+                        <td>sweet</td>
+                        <td>3</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-49')">显示/隐藏 3 个配料</button>
+                            <div id="ingredients-49" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Sweet Vermouth</li>
+            
+                                    <li class="ingredient-item">Sweet and Sour</li>
+            
+                                    <li class="ingredient-item">Sweet and sour</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>51</td>
+                        <td>up</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-50')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-50" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">7-Up</li>
+            
+                                    <li class="ingredient-item">7-up</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>52</td>
+                        <td>angostura</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-51')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-51" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Angostura Bitters</li>
+            
+                                    <li class="ingredient-item">Angostura bitters</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>53</td>
+                        <td>nectar</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-52')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-52" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Apricot Nectar</li>
+            
+                                    <li class="ingredient-item">Peach nectar</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>54</td>
+                        <td>banana</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-53')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-53" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Banana</li>
+            
+                                    <li class="ingredient-item">Banana liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>55</td>
+                        <td>black</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-54')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-54" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Black Sambuca</li>
+            
+                                    <li class="ingredient-item">Black pepper</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>56</td>
+                        <td>sambuca</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-55')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-55" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Black Sambuca</li>
+            
+                                    <li class="ingredient-item">Sambuca</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>57</td>
+                        <td>cordial</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-56')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-56" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blackcurrant cordial</li>
+            
+                                    <li class="ingredient-item">Elderflower cordial</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>58</td>
+                        <td>blended</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-57')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-57" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blended Scotch</li>
+            
+                                    <li class="ingredient-item">Blended whiskey</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>59</td>
+                        <td>curacao</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-58')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-58" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Blue Curacao</li>
+            
+                                    <li class="ingredient-item">Orange Curacao</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>60</td>
+                        <td>carbonated</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-59')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-59" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Carbonated soft drink</li>
+            
+                                    <li class="ingredient-item">Carbonated water</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>61</td>
+                        <td>salt</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-60')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-60" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Celery salt</li>
+            
+                                    <li class="ingredient-item">Salt</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>62</td>
+                        <td>cola</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-61')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-61" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Coca-Cola</li>
+            
+                                    <li class="ingredient-item">Pepsi Cola</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>63</td>
+                        <td>of</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-62')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-62" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Cream of coconut</li>
+            
+                                    <li class="ingredient-item">Sirup of roses</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>64</td>
+                        <td>banane</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-63')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-63" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Creme De Banane</li>
+            
+                                    <li class="ingredient-item">Creme de Banane</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>65</td>
+                        <td>dark</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-64')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-64" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Dark Rum</li>
+            
+                                    <li class="ingredient-item">Dark rum</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>66</td>
+                        <td>yolk</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-65')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-65" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Egg Yolk</li>
+            
+                                    <li class="ingredient-item">Egg yolk</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>67</td>
+                        <td>fresh</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-66')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-66" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Fresh Lemon Juice</li>
+            
+                                    <li class="ingredient-item">Fresh Lime Juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>68</td>
+                        <td>grape</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-67')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-67" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Grape Soda</li>
+            
+                                    <li class="ingredient-item">Grape juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>69</td>
+                        <td>grapefruit</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-68')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-68" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Grapefruit Juice</li>
+            
+                                    <li class="ingredient-item">Grapefruit juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>70</td>
+                        <td>green</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-69')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-69" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Green Chartreuse</li>
+            
+                                    <li class="ingredient-item">Green Creme de Menthe</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>71</td>
+                        <td>chartreuse</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-70')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-70" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Green Chartreuse</li>
+            
+                                    <li class="ingredient-item">Yellow Chartreuse</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>72</td>
+                        <td>menthe</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-71')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-71" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Green Creme de Menthe</li>
+            
+                                    <li class="ingredient-item">White Creme de Menthe</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>73</td>
+                        <td>half</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-72')">显示/隐藏 1 个配料</button>
+                            <div id="ingredients-72" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Half-and-half</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>74</td>
+                        <td>honey</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-73')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-73" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Honey</li>
+            
+                                    <li class="ingredient-item">Honey syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>75</td>
+                        <td>ice</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-74')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-74" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Ice</li>
+            
+                                    <li class="ingredient-item">Vanilla ice-cream</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>76</td>
+                        <td>tea</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-75')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-75" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Iced tea</li>
+            
+                                    <li class="ingredient-item">Tea</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>77</td>
+                        <td>jack</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-76')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-76" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Jack Daniels</li>
+            
+                                    <li class="ingredient-item">Yukon Jack</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>78</td>
+                        <td>kiwi</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-77')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-77" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Kiwi</li>
+            
+                                    <li class="ingredient-item">Kiwi liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>79</td>
+                        <td>lemonade</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-78')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-78" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Lemonade</li>
+            
+                                    <li class="ingredient-item">Pink lemonade</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>80</td>
+                        <td>light</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-79')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-79" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Light cream</li>
+            
+                                    <li class="ingredient-item">Light rum</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>81</td>
+                        <td>lillet</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-80')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-80" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Lillet</li>
+            
+                                    <li class="ingredient-item">Lillet Blanc</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>82</td>
+                        <td>melon</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-81')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-81" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Melon Liqueur</li>
+            
+                                    <li class="ingredient-item">Midori melon liqueur</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>83</td>
+                        <td>mint</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-82')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-82" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Mint</li>
+            
+                                    <li class="ingredient-item">Mint syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>84</td>
+                        <td>olive</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-83')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-83" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Olive</li>
+            
+                                    <li class="ingredient-item">Olive Brine</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>85</td>
+                        <td>orgeat</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-84')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-84" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Orgeat Syrup</li>
+            
+                                    <li class="ingredient-item">Orgeat syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>86</td>
+                        <td>passion</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-85')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-85" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Passion fruit juice</li>
+            
+                                    <li class="ingredient-item">Passion fruit syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>87</td>
+                        <td>port</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-86')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-86" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Port</li>
+            
+                                    <li class="ingredient-item">Ruby Port</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>88</td>
+                        <td>red</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-87')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-87" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Red Chili Flakes</li>
+            
+                                    <li class="ingredient-item">Red wine</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>89</td>
+                        <td>rosemary</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-88')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-88" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Rosemary</li>
+            
+                                    <li class="ingredient-item">Rosemary Syrup</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>90</td>
+                        <td>rye</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-89')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-89" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Rye Whiskey</li>
+            
+                                    <li class="ingredient-item">Rye whiskey</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>91</td>
+                        <td>tomato</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-90')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-90" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Tomato Juice</li>
+            
+                                    <li class="ingredient-item">Tomato juice</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>92</td>
+                        <td>tonic</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-91')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-91" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Tonic Water</li>
+            
+                                    <li class="ingredient-item">Tonic water</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>93</td>
+                        <td>triple</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-92')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-92" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Triple Sec</li>
+            
+                                    <li class="ingredient-item">Triple sec</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                    <tr>
+                        <td>94</td>
+                        <td>sec</td>
+                        <td>2</td>
+                        <td>
+                            <button class="toggle-btn" onclick="toggleIngredients('ingredients-93')">显示/隐藏 2 个配料</button>
+                            <div id="ingredients-93" class="ingredients-container">
+                                <ul class="ingredient-list">
+        
+                                    <li class="ingredient-item">Triple Sec</li>
+            
+                                    <li class="ingredient-item">Triple sec</li>
+            
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+        
+                </tbody>
+            </table>
+            
+            <footer>
+                <p>鸡尾酒配料词汇分析 &copy; 2023</p>
+            </footer>
+        </div>
+        
+        <script>
+            function toggleIngredients(id) {
+                const container = document.getElementById(id);
+                if (container.style.display === 'block') {
+                    container.style.display = 'none';
+                } else {
+                    container.style.display = 'block';
+                }
+            }
+        </script>
+    </body>
+    </html>
+    

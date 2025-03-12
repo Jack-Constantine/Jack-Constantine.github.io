@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鸡尾酒展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .letter-filter {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #letterButtons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .letter-btn {
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .letter-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .letter-btn.active {
+            background-color: #2c3e50;
+        }
+        
+        .cocktails-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .cocktail-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .cocktail-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .cocktail-card h2 {
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .cocktail-content {
+            padding: 15px;
+        }
+        
+        .cocktail-ingredients {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .cocktail-ingredients h3 {
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .cocktail-ingredients ul {
+            list-style-type: none;
+        }
+        
+        .cocktail-ingredients li {
+            padding: 3px 0;
+        }
+        
+        .cocktail-instructions {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .cocktail-instructions h3 {
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cocktail-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .cocktail-info {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .nav-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #1a252f;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>鸡尾酒大全</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索鸡尾酒...">
+        </div>
+        <div class="letter-filter">
+            <span>按字母筛选：</span>
+            <div id="letterButtons"></div>
+        </div>
+        <div class="nav-buttons">
+            <a href="ingredient-analysis.html" class="nav-btn">查看配料统计分析</a>
+            <a href="ingredient_similarity_viewer.html" class="nav-btn">查看配料统计分析</a>
+            <a href="cocktail_finder.html" class="nav-btn">查看可以做的鸡尾酒</a>
+        </div>
+    </header>
+
+    <main>
+        <div id="cocktailsContainer" class="cocktails-container"></div>
+    </main>
+
+    <footer>
+        <p>鸡尾酒数据展示 &copy; 2023</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let allCocktails = [];
+            let currentLetter = '';
+            const cocktailsContainer = document.getElementById('cocktailsContainer');
+            const searchInput = document.getElementById('searchInput');
+            const letterButtons = document.getElementById('letterButtons');
+        
+            // 加载JSON数据
+            fetch('cocktails_by_letter.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('网络响应不正常');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allCocktails = data;
+                    // 处理数据，提取需要的信息
+                    for (const letter in allCocktails) {
+                        allCocktails[letter] = allCocktails[letter].map(drink => {
+                            // 提取配料和用量
+                            const ingredients = [];
+                            for (let i = 1; i <= 15; i++) {
+                                if (drink[`strIngredient${i}`]) {
+                                    let ingredient = drink[`strIngredient${i}`];
+                                    if (drink[`strMeasure${i}`]) {
+                                        ingredient = `${drink[`strMeasure${i}`]} ${ingredient}`.trim();
+                                    }
+                                    ingredients.push(ingredient);
+                                }
+                            }
+                            
+                            return {
+                                id: drink.idDrink,
+                                name: drink.strDrink,
+                                category: drink.strCategory,
+                                alcoholic: drink.strAlcoholic,
+                                glass: drink.strGlass,
+                                instructions: drink.strInstructions,
+                                instructionsZH: drink.strInstructionsZH_HANS || drink.strInstructionsZH_HANT,
+                                thumbnail: drink.strDrinkThumb,
+                                ingredients: ingredients
+                            };
+                        });
+                    }
+                    createLetterButtons();
+                    displayAllCocktails();
+                })
+                .catch(error => {
+                    console.error('获取数据时出错:', error);
+                    cocktailsContainer.innerHTML = `
+                        <div class="no-results">
+                            <h2>加载数据时出错</h2>
+                            <p>${error.message}</p>
+                        </div>
+                    `;
+                });
+        
+            // 创建字母按钮
+            function createLetterButtons() {
+                const letters = Object.keys(allCocktails).sort();
+                
+                letters.forEach(letter => {
+                    const button = document.createElement('button');
+                    button.textContent = letter.toUpperCase();
+                    button.classList.add('letter-btn');
+                    button.addEventListener('click', () => {
+                        filterByLetter(letter);
+                        
+                        // 更新活跃按钮
+                        document.querySelectorAll('.letter-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        button.classList.add('active');
+                    });
+                    letterButtons.appendChild(button);
+                });
+        
+                // 添加"全部"按钮
+                const allButton = document.createElement('button');
+                allButton.textContent = '全部';
+                allButton.classList.add('letter-btn', 'active');
+                allButton.addEventListener('click', () => {
+                    currentLetter = '';
+                    displayAllCocktails();
+                    
+                    // 更新活跃按钮
+                    document.querySelectorAll('.letter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    allButton.classList.add('active');
+                });
+                letterButtons.insertBefore(allButton, letterButtons.firstChild);
+            }
+        
+            // 按字母筛选
+            function filterByLetter(letter) {
+                currentLetter = letter;
+                const filteredCocktails = allCocktails[letter] || [];
+                displayCocktails(filteredCocktails);
+            }
+        
+            // 显示所有鸡尾酒
+            function displayAllCocktails() {
+                let allDrinks = [];
+                for (const letter in allCocktails) {
+                    allDrinks = allDrinks.concat(allCocktails[letter]);
+                }
+                displayCocktails(allDrinks);
+            }
+        
+            // 显示鸡尾酒列表
+            function displayCocktails(cocktails) {
+                if (cocktails.length === 0) {
+                    cocktailsContainer.innerHTML = `
+                        <div class="no-results">
+                            <h2>没有找到匹配的鸡尾酒</h2>
+                        </div>
+                    `;
+                    return;
+                }
+        
+                cocktailsContainer.innerHTML = '';
+                cocktails.forEach(cocktail => {
+                    const card = document.createElement('div');
+                    card.classList.add('cocktail-card');
+                    
+                    // 添加图片
+                    let thumbnailHTML = '';
+                    if (cocktail.thumbnail) {
+                        thumbnailHTML = `<img src="${cocktail.thumbnail}" alt="${cocktail.name}" class="cocktail-image">`;
+                    }
+                    
+                    let ingredientsHTML = '';
+                    if (cocktail.ingredients && cocktail.ingredients.length > 0) {
+                        ingredientsHTML = `
+                            <div class="cocktail-ingredients">
+                                <h3>配料</h3>
+                                <ul>
+                                    ${cocktail.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+        
+                    let instructionsHTML = '';
+                    if (cocktail.instructions) {
+                        // 优先使用中文说明，如果没有则使用英文
+                        const instructions = cocktail.instructionsZH || cocktail.instructions;
+                        instructionsHTML = `
+                            <div class="cocktail-instructions">
+                                <h3>制作方法</h3>
+                                <p>${instructions}</p>
+                            </div>
+                        `;
+                    }
+        
+                    // 添加更多信息
+                    let infoHTML = '';
+                    if (cocktail.category || cocktail.alcoholic || cocktail.glass) {
+                        infoHTML = `
+                            <div class="cocktail-info">
+                                ${cocktail.category ? `<p><strong>类别:</strong> ${cocktail.category}</p>` : ''}
+                                ${cocktail.alcoholic ? `<p><strong>酒精:</strong> ${cocktail.alcoholic}</p>` : ''}
+                                ${cocktail.glass ? `<p><strong>杯具:</strong> ${cocktail.glass}</p>` : ''}
+                            </div>
+                        `;
+                    }
+        
+                    card.innerHTML = `
+                        <h2>${cocktail.name}</h2>
+                        <div class="cocktail-content">
+                            ${thumbnailHTML}
+                            ${infoHTML}
+                            ${ingredientsHTML}
+                            ${instructionsHTML}
+                        </div>
+                    `;
+                    
+                    cocktailsContainer.appendChild(card);
+                });
+            }
+        
+            // 搜索功能
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    if (currentLetter) {
+                        filterByLetter(currentLetter);
+                    } else {
+                        displayAllCocktails();
+                    }
+                    return;
+                }
+        
+                let searchResults = [];
+                
+                // 如果有选中的字母，只在该字母的鸡尾酒中搜索
+                if (currentLetter) {
+                    searchResults = (allCocktails[currentLetter] || []).filter(cocktail => 
+                        cocktail.name.toLowerCase().includes(searchTerm)
+                    );
+                } else {
+                    // 在所有鸡尾酒中搜索
+                    for (const letter in allCocktails) {
+                        const letterResults = allCocktails[letter].filter(cocktail => 
+                            cocktail.name.toLowerCase().includes(searchTerm)
+                        );
+                        searchResults = searchResults.concat(letterResults);
+                    }
+                }
+                
+                displayCocktails(searchResults);
+            });
+        });
+    </script>
+</body>
+</html>
