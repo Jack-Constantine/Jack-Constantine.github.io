@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都5日游 - 高德地图</title>
+    <!-- 内联CSS样式 -->
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* 顶部导航栏样式 */
+        header {
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        header h1 {
+            margin-bottom: 1.2rem;
+            text-align: center;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 主内容区域样式 */
+        main {
+            display: flex;
+            flex: 1;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                flex-direction: row;
+            }
+        }
+
+        /* 地图容器样式 */
+        #map-container {
+            flex: 2;
+            height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            background-color: #e0e0e0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #map-container:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            overflow-y: auto;
+            max-height: 500px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .day-info {
+            display: none;
+        }
+
+        .day-info.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-info h2 {
+            margin-bottom: 1.2rem;
+            color: #1e88e5;
+            border-bottom: 2px solid #1e88e5;
+            padding-bottom: 0.8rem;
+            font-size: 1.6rem;
+        }
+
+        /* 行程概览样式 */
+        .trip-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .day-summary {
+            background-color: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border-left: 4px solid #1e88e5;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-summary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: #f0f4f8;
+        }
+
+        .day-summary h3 {
+            margin-bottom: 0.6rem;
+            color: #1e88e5;
+            font-size: 1.2rem;
+        }
+
+        .day-summary p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* 景点列表样式 */
+        .spot-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .spot {
+            background-color: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border-left: 4px solid #1e88e5;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .spot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: #f0f4f8;
+        }
+
+        .spot h3 {
+            margin-bottom: 0.6rem;
+            color: #1e88e5;
+            font-size: 1.2rem;
+        }
+
+        .spot p {
+            margin-bottom: 1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* 导航按钮样式 */
+        .navigate-btn,
+        .navigate-btn-info {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigate-btn:hover,
+        .navigate-btn-info:hover {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .navigate-btn:active,
+        .navigate-btn-info:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigate-btn-info {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+            color: white;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: auto;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 地图标记样式 */
+        .amap-marker-label {
+            border: none;
+            background-color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        /* 路线规划样式 */
+        .route-info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            max-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .route-info h3 {
+            margin-bottom: 8px;
+            color: #1e88e5;
+            font-size: 1.1rem;
+        }
+
+        .route-info p {
+            margin-bottom: 8px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .close-route-info {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-route-info:hover {
+            color: #333;
+        }
+
+        /* 路线信息容器样式 */
+        .route-info-container {
+            position: fixed;
+            top: 90px;
+            right: 25px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            max-width: 300px;
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* 路线面板样式 */
+        .route-panel {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 320px;
+            height: 100%;
+            background-color: white;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 90;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .route-panel.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* 信息窗口样式 */
+        .info-window {
+            padding: 5px;
+        }
+
+        .info-window h3 {
+            color: #1e88e5;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .info-window p {
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .location-info {
+            font-size: 0.9rem;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            nav a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            #map-container {
+                height: 350px;
+            }
+
+            .sidebar {
+                padding: 1rem;
+            }
+
+            .route-info-container {
+                top: 70px;
+                right: 15px;
+                left: 15px;
+                max-width: none;
+            }
+
+            .route-panel {
+                width: 100%;
+                height: 300px;
+                position: relative;
+                margin-top: 15px;
+            }
+
+            .day-summary,
+            .spot {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <!-- 引入高德地图API -->
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=e5bd9b3e8d1e3e1d5e3a6a5e3e1d5e3a"></script>
+    <!-- 引入UI组件库 -->
+    <script src="https://webapi.amap.com/ui/1.1/main.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>成都5日游</h1>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" data-day="overview">行程概览</a></li>
+                <li><a href="#" data-day="day1">第1天</a></li>
+                <li><a href="#" data-day="day2">第2天</a></li>
+                <li><a href="#" data-day="day3">第3天</a></li>
+                <li><a href="#" data-day="day4">第4天</a></li>
+                <li><a href="#" data-day="day5">第5天</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="map-container"></div>
+
+        <div id="panel" class="route-panel"></div>
+
+        <div class="sidebar">
+            <div class="day-info active" id="overview">
+                <h2>成都5日游行程概览</h2>
+                <p>这是一个基于高德地图MCP的成都5日游行程规划应用，帮助您轻松游览成都的著名景点。</p>
+                <div class="trip-summary">
+                    <div class="day-summary">
+                        <h3>第1天：市区文化探索</h3>
+                        <p>成都双流国际机场 → 宽窄巷子 → 锦里古街 → 武侯祠</p>
+                    </div>
+                    <div class="day-summary">
+                        <h3>第2天：熊猫与自然之旅</h3>
+                        <p>熊猫基地 → 金沙遗址博物馆 → 奎星楼街</p>
+                    </div>
+                    <div class="day-summary">
+                        <h3>第3天：时尚与美食</h3>
+                        <p>春熙路 → IFS → 太古里 → 望平街 → 九眼桥 → 抚琴夜市</p>
+                    </div>
+                    <div class="day-summary">
+                        <h3>第4天：历史与现代</h3>
+                        <p>三星堆博物馆 → 东郊记忆 → 市区自由活动</p>
+                    </div>
+                    <div class="day-summary">
+                        <h3>第5天：自然风光</h3>
+                        <p>都江堰 → 青城山 → 返回市区</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-info" id="day1">
+                <h2>第1天：市区文化探索</h2>
+                <div class="spot-list">
+                    <div class="spot" data-lng="103.9514" data-lat="30.5784">
+                        <h3>成都双流国际机场</h3>
+                        <p>抵达成都的第一站，是四川省最大的国际机场，也是西南地区重要的航空枢纽。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0566" data-lat="30.6707">
+                        <h3>宽窄巷子</h3>
+                        <p>成都市著名的历史文化街区，由宽巷子、窄巷子和井巷子组成，是清朝时期遗留下来的古街道，体验成都传统街区文化。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0477" data-lat="30.6429">
+                        <h3>锦里古街</h3>
+                        <p>位于武侯祠博物馆旁，是成都著名的商业步行街，以三国文化和成都民俗为特色，可品尝各种成都特色小吃。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0419" data-lat="30.6427">
+                        <h3>武侯祠</h3>
+                        <p>中国唯一的一座君臣合祀祠庙，祭祀的是三国时期蜀汉丞相诸葛亮和蜀汉皇帝刘备，了解三国文化的绝佳去处。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-info" id="day2">
+                <h2>第2天：熊猫与自然之旅</h2>
+                <div class="spot-list">
+                    <div class="spot" data-lng="104.1517" data-lat="30.7348">
+                        <h3>熊猫基地</h3>
+                        <p>成都大熊猫繁育研究基地是世界著名的大熊猫繁育和研究机构，可以近距离观赏到国宝大熊猫，建议早上前往，此时熊猫较为活跃。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0115" data-lat="30.6810">
+                        <h3>金沙遗址博物馆</h3>
+                        <p>展示了三千多年前古蜀文明的辉煌，出土了大量珍贵文物，包括著名的太阳神鸟金饰，是了解古蜀文明的重要场所。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0618" data-lat="30.6693">
+                        <h3>奎星楼街</h3>
+                        <p>成都市中心的历史文化街区，保留了许多清末民初的建筑风格，现在是集美食、文创、休闲于一体的特色街区，晚上灯光璀璨。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-info" id="day3">
+                <h2>第3天：时尚与美食</h2>
+                <div class="spot-list">
+                    <div class="spot" data-lng="104.0785" data-lat="30.6537">
+                        <h3>春熙路</h3>
+                        <p>成都最繁华的商业步行街，汇集了众多品牌店铺和特色小吃，是成都的"购物天堂"。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0668" data-lat="30.6545">
+                        <h3>IFS国际金融中心</h3>
+                        <p>成都地标性建筑，屋顶有著名的"大熊猫"雕塑，集高端购物、美食、娱乐于一体的现代商业综合体。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0753" data-lat="30.6534">
+                        <h3>太古里</h3>
+                        <p>成都时尚地标，集购物、餐饮、休闲于一体的开放式街区，保留了成都传统的建筑元素与现代设计的完美结合。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0774" data-lat="30.6634">
+                        <h3>望平街</h3>
+                        <p>充满文艺气息的小资街区，有许多特色咖啡馆、创意小店和文创产品，是拍照打卡的好去处。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0991" data-lat="30.6423">
+                        <h3>九眼桥</h3>
+                        <p>成都著名的夜生活聚集地，可以体验成都的夜生活文化，沿河的酒吧街灯火通明，热闹非凡。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0661" data-lat="30.6932">
+                        <h3>抚琴夜市</h3>
+                        <p>成都著名的夜市之一，汇集了各种成都特色小吃和地道美食，是体验成都夜生活和饮食文化的好去处。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-info" id="day4">
+                <h2>第4天：历史与现代</h2>
+                <div class="spot-list">
+                    <div class="spot" data-lng="104.2519" data-lat="31.1323">
+                        <h3>三星堆博物馆</h3>
+                        <p>位于广汉市的世界级考古遗址，出土了大量青铜器、金器和玉器等文物，展示了神秘的古蜀文明，被誉为"长江文明之源"。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.1491" data-lat="30.6552">
+                        <h3>东郊记忆</h3>
+                        <p>由旧工业区改造的文创园区，保留了原有的工业建筑风貌，现在是艺术展览、创意市集和音乐表演的场所，充满艺术气息。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0662" data-lat="30.6571">
+                        <h3>市区自由活动</h3>
+                        <p>返回市区后可以自由安排时间，逛逛附近的商场、品尝当地美食或者休息放松，为明天的行程做准备。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-info" id="day5">
+                <h2>第5天：自然风光</h2>
+                <div class="spot-list">
+                    <div class="spot" data-lng="103.6173" data-lat="30.9962">
+                        <h3>都江堰</h3>
+                        <p>世界文化遗产，两千多年前李冰父子修建的伟大水利工程，至今仍在发挥作用，是中国古代科技和智慧的结晶。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="103.5683" data-lat="30.9005">
+                        <h3>青城山</h3>
+                        <p>道教名山，以幽静取胜，素有"青城天下幽"之称，山上古树参天，溪流潺潺，是道教发源地之一，也是避暑胜地。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                    <div class="spot" data-lng="104.0662" data-lat="30.6571">
+                        <h3>返回市区</h3>
+                        <p>结束一天的行程后返回市区，可以购买一些当地特产作为纪念或礼物，为此次成都之旅画上圆满的句号。</p>
+                        <button class="navigate-btn">导航到这里</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2023 成都5日游 - 基于高德MCP开发</p>
+    </footer>
+
+    <!-- 内联JavaScript代码 -->
+    <script>
+        // 高德地图应用主文件
+
+        // 全局变量
+        let map = null;
+        let markers = [];
+        let currentRoute = null;
+        let routeInfoWindow = null;
+
+        // 初始化地图
+        function initMap() {
+            // 创建地图实例
+            map = new AMap.Map('map-container', {
+                zoom: 11,  // 初始缩放级别
+                center: [104.066, 30.657],  // 成都市中心坐标
+                resizeEnable: true
+            });
+
+            // 添加地图控件
+            map.plugin([
+                'AMap.ToolBar',
+                'AMap.Scale',
+                'AMap.HawkEye',
+                'AMap.MapType',
+                'AMap.Geolocation'
+            ], function () {
+                // 添加工具条控件
+                map.addControl(new AMap.ToolBar());
+                // 添加比例尺控件
+                map.addControl(new AMap.Scale());
+                // 添加鹰眼控件
+                map.addControl(new AMap.HawkEye({ isOpen: false }));
+                // 添加地图类型切换控件
+                map.addControl(new AMap.MapType());
+                // 添加定位控件
+                map.addControl(new AMap.Geolocation());
+            });
+
+            // 显示默认标记（概览模式）
+            showOverviewMarkers();
+        }
+
+        // 显示概览模式的所有景点标记
+        function showOverviewMarkers() {
+            // 清除现有标记
+            clearMarkers();
+
+            // 获取所有景点元素
+            const allSpots = document.querySelectorAll('.spot');
+
+            // 为每个景点创建标记
+            allSpots.forEach(spot => {
+                const lng = parseFloat(spot.dataset.lng);
+                const lat = parseFloat(spot.dataset.lat);
+                const title = spot.querySelector('h3').textContent;
+
+                addMarker(lng, lat, title, spot.parentElement.parentElement.id);
+            });
+
+            // 调整地图视野以包含所有标记
+            if (markers.length > 0) {
+                map.setFitView(markers);
+            }
+        }
+
+        // 显示特定日期的景点标记
+        function showDayMarkers(dayId) {
+            // 清除现有标记
+            clearMarkers();
+
+            // 获取特定日期的景点元素
+            const daySpots = document.querySelectorAll(`#${dayId} .spot`);
+
+            // 为每个景点创建标记
+            daySpots.forEach(spot => {
+                const lng = parseFloat(spot.dataset.lng);
+                const lat = parseFloat(spot.dataset.lat);
+                const title = spot.querySelector('h3').textContent;
+
+                addMarker(lng, lat, title, dayId);
+            });
+
+            // 调整地图视野以包含所有标记
+            if (markers.length > 0) {
+                map.setFitView(markers);
+
+                // 如果有多个标记，绘制路线
+                if (markers.length > 1) {
+                    drawRoute(markers.map(marker => marker.getPosition()));
+                }
+            }
+        }
+
+        // 添加标记
+        function addMarker(lng, lat, title, dayId) {
+            // 根据不同天数设置不同颜色
+            let color = '#0091ff';
+            switch (dayId) {
+                case 'day1': color = '#FF5722'; break;
+                case 'day2': color = '#4CAF50'; break;
+                case 'day3': color = '#9C27B0'; break;
+                case 'day4': color = '#FF9800'; break;
+                case 'day5': color = '#2196F3'; break;
+                default: color = '#0091ff';
+            }
+
+            // 创建标记
+            const marker = new AMap.Marker({
+                position: new AMap.LngLat(lng, lat),
+                title: title,
+                icon: new AMap.Icon({
+                    size: new AMap.Size(25, 34),
+                    image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+                    imageSize: new AMap.Size(25, 34),
+                    imageOffset: new AMap.Pixel(0, 0)
+                }),
+                label: {
+                    content: title,
+                    direction: 'right'
+                }
+            });
+
+            // 将标记添加到地图
+            marker.setMap(map);
+
+            // 添加点击事件
+            marker.on('click', function () {
+                // 显示信息窗体
+                showInfoWindow(marker, title, dayId);
+            });
+
+            // 将标记添加到数组
+            markers.push(marker);
+
+            return marker;
+        }
+
+        // 清除所有标记
+        function clearMarkers() {
+            // 清除标记
+            markers.forEach(marker => {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // 清除路线
+            if (currentRoute) {
+                currentRoute.setMap(null);
+                currentRoute = null;
+            }
+
+            // 清除路线信息窗口
+            if (routeInfoWindow) {
+                routeInfoWindow.setMap(null);
+                routeInfoWindow = null;
+            }
+        }
+
+        // 显示信息窗体
+        function showInfoWindow(marker, title, dayId) {
+            // 获取对应的景点信息
+            const spotElement = document.querySelector(`#${dayId} .spot h3:contains('${title}')`).closest('.spot');
+            const description = spotElement ? spotElement.querySelector('p').textContent : '';
+            const position = marker.getPosition();
+
+            // 创建信息窗体内容
+            const content = `
+        <div class="info-window">
+            <h3>${title}</h3>
+            <p>${description}</p>
+            <p class="location-info">位置: ${position.getLng().toFixed(4)}, ${position.getLat().toFixed(4)}</p>
+            <button class="navigate-btn-info">导航到这里</button>
+        </div>
+    `;
+
+            // 创建信息窗体
+            const infoWindow = new AMap.InfoWindow({
+                content: content,
+                offset: new AMap.Pixel(0, -30),
+                autoMove: true,
+                closeWhenClickMap: true
+            });
+
+            // 打开信息窗体
+            infoWindow.open(map, marker.getPosition());
+
+            // 添加导航按钮点击事件
+            setTimeout(() => {
+                const navigateBtn = document.querySelector('.navigate-btn-info');
+                if (navigateBtn) {
+                    navigateBtn.addEventListener('click', () => {
+                        // 获取用户当前位置并导航
+                        getUserLocation(marker.getPosition());
+                        infoWindow.close();
+                    });
+                }
+            }, 100);
+        }
+
+        // 绘制路线
+        function drawRoute(positions) {
+            // 清除现有路线
+            if (currentRoute) {
+                currentRoute.setMap(null);
+                currentRoute = null;
+            }
+
+            // 创建路线实例
+            const path = positions.map(pos => [pos.getLng(), pos.getLat()]);
+            currentRoute = new AMap.Polyline({
+                path: path,
+                isOutline: true,
+                outlineColor: '#ffeeff',
+                borderWeight: 2,
+                strokeColor: '#0091ff',
+                strokeOpacity: 0.7,
+                strokeWeight: 6,
+                strokeStyle: 'solid',
+                lineJoin: 'round',
+                lineCap: 'round',
+                zIndex: 50
+            });
+
+            // 将路线添加到地图
+            currentRoute.setMap(map);
+        }
+
+        // 获取用户当前位置
+        function getUserLocation(destination) {
+            map.plugin('AMap.Geolocation', function () {
+                const geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    buttonPosition: 'RB',
+                    buttonOffset: new AMap.Pixel(10, 20),
+                    zoomToAccuracy: true
+                });
+
+                map.addControl(geolocation);
+                geolocation.getCurrentPosition(function (status, result) {
+                    if (status === 'complete') {
+                        // 获取位置成功，开始导航
+                        startNavigation(result.position, destination);
+                    } else {
+                        // 获取位置失败，使用成都市中心作为起点
+                        alert('无法获取您的位置，将使用成都市中心作为起点进行导航。');
+                        startNavigation(new AMap.LngLat(104.066, 30.657), destination);
+                    }
+                });
+            });
+        }
+
+        // 开始导航
+        function startNavigation(origin, destination) {
+            // 显示路线面板
+            const panel = document.getElementById('panel');
+            panel.classList.add('active');
+
+            // 使用驾车导航
+            AMap.plugin('AMap.Driving', function () {
+                const driving = new AMap.Driving({
+                    policy: AMap.DrivingPolicy.LEAST_TIME,
+                    map: map,
+                    panel: 'panel'
+                });
+
+                // 清除现有路线和信息窗口
+                if (currentRoute) {
+                    currentRoute.setMap(null);
+                    currentRoute = null;
+                }
+
+                if (routeInfoWindow) {
+                    routeInfoWindow.setMap(null);
+                    routeInfoWindow = null;
+                }
+
+                // 规划路线
+                driving.search(origin, destination, function (status, result) {
+                    if (status === 'complete') {
+                        // 创建路线信息窗口
+                        createRouteInfoWindow(result.routes[0]);
+                    } else {
+                        alert('导航失败，请稍后重试。');
+                        // 隐藏路线面板
+                        panel.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        // 创建路线信息窗口
+        function createRouteInfoWindow(route) {
+            // 创建信息窗口内容
+            const content = `
+        <div class="route-info">
+            <button class="close-route-info">×</button>
+            <h3>导航信息</h3>
+            <p>距离：${(route.distance / 1000).toFixed(1)} 公里</p>
+            <p>预计时间：${(route.time / 60).toFixed(0)} 分钟</p>
+            <p>导航已开始，请按照地图上的路线行驶。</p>
+        </div>
+    `;
+
+            // 创建信息窗口
+            const routeInfoDiv = document.createElement('div');
+            routeInfoDiv.className = 'route-info-container';
+            routeInfoDiv.innerHTML = content;
+            document.body.appendChild(routeInfoDiv);
+
+            // 保存路线信息窗口引用
+            routeInfoWindow = routeInfoDiv;
+
+            // 添加关闭按钮事件
+            const closeBtn = routeInfoDiv.querySelector('.close-route-info');
+            closeBtn.addEventListener('click', function () {
+                document.body.removeChild(routeInfoDiv);
+                routeInfoWindow = null;
+
+                // 隐藏路线面板
+                const panel = document.getElementById('panel');
+                panel.classList.remove('active');
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化地图
+            initMap();
+
+            // 添加导航菜单点击事件
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // 更新活动链接样式
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 获取日期ID
+                    const dayId = this.dataset.day;
+
+                    // 更新活动内容
+                    const dayInfos = document.querySelectorAll('.day-info');
+                    dayInfos.forEach(info => info.classList.remove('active'));
+                    document.getElementById(dayId).classList.add('active');
+
+                    // 更新地图标记
+                    if (dayId === 'overview') {
+                        showOverviewMarkers();
+                    } else {
+                        showDayMarkers(dayId);
+                    }
+                });
+            });
+
+            // 添加导航按钮点击事件
+            const navigateBtns = document.querySelectorAll('.navigate-btn');
+            navigateBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // 获取景点坐标
+                    const spot = this.closest('.spot');
+                    const lng = parseFloat(spot.dataset.lng);
+                    const lat = parseFloat(spot.dataset.lat);
+                    const position = new AMap.LngLat(lng, lat);
+
+                    // 获取用户位置并导航
+                    getUserLocation(position);
+                });
+            });
+        });
+
+        // 辅助函数：选择器扩展
+        Document.prototype.querySelector = function (selector) {
+            if (selector.includes(':contains')) {
+                // 处理:contains选择器
+                const parts = selector.split(':contains(');
+                const baseSelector = parts[0];
+                const text = parts[1].slice(0, -1).replace(/["']/g, '');
+
+                // 获取基础选择器的元素
+                const elements = document.querySelectorAll(baseSelector);
+
+                // 查找包含指定文本的元素
+                for (let i = 0; i < elements.length; i++) {
+                    if (elements[i].textContent.includes(text)) {
+                        return elements[i];
+                    }
+                }
+
+                return null;
+            } else {
+                // 使用原生querySelector
+                return document.querySelector(selector);
+            }
+        };
+
+        // 扩展Element.prototype.closest方法（如果浏览器不支持）
+        if (!Element.prototype.closest) {
+            Element.prototype.closest = function (selector) {
+                let el = this;
+                while (el) {
+                    if (el.matches(selector)) {
+                        return el;
+                    }
+                    el = el.parentElement;
+                }
+                return null;
+            };
+        }
+
+        // 扩展Element.prototype.matches方法（如果浏览器不支持）
+        if (!Element.prototype.matches) {
+            Element.prototype.matches =
+                Element.prototype.matchesSelector ||
+                Element.prototype.mozMatchesSelector ||
+                Element.prototype.msMatchesSelector ||
+                Element.prototype.oMatchesSelector ||
+                Element.prototype.webkitMatchesSelector ||
+                function (s) {
+                    const matches = (this.document || this.ownerDocument).querySelectorAll(s);
+                    let i = matches.length;
+                    while (--i >= 0 && matches.item(i) !== this) { }
+                    return i > -1;
+                };
+        }
+
+    </script>
+</body>
+</html>
