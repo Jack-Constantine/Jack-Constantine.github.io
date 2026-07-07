@@ -16,12 +16,12 @@
   <meta name="author" content="JackConstantine">
   <meta name="keywords" content="">
   
-    <meta name="description" content="📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling 一、问题定义 真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性 raster 图。 为什么这个问题重要：科研插图通常要花几天，并且后续修改频繁；如果输出不可编辑，研究者会">
+    <meta name="description" content="📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling  一、问题定义  真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性 raster 图。 为什么这个问题重要：科研插图通常要花几天，并且后续修改频繁；如果输">
 <meta property="og:type" content="article">
 <meta property="og:title" content="研究:text2fig">
 <meta property="og:url" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/index.html">
 <meta property="og:site_name" content="JackConstantine&#39;s Blog">
-<meta property="og:description" content="📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling 一、问题定义 真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性 raster 图。 为什么这个问题重要：科研插图通常要花几天，并且后续修改频繁；如果输出不可编辑，研究者会">
+<meta property="og:description" content="📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling  一、问题定义  真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性 raster 图。 为什么这个问题重要：科研插图通常要花几天，并且后续修改频繁；如果输">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-edit-main.png">
 <meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/figagent-main.png">
@@ -34,8 +34,14 @@
 <meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paperdraw-main.png">
 <meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/scifig-main.png">
 <meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/sciir-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/automatikz-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-0707-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/crafter-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/chartplot-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/vispainter-main.png">
+<meta property="og:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/sridbench-main.png">
 <meta property="article:published_time" content="2026-07-06T13:01:15.000Z">
-<meta property="article:modified_time" content="2026-07-06T13:10:56.374Z">
+<meta property="article:modified_time" content="2026-07-07T16:03:26.586Z">
 <meta property="article:author" content="JackConstantine">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://jack-constantine.github.io/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-edit-main.png">
@@ -273,7 +279,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          22k 字
+          34k 字
         
       </span>
     
@@ -284,7 +290,7 @@
         
         
         
-          183 分钟
+          286 分钟
         
       </span>
     
@@ -326,59 +332,75 @@
             
               <div class="markdown-body">
                 
-                <h1 id="📄-AutoFigure-Edit-Generating-Editable-Scientific-Illustrations-via-Reference-Guided-Styling"><a href="#📄-AutoFigure-Edit-Generating-Editable-Scientific-Illustrations-via-Reference-Guided-Styling" class="headerlink" title="📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling"></a>📄 AutoFigure-Edit: Generating Editable Scientific Illustrations via Reference-Guided Styling</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-edit-main.png" srcset="/img/loading.gif" lazyload class="" title="AutoFigure-Edit">
-<h2 id="一、问题定义"><a href="#一、问题定义" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性 raster 图。</li>
+                <h1
+id="autofigure-edit-generating-editable-scientific-illustrations-via-reference-guided-styling">📄
+AutoFigure-Edit: Generating Editable Scientific Illustrations via
+Reference-Guided Styling</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-edit-main.png" srcset="/img/loading.gif" lazyload class="" title="AutoFigure-Edit">
+<h2 id="一问题定义">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：把长篇方法文本直接变成可编辑、可局部修改的科研插图，而不是只能得到一次性
+raster 图。</li>
 <li>为什么这个问题重要：科研插图通常要花几天，并且后续修改频繁；如果输出不可编辑，研究者会被重新作图成本拖死。</li>
-<li>现有方法为什么失败：T2I 模型视觉上可观但结构不稳；纯 SVG/代码法可编辑但布局和美观性差；PNG 转 SVG 会继承上游结构错误。</li>
+<li>现有方法为什么失败：T2I 模型视觉上可观但结构不稳；纯
+SVG/代码法可编辑但布局和美观性差；PNG 转 SVG 会继承上游结构错误。</li>
 </ul>
-<h2 id="二、方法机制"><a href="#二、方法机制" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：长上下文科研文本 + 参考风格图。</li>
-<li>核心机制是什么：四阶段流水线<ul>
+<li>核心机制是什么：四阶段流水线
+<ul>
 <li>Stage I：风格条件图像生成，先得到 raster 草图</li>
 <li>Stage II：分割与结构索引，把图拆成可定位部件</li>
 <li>Stage III：资产提取，保留可复用视觉元素</li>
 <li>Stage IV：SVG 模板生成与二次 refinement，把结构映射成可编辑 SVG</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：带嵌入式可视化编辑器的可编辑 SVG 插图。</li>
 </ul>
-<h2 id="三、数据集"><a href="#三、数据集" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集">三、数据集</h2>
+<ul>
 <li>数据集名称：FigureBench 的 research-paper subset</li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开 benchmark</li>
-<li>数据是如何获得的（非常重要）：<ul>
+<li>数据是如何获得的（非常重要）：
+<ul>
 <li>标注方式：论文未详细展开，沿用 FigureBench 原有构造</li>
 <li>是否清洗 / 过滤 / 增强：论文未详述</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：文中明确用于评测的 200 个 method descriptions；未给出 train/val/test</li>
-</ul>
-</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：文中明确用于评测的 200 个 method
+descriptions；未给出 train/val/test</li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：text + image</li>
-<li>是否可公开下载：<ul>
-<li>下载链接：论文提到项目代码 <code>https://github.com/ResearAI/AutoFigure-Edit</code></li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：论文提到项目代码
+<code>https://github.com/ResearAI/AutoFigure-Edit</code></li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构"><a href="#四、模型结构" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：Gemini-3-Pro-Image-Preview、Gemini-3.1-Pro-Preview、NanoBanana-Pro 一类闭源 VLM/T2I</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构">四、模型结构</h2>
+<ul>
+<li>backbone模型：Gemini-3-Pro-Image-Preview、Gemini-3.1-Pro-Preview、NanoBanana-Pro
+一类闭源 VLM/T2I</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: 风格条件图像生成</li>
 <li>module 2: 分割与结构解析</li>
 <li>module 3: SVG 模板生成与渲染对齐 refinement</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: Gemini / NanoBanana 系列</li>
-<li>fine-tuning方式：主要是 prompting / pipeline orchestration，未报告专门微调</li>
+<li>fine-tuning方式：主要是 prompting / pipeline
+orchestration，未报告专门微调</li>
+</ul></li>
+<li>关键设计思想：先生成视觉草图，再做结构拆解和 SVG
+重建，用“中间结构层”换取可编辑性。</li>
 </ul>
-</li>
-<li>关键设计思想：先生成视觉草图，再做结构拆解和 SVG 重建，用“中间结构层”换取可编辑性。</li>
-</ul>
-<h2 id="五、计算资源"><a href="#五、计算资源" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：大概率使用云端模型推理</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
@@ -386,171 +408,235 @@
 <li>训练时长（如果有）：未提供</li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点"><a href="#六、创新点" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：把参考风格控制、结构索引和 SVG 重建串成一体化可编辑科研插图系统。</li>
-<li>工程优化（engineering tricks）：先 raster 后 vector；用渲染回看做轻量 refinement。</li>
-<li>实验或数据贡献：在 FigureBench 上做结构化评测，并提供在线演示/编辑器。</li>
+<h2 id="六创新点">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把参考风格控制、结构索引和 SVG
+重建串成一体化可编辑科研插图系统。</li>
+<li>工程优化（engineering tricks）：先 raster 后
+vector；用渲染回看做轻量 refinement。</li>
+<li>实验或数据贡献：在 FigureBench
+上做结构化评测，并提供在线演示/编辑器。</li>
 </ul>
-<h2 id="七、局限性"><a href="#七、局限性" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：上游分割错、背景去除错、复杂专业图形超出基础模型能力时，SVG 重建会连锁失真。</li>
+<h2 id="七局限性">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：上游分割错、背景去除错、复杂专业图形超出基础模型能力时，SVG
+重建会连锁失真。</li>
 <li>隐含假设：默认基础模型能先给出可被结构化的高质量 raster 草图。</li>
 <li>未解决问题：仍依赖闭源模型；跨学科高专业图的正确性验证不足。</li>
 </ul>
-<h2 id="八、可复用模块"><a href="#八、可复用模块" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块">八、可复用模块</h2>
+<ul>
 <li>style-conditioned draft generation</li>
 <li>segmentation-to-asset indexing</li>
 <li>raster-to-editable-SVG reconstruction</li>
 <li>render-and-refine loop</li>
 </ul>
-<h2 id="九、灵感种子"><a href="#九、灵感种子" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向"><a href="#1-改进方向" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
+<h2 id="九灵感种子">九、灵感种子</h2>
+<h3 id="改进方向">1. 改进方向</h3>
+<ul>
 <li>把 Stage II 的分割换成显式图元检测器，减少错误传播。</li>
 <li>引入“图元级约束求解器”，而不是只靠 VLM 回改 SVG。</li>
 </ul>
-<h3 id="2-跨领域迁移"><a href="#2-跨领域迁移" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移">2. 跨领域迁移</h3>
+<ul>
 <li>可迁移到 graphical abstract、教学流程图、专利示意图。</li>
 </ul>
-<h3 id="3-组合机会"><a href="#3-组合机会" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>可与 DiagramRAG 的结构检索结合，先检索拓扑相似参考图再做 SVG 重建。</li>
+<h3 id="组合机会">3. 组合机会</h3>
+<ul>
+<li>可与 DiagramRAG 的结构检索结合，先检索拓扑相似参考图再做 SVG
+重建。</li>
 </ul>
-<hr>
-<h1 id="📄-Automatic-Method-Illustration-Generation-for-AI-Scientific-Papers-via-Drawing-Middleware-Creation-Evolution-and-Orchestration"><a href="#📄-Automatic-Method-Illustration-Generation-for-AI-Scientific-Papers-via-Drawing-Middleware-Creation-Evolution-and-Orchestration" class="headerlink" title="📄 Automatic Method Illustration Generation for AI Scientific Papers via Drawing Middleware Creation, Evolution, and Orchestration"></a>📄 Automatic Method Illustration Generation for AI Scientific Papers via Drawing Middleware Creation, Evolution, and Orchestration</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/figagent-main.png" srcset="/img/loading.gif" lazyload class="" title="FigAgent">
-<h2 id="一、问题定义-1"><a href="#一、问题定义-1" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：自动生成高保真、可编辑的 AI 论文方法示意图（MI），并能跟随研究社区新概念持续演化。</li>
+<hr />
+<h1
+id="automatic-method-illustration-generation-for-ai-scientific-papers-via-drawing-middleware-creation-evolution-and-orchestration">📄
+Automatic Method Illustration Generation for AI Scientific Papers via
+Drawing Middleware Creation, Evolution, and Orchestration</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/figagent-main.png" srcset="/img/loading.gif" lazyload class="" title="FigAgent">
+<h2 id="一问题定义-1">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：自动生成高保真、可编辑的 AI
+论文方法示意图（MI），并能跟随研究社区新概念持续演化。</li>
 <li>为什么这个问题重要：方法图高度依赖领域图形惯例，人工绘制耗时且样式知识分散在作者经验里。</li>
-<li>现有方法为什么失败：raster 生成方法结构容易错；后处理 vectorization 仍带噪；直接 SVG 代码生成又难以处理复杂组件和社区风格演化。</li>
+<li>现有方法为什么失败：raster 生成方法结构容易错；后处理 vectorization
+仍带噪；直接 SVG 代码生成又难以处理复杂组件和社区风格演化。</li>
 </ul>
-<h2 id="二、方法机制-1"><a href="#二、方法机制-1" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-1">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：论文文本 p</li>
-<li>核心机制是什么：<ul>
-<li>CA 从公开论文中构建 experience dataset，并抽取 reusable middlewares</li>
+<li>核心机制是什么：
+<ul>
+<li>CA 从公开论文中构建 experience dataset，并抽取 reusable
+middlewares</li>
 <li>PA 将文本解析为 concept graph</li>
 <li>DA 在 DrawIO 中调用 middleware 绘制</li>
 <li>EA / RA 评估并在 Explore-and-Select 策略下反复尝试更优绘制选择</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：可导出为 SVG 的高保真方法图。</li>
 </ul>
-<h2 id="三、数据集-1"><a href="#三、数据集-1" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
-<li>数据集名称：<ul>
+<h2 id="三数据集-1">三、数据集</h2>
+<ul>
+<li>数据集名称：
+<ul>
 <li>Dexp（experience dataset）</li>
 <li>FigAgentBench（测试集）</li>
 <li>另在 PaperBananaBench 上评测</li>
-</ul>
-</li>
+</ul></li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开论文 Web 收集</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：自动收集论文文本和 MI，并抽取 XML/DrawIO 代码；middleware 创建和演化由 agent 驱动</li>
-<li>是否清洗 / 过滤 / 增强：有中间的 middleware 去重、合并、进化更新</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：共 4,964 对 paper-MI(XML)；80% 构建 Dexp，20% 作为 FigAgentBench；未说明 val</li>
-</ul>
-</li>
-<li>数据模态（text / image / multimodal / graph）：text + diagram code + image</li>
-<li>是否可公开下载：<ul>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：自动收集论文文本和 MI，并抽取 XML/DrawIO 代码；middleware
+创建和演化由 agent 驱动</li>
+<li>是否清洗 / 过滤 / 增强：有中间的 middleware
+去重、合并、进化更新</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：共 4,964 对 paper-MI(XML)；80% 构建 Dexp，20%
+作为 FigAgentBench；未说明 val</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：text + diagram code +
+image</li>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：论文文本未给出稳定公开链接</li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-1"><a href="#四、模型结构-1" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
+<h2 id="四模型结构-1">四、模型结构</h2>
+<ul>
 <li>backbone模型：LLM + vision-LLM + DrawIO 工具环境</li>
-<li>模型结构组成模块：<ul>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: Middleware Creation Agent / repository evolution</li>
 <li>module 2: Parser Agent 生成 concept graph</li>
 <li>module 3: Drawer Agent + Evaluator Agent + Refiner Agent</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: 论文提到 LLM、vision-LLM、语义编码器（如 bge-m3
+一类）</li>
+<li>fine-tuning方式：未报告端到端参数微调；核心是 agentic
+orchestration</li>
+</ul></li>
+<li>关键设计思想：把“作者常画的图元模板”显式化成 Python
+middleware，再通过检索、进化和选择完成复杂图合成。</li>
 </ul>
-</li>
-<li>是否使用预训练模型：<ul>
-<li>base model: 论文提到 LLM、vision-LLM、语义编码器（如 bge-m3 一类）</li>
-<li>fine-tuning方式：未报告端到端参数微调；核心是 agentic orchestration</li>
-</ul>
-</li>
-<li>关键设计思想：把“作者常画的图元模板”显式化成 Python middleware，再通过检索、进化和选择完成复杂图合成。</li>
-</ul>
-<h2 id="五、计算资源-1"><a href="#五、计算资源-1" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-1">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：未明确</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
 <li>是否分布式训练：未提供GPU信息</li>
 <li>训练时长（如果有）：未提供</li>
-<li>batch size / epoch（如果有）：文中只给出 Dexp 批次级目标函数，没有标准深度训练设置</li>
+<li>batch size / epoch（如果有）：文中只给出 Dexp
+批次级目标函数，没有标准深度训练设置</li>
 </ul>
-<h2 id="六、创新点-1"><a href="#六、创新点-1" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：middleware-driven 图生成范式，把图元模板作为一等公民，并引入 repository evolution。</li>
-<li>工程优化（engineering tricks）：Explore-and-Select 绘制策略；theme-concept 索引；DrawIO 可执行函数封装。</li>
-<li>实验或数据贡献：构建 FigAgentBench，并系统对比 image-based / SVG-based 基线。</li>
+<h2 id="六创新点-1">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：middleware-driven
+图生成范式，把图元模板作为一等公民，并引入 repository evolution。</li>
+<li>工程优化（engineering tricks）：Explore-and-Select
+绘制策略；theme-concept 索引；DrawIO 可执行函数封装。</li>
+<li>实验或数据贡献：构建 FigAgentBench，并系统对比 image-based /
+SVG-based 基线。</li>
 </ul>
-<h2 id="七、局限性-1"><a href="#七、局限性-1" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：如果 middleware 库覆盖不足，DA 很难画出新颖组件；视觉上可能仍受 DrawIO 原子图元表达力限制。</li>
+<h2 id="七局限性-1">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：如果 middleware 库覆盖不足，DA
+很难画出新颖组件；视觉上可能仍受 DrawIO 原子图元表达力限制。</li>
 <li>隐含假设：相似主题论文中存在足够可重用视觉原语。</li>
-<li>未解决问题：跨学科迁移、全新概念的 zero-shot 表达、计算资源/调用成本没有透明展开。</li>
+<li>未解决问题：跨学科迁移、全新概念的 zero-shot
+表达、计算资源/调用成本没有透明展开。</li>
 </ul>
-<h2 id="八、可复用模块-1"><a href="#八、可复用模块-1" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-1">八、可复用模块</h2>
+<ul>
 <li>concept graph parser</li>
 <li>drawing middleware repository</li>
 <li>middleware evolution loop</li>
 <li>explore-and-select orchestration</li>
 </ul>
-<h2 id="九、灵感种子-1"><a href="#九、灵感种子-1" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-1"><a href="#1-改进方向-1" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>把 middleware 从函数库升级为“可组合图语法”，让新概念可由旧图元自动拼装。</li>
+<h2 id="九灵感种子-1">九、灵感种子</h2>
+<h3 id="改进方向-1">1. 改进方向</h3>
+<ul>
+<li>把 middleware
+从函数库升级为“可组合图语法”，让新概念可由旧图元自动拼装。</li>
 </ul>
-<h3 id="2-跨领域迁移-1"><a href="#2-跨领域迁移-1" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-1">2. 跨领域迁移</h3>
+<ul>
 <li>可用于 UI 草图、教育流程图、生物机制图。</li>
 </ul>
-<h3 id="3-组合机会-1"><a href="#3-组合机会-1" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>可和 Paper2Figure 的 FigScript 结合：middleware 负责组件，FigScript 负责全局布局。</li>
+<h3 id="组合机会-1">3. 组合机会</h3>
+<ul>
+<li>可和 Paper2Figure 的 FigScript 结合：middleware 负责组件，FigScript
+负责全局布局。</li>
 </ul>
-<hr>
-<h1 id="📄-DiagramBank-A-Quality-Audited-Dataset-of-Scientific-Schematic"><a href="#📄-DiagramBank-A-Quality-Audited-Dataset-of-Scientific-Schematic" class="headerlink" title="📄 DiagramBank: A Quality-Audited Dataset of Scientific Schematic"></a>📄 DiagramBank: A Quality-Audited Dataset of Scientific Schematic</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/diagrambank-main.png" srcset="/img/loading.gif" lazyload class="" title="DiagramBank">
-<h2 id="一、问题定义-2"><a href="#一、问题定义-2" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：构建一个高质量、可审计、带上下文与 provenance 的科学示意图数据资源。</li>
-<li>为什么这个问题重要：后续 diagram retrieval、RAG、benchmark、图理解都需要“先把图集对”。</li>
-<li>现有方法为什么失败：过去资源常混合 plot/photo/diagram，没有 paper-level context，也没有质量审计和过滤不确定性。</li>
+<hr />
+<h1
+id="diagrambank-a-quality-audited-dataset-of-scientific-schematic">📄
+DiagramBank: A Quality-Audited Dataset of Scientific Schematic</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/diagrambank-main.png" srcset="/img/loading.gif" lazyload class="" title="DiagramBank">
+<h2 id="一问题定义-2">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：构建一个高质量、可审计、带上下文与 provenance
+的科学示意图数据资源。</li>
+<li>为什么这个问题重要：后续 diagram
+retrieval、RAG、benchmark、图理解都需要“先把图集对”。</li>
+<li>现有方法为什么失败：过去资源常混合 plot/photo/diagram，没有
+paper-level context，也没有质量审计和过滤不确定性。</li>
 </ul>
-<h2 id="二、方法机制-2"><a href="#二、方法机制-2" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-2">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：OpenReview 论文 PDF + metadata</li>
-<li>核心机制是什么：PDF 抽图 → CLIP 预过滤 → VLM cascade 复核 → context/provenance 绑定 → audit</li>
-<li>输出是什么：57,100 条 schematic diagram 记录及多种 confidence-controlled views。</li>
+<li>核心机制是什么：PDF 抽图 → CLIP 预过滤 → VLM cascade 复核 →
+context/provenance 绑定 → audit</li>
+<li>输出是什么：57,100 条 schematic diagram 记录及多种
+confidence-controlled views。</li>
 </ul>
-<h2 id="三、数据集-2"><a href="#三、数据集-2" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集-2">三、数据集</h2>
+<ul>
 <li>数据集名称：DiagramBank</li>
-<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开，OpenReview-hosted AI/ML venues</li>
-<li>数据是如何获得的（非常重要）：<ul>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开，OpenReview-hosted
+AI/ML venues</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
 <li>标注方式：自动过滤为主，人工盲审用于 release precision 审计</li>
-<li>是否清洗 / 过滤 / 增强：有 CLIP 预筛、VLM cascade、accepted-paper filter、confidence views</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：不预设 train/val/test；主发布版本 57,100，候选池 94,176</li>
-</ul>
-</li>
-<li>数据模态（text / image / multimodal / graph）：image + metadata + paper context</li>
-<li>是否可公开下载：<ul>
+<li>是否清洗 / 过滤 / 增强：有 CLIP 预筛、VLM cascade、accepted-paper
+filter、confidence views</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：不预设 train/val/test；主发布版本 57,100，候选池
+94,176</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：image + metadata +
+paper context</li>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：<code>https://github.com/csml-rpi/DiagramBank</code></li>
 <li>是否需要申请：论文未说明，一般看作公开资源</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-2"><a href="#四、模型结构-2" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：OpenCLIP ViT-B/32 + DataComp-XL 权重；后续 VLM cascade</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-2">四、模型结构</h2>
+<ul>
+<li>backbone模型：OpenCLIP ViT-B/32 + DataComp-XL 权重；后续 VLM
+cascade</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: PDF figure extraction</li>
 <li>module 2: CLIP-based coarse classification</li>
 <li>module 3: VLM cascade + audit packaging</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: OpenCLIP / VLM</li>
 <li>fine-tuning方式：未报告微调</li>
-</ul>
-</li>
+</ul></li>
 <li>关键设计思想：不是“做最强分类器”，而是把过滤过程显式可追踪化，让下游研究者可按置信度自定义子集。</li>
 </ul>
-<h2 id="五、计算资源-2"><a href="#五、计算资源-2" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-2">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：论文未明确</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
@@ -558,365 +644,490 @@
 <li>训练时长（如果有）：未提供</li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点-2"><a href="#六、创新点-2" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：把 diagram dataset 构造成“可审计资源层”，而非单纯图像集合。</li>
-<li>工程优化（engineering tricks）：cascade filtering、confidence views、paper/figure context 对齐。</li>
-<li>实验或数据贡献：57,100 高质量 schematic diagrams，且给出审计精度。</li>
+<h2 id="六创新点-2">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把 diagram dataset
+构造成“可审计资源层”，而非单纯图像集合。</li>
+<li>工程优化（engineering tricks）：cascade filtering、confidence
+views、paper/figure context 对齐。</li>
+<li>实验或数据贡献：57,100 高质量 schematic
+diagrams，且给出审计精度。</li>
 </ul>
-<h2 id="七、局限性-2"><a href="#七、局限性-2" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：自动 PDF 解析错误、caption / figure-reference span 不完整、diagram vs plot 误分。</li>
+<h2 id="七局限性-2">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：自动 PDF 解析错误、caption / figure-reference
+span 不完整、diagram vs plot 误分。</li>
 <li>隐含假设：OpenReview AI/ML 论文足以代表目标研究空间。</li>
-<li>未解决问题：没有天然覆盖其他学科，也不直接提供 train/test benchmark protocol。</li>
+<li>未解决问题：没有天然覆盖其他学科，也不直接提供 train/test benchmark
+protocol。</li>
 </ul>
-<h2 id="八、可复用模块-2"><a href="#八、可复用模块-2" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-2">八、可复用模块</h2>
+<ul>
 <li>PDF-to-figure extraction pipeline</li>
 <li>confidence-controlled release views</li>
 <li>provenance-aware indexing schema</li>
 <li>blind audit protocol</li>
 </ul>
-<h2 id="九、灵感种子-2"><a href="#九、灵感种子-2" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-2"><a href="#1-改进方向-2" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>加入“结构标签层”，把图片资源升级成带拓扑与版式标签的 retrieval-ready corpus。</li>
+<h2 id="九灵感种子-2">九、灵感种子</h2>
+<h3 id="改进方向-2">1. 改进方向</h3>
+<ul>
+<li>加入“结构标签层”，把图片资源升级成带拓扑与版式标签的 retrieval-ready
+corpus。</li>
 </ul>
-<h3 id="2-跨领域迁移-2"><a href="#2-跨领域迁移-2" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-2">2. 跨领域迁移</h3>
+<ul>
 <li>法学流程图、医学示意图、专利附图语料库。</li>
 </ul>
-<h3 id="3-组合机会-2"><a href="#3-组合机会-2" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 DiagramRAG、SciIR、AutoFigure 系统结合，做 retrieval-conditioned figure generation。</li>
+<h3 id="组合机会-2">3. 组合机会</h3>
+<ul>
+<li>与 DiagramRAG、SciIR、AutoFigure 系统结合，做 retrieval-conditioned
+figure generation。</li>
 </ul>
-<hr>
-<h1 id="📄-DiagramRAG-A-Lightweight-Framework-to-Retrieve-Scientific-Diagram-for-Figure-Generation"><a href="#📄-DiagramRAG-A-Lightweight-Framework-to-Retrieve-Scientific-Diagram-for-Figure-Generation" class="headerlink" title="📄 DiagramRAG: A Lightweight Framework to Retrieve Scientific Diagram for Figure Generation"></a>📄 DiagramRAG: A Lightweight Framework to Retrieve Scientific Diagram for Figure Generation</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/diagramrag-main.png" srcset="/img/loading.gif" lazyload class="" title="DiagramRAG">
-<h2 id="一、问题定义-3"><a href="#一、问题定义-3" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：给定不完整 sketch，如何检索到拓扑兼容的科学图作为参考，再生成更完整、更美观的图。</li>
+<hr />
+<h1
+id="diagramrag-a-lightweight-framework-to-retrieve-scientific-diagram-for-figure-generation">📄
+DiagramRAG: A Lightweight Framework to Retrieve Scientific Diagram for
+Figure Generation</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/diagramrag-main.png" srcset="/img/loading.gif" lazyload class="" title="DiagramRAG">
+<h2 id="一问题定义-3">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：给定不完整
+sketch，如何检索到拓扑兼容的科学图作为参考，再生成更完整、更美观的图。</li>
 <li>为什么这个问题重要：端到端生成常在结构完整性和拓扑一致性上翻车，而科研图首先是结构问题。</li>
-<li>现有方法为什么失败：纯 T2I 不理解图拓扑；普通图像检索更重视觉相似，不重“连接关系是否对”。</li>
+<li>现有方法为什么失败：纯 T2I
+不理解图拓扑；普通图像检索更重视觉相似，不重“连接关系是否对”。</li>
 </ul>
-<h2 id="二、方法机制-3"><a href="#二、方法机制-3" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-3">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：用户 sketch / 不完整布局</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>把 diagram 表示成 knowledge graph</li>
 <li>合成多类 sketch variants</li>
 <li>训练对比式 embedding，使 sketch 与兼容 diagram 对齐</li>
-<li>检索参考图后，由 structural planning agent + visual guidance agent 驱动生成</li>
-</ul>
-</li>
+<li>检索参考图后，由 structural planning agent + visual guidance agent
+驱动生成</li>
+</ul></li>
 <li>输出是什么：结构更完整的最终 diagram。</li>
 </ul>
-<h2 id="三、数据集-3"><a href="#三、数据集-3" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
-<li>数据集名称：<ul>
+<h2 id="三数据集-3">三、数据集</h2>
+<ul>
+<li>数据集名称：
+<ul>
 <li>DiagramSketch</li>
 <li>diagram pool 基于 DiagramBank + FigureBench</li>
-</ul>
-</li>
-<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开数据 + 自动合成 sketch variants</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：正样本由 sketch 与其源 diagram 自动配对；负样本来自 mini-batch/in-batch negatives</li>
-<li>是否清洗 / 过滤 / 增强：有五类 sketch variant 合成、过滤与 topology-KG 变体协议</li>
-</ul>
-</li>
-<li>数据规模：<ul>
+</ul></li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开数据 + 自动合成 sketch
+variants</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：正样本由 sketch 与其源 diagram 自动配对；负样本来自
+mini-batch/in-batch negatives</li>
+<li>是否清洗 / 过滤 / 增强：有五类 sketch variant 合成、过滤与
+topology-KG 变体协议</li>
+</ul></li>
+<li>数据规模：
+<ul>
 <li>train / val / test：论文未完整给出全量 split</li>
-</ul>
-</li>
-<li>数据模态（text / image / multimodal / graph）：image + sketch + graph</li>
-<li>是否可公开下载：<ul>
-<li>下载链接：<ul>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：image + sketch +
+graph</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：
+<ul>
 <li><code>https://anonymous.4open.science/r/DiagramRAG-A262</code></li>
 <li><code>https://huggingface.co/datasets/anonymous-review-a262/DiagramSketch</code></li>
-</ul>
-</li>
+</ul></li>
 <li>是否需要申请：看起来不需要</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-3"><a href="#四、模型结构-3" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：CLIP 系列视觉编码器 + contrastive retrieval + 外部生成模型</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-3">四、模型结构</h2>
+<ul>
+<li>backbone模型：CLIP 系列视觉编码器 + contrastive retrieval +
+外部生成模型</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: sketch / diagram dual encoder</li>
 <li>module 2: contrastive retrieval space learning</li>
-<li>module 3: structural planning agent + visual guidance agent + generator</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
-<li>base model: CLIP ViT-B/L 等；生成器可用 Nano Banana Pro / GPT-Image 2</li>
+<li>module 3: structural planning agent + visual guidance agent +
+generator</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: CLIP ViT-B/L 等；生成器可用 Nano Banana Pro / GPT-Image
+2</li>
 <li>fine-tuning方式：contrastive training；生成器本身未必微调</li>
-</ul>
-</li>
+</ul></li>
 <li>关键设计思想：把“检索什么参考图”作为第一关键步骤，通过拓扑相容性而非纯语义相似驱动下游生成。</li>
 </ul>
-<h2 id="五、计算资源-3"><a href="#五、计算资源-3" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-3">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：是</li>
 <li>GPU型号：NVIDIA H800 80GB</li>
 <li>GPU数量：单节点，数量未明确</li>
 <li>是否分布式训练：未说明</li>
 <li>训练时长（如果有）：未提供</li>
-<li>batch size / epoch（如果有）：<ul>
+<li>batch size / epoch（如果有）：
+<ul>
 <li>默认 5 epochs，batch size 64</li>
 <li>ViT-L/14 时 batch size 32，训练 10 epochs</li>
+</ul></li>
 </ul>
-</li>
+<h2 id="六创新点-3">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：结构感知 sketch-to-diagram
+retrieval，把图生成拆成“检索兼容参考 + 条件生成”。</li>
+<li>工程优化（engineering tricks）：知识图表示、多级退化 sketch
+合成、in-batch contrastive negatives。</li>
+<li>实验或数据贡献：公开 DiagramSketch，并构建基于
+DiagramBank/FigureBench 的 diagram pool。</li>
 </ul>
-<h2 id="六、创新点-3"><a href="#六、创新点-3" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：结构感知 sketch-to-diagram retrieval，把图生成拆成“检索兼容参考 + 条件生成”。</li>
-<li>工程优化（engineering tricks）：知识图表示、多级退化 sketch 合成、in-batch contrastive negatives。</li>
-<li>实验或数据贡献：公开 DiagramSketch，并构建基于 DiagramBank/FigureBench 的 diagram pool。</li>
-</ul>
-<h2 id="七、局限性-3"><a href="#七、局限性-3" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：对非 workflow/framework 类科研图泛化不足；若检索库本身覆盖弱，生成上限被锁死。</li>
+<h2 id="七局限性-3">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：对非 workflow/framework
+类科研图泛化不足；若检索库本身覆盖弱，生成上限被锁死。</li>
 <li>隐含假设：目标图可由现有参考图的结构原型近似覆盖。</li>
 <li>未解决问题：对 plots/tables/math illustration 的泛化尚未证明。</li>
 </ul>
-<h2 id="八、可复用模块-3"><a href="#八、可复用模块-3" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-3">八、可复用模块</h2>
+<ul>
 <li>sketch variant synthesizer</li>
 <li>topology-aware contrastive retriever</li>
 <li>structure prompt planner</li>
 <li>style guidance summarizer</li>
 </ul>
-<h2 id="九、灵感种子-3"><a href="#九、灵感种子-3" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-3"><a href="#1-改进方向-3" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
+<h2 id="九灵感种子-3">九、灵感种子</h2>
+<h3 id="改进方向-3">1. 改进方向</h3>
+<ul>
 <li>将检索对象从整图升级为“局部拓扑片段”，支持模块级拼装。</li>
 </ul>
-<h3 id="2-跨领域迁移-3"><a href="#2-跨领域迁移-3" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-3">2. 跨领域迁移</h3>
+<ul>
 <li>UI wireframe retrieval、工业流程图补全、教育板书结构生成。</li>
 </ul>
-<h3 id="3-组合机会-3"><a href="#3-组合机会-3" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 AutoFigure-Edit 或 GenGA 结合，先检索结构，再输出可编辑 SVG。</li>
+<h3 id="组合机会-3">3. 组合机会</h3>
+<ul>
+<li>与 AutoFigure-Edit 或 GenGA 结合，先检索结构，再输出可编辑
+SVG。</li>
 </ul>
-<hr>
-<h1 id="📄-Generation-and-Evaluation-of-Editable-Graphical-Abstracts-for-Academic-Papers"><a href="#📄-Generation-and-Evaluation-of-Editable-Graphical-Abstracts-for-Academic-Papers" class="headerlink" title="📄 Generation and Evaluation of Editable Graphical Abstracts for Academic Papers"></a>📄 Generation and Evaluation of Editable Graphical Abstracts for Academic Papers</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/genga-main.png" srcset="/img/loading.gif" lazyload class="" title="GenGA">
-<h2 id="一、问题定义-4"><a href="#一、问题定义-4" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：让 graphical abstract 生成结果不仅好看，而且是可编辑的、可局部修改的、能保留论文真实资产的。</li>
-<li>为什么这个问题重要：GA 是论文传播入口，但现有图像生成结果难编辑，也容易把真实实验 asset 改坏。</li>
-<li>现有方法为什么失败：端到端 raster 生成会把可编辑性和真实数据约束全部丢掉。</li>
+<hr />
+<h1
+id="generation-and-evaluation-of-editable-graphical-abstracts-for-academic-papers">📄
+Generation and Evaluation of Editable Graphical Abstracts for Academic
+Papers</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/genga-main.png" srcset="/img/loading.gif" lazyload class="" title="GenGA">
+<h2 id="一问题定义-4">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：让 graphical abstract
+生成结果不仅好看，而且是可编辑的、可局部修改的、能保留论文真实资产的。</li>
+<li>为什么这个问题重要：GA
+是论文传播入口，但现有图像生成结果难编辑，也容易把真实实验 asset
+改坏。</li>
+<li>现有方法为什么失败：端到端 raster
+生成会把可编辑性和真实数据约束全部丢掉。</li>
 </ul>
-<h2 id="二、方法机制-4"><a href="#二、方法机制-4" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-4">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：论文全文 / 摘要引言 + 可选资产图 A</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>reference retrieval</li>
 <li>reference vectorization</li>
 <li>asset-aware SVG generation</li>
 <li>self-correction loop</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：可编辑 SVG 格式的 graphical abstract。</li>
 </ul>
-<h2 id="三、数据集-4"><a href="#三、数据集-4" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集-4">三、数据集</h2>
+<ul>
 <li>数据集名称：SciGA-145k</li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开数据集</li>
-<li>数据是如何获得的（非常重要）：<ul>
+<li>数据是如何获得的（非常重要）：
+<ul>
 <li>标注方式：来自 papers paired with GAs；资产提取为半自动</li>
-<li>是否清洗 / 过滤 / 增强：评测时聚焦 CS 域；使用 16,416 个额外 GAs 做检索参考</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：测试集 2,053 papers；其余 split 未在文中明确</li>
-</ul>
-</li>
+<li>是否清洗 / 过滤 / 增强：评测时聚焦 CS 域；使用 16,416 个额外 GAs
+做检索参考</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：测试集 2,053 papers；其余 split
+未在文中明确</li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：multimodal</li>
-<li>是否可公开下载：<ul>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：论文引用 SciGA，但本文未直接给稳定下载链接</li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-4"><a href="#四、模型结构-4" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：VLM + vectorization module + self-correction pipeline</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-4">四、模型结构</h2>
+<ul>
+<li>backbone模型：VLM + vectorization module + self-correction
+pipeline</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: reference retrieval</li>
-<li>module 2: reference vectorization，把 arrows/regions/text blocks 变成 SVG 元素</li>
+<li>module 2: reference vectorization，把 arrows/regions/text blocks
+变成 SVG 元素</li>
 <li>module 3: asset-aware generation</li>
 <li>module 4: self-correction loop</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: 文中只说使用生成模型 / VLM，未完整披露底模</li>
 <li>fine-tuning方式：未明确</li>
+</ul></li>
+<li>关键设计思想：把“用户资产”视为固定约束而非生成目标，同时引入
+Structural Independence Coefficient 衡量局部可编辑性。</li>
 </ul>
-</li>
-<li>关键设计思想：把“用户资产”视为固定约束而非生成目标，同时引入 Structural Independence Coefficient 衡量局部可编辑性。</li>
-</ul>
-<h2 id="五、计算资源-4"><a href="#五、计算资源-4" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-4">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：未明确</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
 <li>是否分布式训练：未提供GPU信息</li>
 <li>训练时长（如果有）：未提供</li>
-<li>batch size / epoch（如果有）：文中提到 self-correction 迭代 4 轮，但没有训练批次信息</li>
+<li>batch size / epoch（如果有）：文中提到 self-correction 迭代 4
+轮，但没有训练批次信息</li>
 </ul>
-<h2 id="六、创新点-4"><a href="#六、创新点-4" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：定义 Editable GA Generation 任务，并把 editability 作为核心目标。</li>
-<li>工程优化（engineering tricks）：reference vectorization；asset placeholder 机制；self-correction。</li>
+<h2 id="六创新点-4">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：定义 Editable GA Generation 任务，并把
+editability 作为核心目标。</li>
+<li>工程优化（engineering tricks）：reference vectorization；asset
+placeholder 机制；self-correction。</li>
 <li>实验或数据贡献：提出 SIC 指标与新的 editable GA 评测框架。</li>
 </ul>
-<h2 id="七、局限性-4"><a href="#七、局限性-4" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：非结构资产会被替换成 placeholder，视觉表达可能不完整；若参考图和目标论文语义差距太大，SVG 结构指导会误导。</li>
+<h2 id="七局限性-4">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：非结构资产会被替换成
+placeholder，视觉表达可能不完整；若参考图和目标论文语义差距太大，SVG
+结构指导会误导。</li>
 <li>隐含假设：GA 可被分解成结构层和资产层，且两者可相对独立优化。</li>
 <li>未解决问题：跨学科外观风格、复杂真实照片资产融入、底层生成模型透明性。</li>
 </ul>
-<h2 id="八、可复用模块-4"><a href="#八、可复用模块-4" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-4">八、可复用模块</h2>
+<ul>
 <li>editable-vector target formulation</li>
 <li>structural vectorization</li>
 <li>asset-as-constraint generation</li>
 <li>self-correction over rasterized SVG</li>
 </ul>
-<h2 id="九、灵感种子-4"><a href="#九、灵感种子-4" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-4"><a href="#1-改进方向-4" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>用局部 slot-based asset binding 替代 placeholder，提高真实资产保真度。</li>
+<h2 id="九灵感种子-4">九、灵感种子</h2>
+<h3 id="改进方向-4">1. 改进方向</h3>
+<ul>
+<li>用局部 slot-based asset binding 替代
+placeholder，提高真实资产保真度。</li>
 </ul>
-<h3 id="2-跨领域迁移-4"><a href="#2-跨领域迁移-4" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-4">2. 跨领域迁移</h3>
+<ul>
 <li>海报摘要、教学课件封面、医学 graphical summary。</li>
 </ul>
-<h3 id="3-组合机会-4"><a href="#3-组合机会-4" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 AutoFigure-Edit 结合，先生成 editable GA，再用 editor 做细粒度 revision。</li>
+<h3 id="组合机会-4">3. 组合机会</h3>
+<ul>
+<li>与 AutoFigure-Edit 结合，先生成 editable GA，再用 editor 做细粒度
+revision。</li>
 </ul>
-<hr>
-<h1 id="📄-GeoSVG-RL-Geometry-Aware-Reinforcement-Learning-for-Layout-Constrained-Text-to-SVG-Diagram-Generation"><a href="#📄-GeoSVG-RL-Geometry-Aware-Reinforcement-Learning-for-Layout-Constrained-Text-to-SVG-Diagram-Generation" class="headerlink" title="📄 GeoSVG-RL: Geometry-Aware Reinforcement Learning for Layout-Constrained Text-to-SVG Diagram Generation"></a>📄 GeoSVG-RL: Geometry-Aware Reinforcement Learning for Layout-Constrained Text-to-SVG Diagram Generation</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/geosvg-rl-main.png" srcset="/img/loading.gif" lazyload class="" title="GeoSVG-RL">
-<h2 id="一、问题定义-5"><a href="#一、问题定义-5" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：生成的 SVG 代码即使语法正确，也常在箭头锚点、文本溢出、布局约束上失败；该文要直接优化这些几何约束。</li>
+<hr />
+<h1
+id="geosvg-rl-geometry-aware-reinforcement-learning-for-layout-constrained-text-to-svg-diagram-generation">📄
+GeoSVG-RL: Geometry-Aware Reinforcement Learning for Layout-Constrained
+Text-to-SVG Diagram Generation</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/geosvg-rl-main.png" srcset="/img/loading.gif" lazyload class="" title="GeoSVG-RL">
+<h2 id="一问题定义-5">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：生成的 SVG
+代码即使语法正确，也常在箭头锚点、文本溢出、布局约束上失败；该文要直接优化这些几何约束。</li>
 <li>为什么这个问题重要：科研图不是普通代码生成，图一旦几何关系错，整图就不可用。</li>
-<li>现有方法为什么失败：token-level likelihood 不关心“渲染后是否合理”，模型学到的是代码模仿，不是几何可用性。</li>
+<li>现有方法为什么失败：token-level likelihood
+不关心“渲染后是否合理”，模型学到的是代码模仿，不是几何可用性。</li>
 </ul>
-<h2 id="二、方法机制-5"><a href="#二、方法机制-5" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-5">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：文本 prompt x</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>先预测 layout plan z</li>
 <li>SVG policy 生成代码 y</li>
 <li>browser-backed verifier 渲染并提取几何</li>
-<li>用 canvas fit、text containment、anchor alignment、graph consistency、SVG cleanliness 奖励做 GRPO 强化</li>
-</ul>
-</li>
+<li>用 canvas fit、text containment、anchor alignment、graph
+consistency、SVG cleanliness 奖励做 GRPO 强化</li>
+</ul></li>
 <li>输出是什么：满足布局约束、可执行的 SVG diagram。</li>
 </ul>
-<h2 id="三、数据集-5"><a href="#三、数据集-5" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集-5">三、数据集</h2>
+<ul>
 <li>数据集名称：procedurally generated synthetic corpus</li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：合成</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：程序化生成 prompt-plan-SVG 三元组，并带有 corrupted variants</li>
-<li>是否清洗 / 过滤 / 增强：包含 box shifts / misalignments 等扰动样本</li>
-</ul>
-</li>
-<li>数据规模：<ul>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：程序化生成 prompt-plan-SVG 三元组，并带有 corrupted
+variants</li>
+<li>是否清洗 / 过滤 / 增强：包含 box shifts / misalignments
+等扰动样本</li>
+</ul></li>
+<li>数据规模：
+<ul>
 <li>train / val / test：48,000 / 4,000 / 8,200</li>
-</ul>
-</li>
-<li>数据模态（text / image / multimodal / graph）：text + SVG code + rendered image + geometry</li>
-<li>是否可公开下载：<ul>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：text + SVG code +
+rendered image + geometry</li>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：<code>https://github.com/johnnyZeppelin/GeoSVG-RL</code></li>
 <li>是否需要申请：看起来不需要</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-5"><a href="#四、模型结构-5" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：Qwen2.5-Coder-7B-Instruct 初始化的 autoregressive code model</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-5">四、模型结构</h2>
+<ul>
+<li>backbone模型：Qwen2.5-Coder-7B-Instruct 初始化的 autoregressive code
+model</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: layout planner</li>
 <li>module 2: SVG generator policy</li>
 <li>module 3: browser verifier / reward parser</li>
 <li>module 4: GRPO policy refinement</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: Qwen2.5-Coder-7B-Instruct</li>
 <li>fine-tuning方式：先 SFT warm-start，再 GRPO 强化学习</li>
+</ul></li>
+<li>关键设计思想：把 SVG 生成视为 constrained program
+synthesis，训练目标从“像不像参考代码”改成“渲染后几何是否可用”。</li>
 </ul>
-</li>
-<li>关键设计思想：把 SVG 生成视为 constrained program synthesis，训练目标从“像不像参考代码”改成“渲染后几何是否可用”。</li>
-</ul>
-<h2 id="五、计算资源-5"><a href="#五、计算资源-5" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-5">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：是</li>
 <li>GPU型号：NVIDIA A100 80GB</li>
 <li>GPU数量：未明确</li>
 <li>是否分布式训练：未说明</li>
-<li>训练时长（如果有）：<ul>
+<li>训练时长（如果有）：
+<ul>
 <li>warm-start 约 96 GPU-hours</li>
 <li>GRPO refinement 约 128 GPU-hours</li>
-</ul>
-</li>
-<li>batch size / epoch（如果有）：<ul>
+</ul></li>
+<li>batch size / epoch（如果有）：
+<ul>
 <li>SFT 3 epochs，batch size 128</li>
-<li>GRPO batch size 32，4 gradient accumulation steps，1,500 updates</li>
+<li>GRPO batch size 32，4 gradient accumulation steps，1,500
+updates</li>
+</ul></li>
 </ul>
-</li>
+<h2 id="六创新点-5">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把 browser-rendered geometry 直接引入 RL
+奖励，优化图形约束而非 token 相似。</li>
+<li>工程优化（engineering tricks）：dual-path verifier、curriculum
+reward weighting、synthetic corrupted variants。</li>
+<li>实验或数据贡献：给出 layout-constrained SVG
+的较完整几何评测套件。</li>
 </ul>
-<h2 id="六、创新点-5"><a href="#六、创新点-5" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：把 browser-rendered geometry 直接引入 RL 奖励，优化图形约束而非 token 相似。</li>
-<li>工程优化（engineering tricks）：dual-path verifier、curriculum reward weighting、synthetic corrupted variants。</li>
-<li>实验或数据贡献：给出 layout-constrained SVG 的较完整几何评测套件。</li>
-</ul>
-<h2 id="七、局限性-5"><a href="#七、局限性-5" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：真实科研图比合成语料更复杂时，planner 和 reward 设计可能失配。</li>
+<h2 id="七局限性-5">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：真实科研图比合成语料更复杂时，planner 和
+reward 设计可能失配。</li>
 <li>隐含假设：关键可用性可以被显式几何 reward 充分表达。</li>
-<li>未解决问题：跨风格泛化、真实开放域 prompt、复杂图元与 icon 表达能力。</li>
+<li>未解决问题：跨风格泛化、真实开放域 prompt、复杂图元与 icon
+表达能力。</li>
 </ul>
-<h2 id="八、可复用模块-5"><a href="#八、可复用模块-5" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-5">八、可复用模块</h2>
+<ul>
 <li>browser-backed verifier</li>
 <li>geometry-aware reward library</li>
 <li>plan-then-generate SVG policy</li>
 <li>GRPO for executable graphics</li>
 </ul>
-<h2 id="九、灵感种子-5"><a href="#九、灵感种子-5" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-5"><a href="#1-改进方向-5" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>用 differentiable layout solver 或 symbolic verifier 进一步增强 reward 信号。</li>
+<h2 id="九灵感种子-5">九、灵感种子</h2>
+<h3 id="改进方向-5">1. 改进方向</h3>
+<ul>
+<li>用 differentiable layout solver 或 symbolic verifier 进一步增强
+reward 信号。</li>
 </ul>
-<h3 id="2-跨领域迁移-5"><a href="#2-跨领域迁移-5" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
-<li>UI layout code generation、PPT diagram generation、CAD 草图生成。</li>
+<h3 id="跨领域迁移-5">2. 跨领域迁移</h3>
+<ul>
+<li>UI layout code generation、PPT diagram generation、CAD
+草图生成。</li>
 </ul>
-<h3 id="3-组合机会-5"><a href="#3-组合机会-5" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 Paper2Figure / FigAgent 结合，agent 负责语义，GeoSVG-RL 负责最终几何可用性。</li>
+<h3 id="组合机会-5">3. 组合机会</h3>
+<ul>
+<li>与 Paper2Figure / FigAgent 结合，agent 负责语义，GeoSVG-RL
+负责最终几何可用性。</li>
 </ul>
-<hr>
-<h1 id="📄-Paper2Figure-A-Multi-Agent-Collaborative-System-for-Figure-Generation"><a href="#📄-Paper2Figure-A-Multi-Agent-Collaborative-System-for-Figure-Generation" class="headerlink" title="📄 Paper2Figure: A Multi-Agent Collaborative System for Figure Generation"></a>📄 Paper2Figure: A Multi-Agent Collaborative System for Figure Generation</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paper2figure-main.png" srcset="/img/loading.gif" lazyload class="" title="Paper2Figure">
-<h2 id="一、问题定义-6"><a href="#一、问题定义-6" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：让“论文文字 → 学术图”同时具备语义准确、视觉美观、可交互修改三者兼得。</li>
+<hr />
+<h1
+id="paper2figure-a-multi-agent-collaborative-system-for-figure-generation">📄
+Paper2Figure: A Multi-Agent Collaborative System for Figure
+Generation</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paper2figure-main.png" srcset="/img/loading.gif" lazyload class="" title="Paper2Figure">
+<h2 id="一问题定义-6">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：让“论文文字 →
+学术图”同时具备语义准确、视觉美观、可交互修改三者兼得。</li>
 <li>为什么这个问题重要：代码法可编辑但难排版，图像法好看但难改；真实使用场景需要生成后继续编辑。</li>
-<li>现有方法为什么失败：SVG/Mermaid 过于底层或表达受限；T2I 图中文字失真、逻辑漏项、结构不可控。</li>
+<li>现有方法为什么失败：SVG/Mermaid 过于底层或表达受限；T2I
+图中文字失真、逻辑漏项、结构不可控。</li>
 </ul>
-<h2 id="二、方法机制-6"><a href="#二、方法机制-6" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-6">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：文本描述 / 用户指令 I</li>
-<li>核心机制是什么：<ul>
-<li>Generation Agents：PlanAgent → ModuleAgent → LayoutAgent，把文本翻成 FigScript</li>
+<li>核心机制是什么：
+<ul>
+<li>Generation Agents：PlanAgent → ModuleAgent → LayoutAgent，把文本翻成
+FigScript</li>
 <li>Web renderer 渲染初图</li>
-<li>Refinement Agents：CriticAgent → RefineAgent → EditAgent，迭代修正 FigScript</li>
+<li>Refinement Agents：CriticAgent → RefineAgent → EditAgent，迭代修正
+FigScript</li>
 <li>用户可在 Web Editor 中自然语言或直接拖拽编辑</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：最终 FigScript + 渲染图 + 可交互编辑结果。</li>
 </ul>
-<h2 id="三、数据集-6"><a href="#三、数据集-6" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集-6">三、数据集</h2>
+<ul>
 <li>数据集名称：Paper2Figure Bench</li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：论文构建 benchmark</li>
-<li>数据是如何获得的（非常重要）：<ul>
+<li>数据是如何获得的（非常重要）：
+<ul>
 <li>标注方式：100 academic figures paired with descriptions</li>
 <li>是否清洗 / 过滤 / 增强：论文未展开细节</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：100 个 paired benchmark cases；未给出 train/val/test</li>
-</ul>
-</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：100 个 paired benchmark cases；未给出
+train/val/test</li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：text + figure</li>
-<li>是否可公开下载：<ul>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：论文文本未明确给出</li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-6"><a href="#四、模型结构-6" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
+<h2 id="四模型结构-6">四、模型结构</h2>
+<ul>
 <li>backbone模型：GPT-4o 统一驱动多 agent + FigScript 中间表示</li>
-<li>模型结构组成模块：<ul>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: Plan / Module / Layout generation agents</li>
 <li>module 2: Critic / Refine / Edit refinement agents</li>
 <li>module 3: FigScript renderer + interactive web editor</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: GPT-4o</li>
 <li>fine-tuning方式：未报告；以 prompting + tool use 为主</li>
+</ul></li>
+<li>关键设计思想：用中间 DSL（FigScript）连接 agent
+reasoning、可视化渲染和人类编辑。</li>
 </ul>
-</li>
-<li>关键设计思想：用中间 DSL（FigScript）连接 agent reasoning、可视化渲染和人类编辑。</li>
-</ul>
-<h2 id="五、计算资源-6"><a href="#五、计算资源-6" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-6">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：可能主要是 API 推理</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
@@ -924,94 +1135,124 @@
 <li>训练时长（如果有）：未提供</li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点-6"><a href="#六、创新点-6" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：FigScript + dual multi-agent + interactive editor 的统一框架。</li>
-<li>工程优化（engineering tricks）：生成阶段与修正阶段角色分离；模板化布局与配色。</li>
-<li>实验或数据贡献：Paper2Figure Bench，且明确比较 SVG/Mermaid/T2I 路线。</li>
+<h2 id="六创新点-6">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：FigScript + dual multi-agent + interactive
+editor 的统一框架。</li>
+<li>工程优化（engineering
+tricks）：生成阶段与修正阶段角色分离；模板化布局与配色。</li>
+<li>实验或数据贡献：Paper2Figure Bench，且明确比较 SVG/Mermaid/T2I
+路线。</li>
 </ul>
-<h2 id="七、局限性-6"><a href="#七、局限性-6" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：DSL 设计边界会限制图形表达；若 Critic 看不出逻辑错，EditAgent 会稳定放大错误。</li>
+<h2 id="七局限性-6">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：DSL 设计边界会限制图形表达；若 Critic
+看不出逻辑错，EditAgent 会稳定放大错误。</li>
 <li>隐含假设：大部分学术图可被 FigScript 这套中间语言表达。</li>
-<li>未解决问题：大规模 benchmark 太小；真实用户交互成本与长期可维护性未展开。</li>
+<li>未解决问题：大规模 benchmark
+太小；真实用户交互成本与长期可维护性未展开。</li>
 </ul>
-<h2 id="八、可复用模块-6"><a href="#八、可复用模块-6" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-6">八、可复用模块</h2>
+<ul>
 <li>intermediate figure DSL</li>
 <li>generation/refinement dual-agent split</li>
 <li>visual critic-to-edit loop</li>
 <li>language + direct manipulation co-editing</li>
 </ul>
-<h2 id="九、灵感种子-6"><a href="#九、灵感种子-6" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-6"><a href="#1-改进方向-6" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>把 FigScript 接上自动约束求解器，减少 refinement 对大模型视觉检查的依赖。</li>
+<h2 id="九灵感种子-6">九、灵感种子</h2>
+<h3 id="改进方向-6">1. 改进方向</h3>
+<ul>
+<li>把 FigScript 接上自动约束求解器，减少 refinement
+对大模型视觉检查的依赖。</li>
 </ul>
-<h3 id="2-跨领域迁移-6"><a href="#2-跨领域迁移-6" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-6">2. 跨领域迁移</h3>
+<ul>
 <li>海报、教育图、产品流程图、白板草图协作系统。</li>
 </ul>
-<h3 id="3-组合机会-6"><a href="#3-组合机会-6" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
+<h3 id="组合机会-6">3. 组合机会</h3>
+<ul>
 <li>与 GeoSVG-RL 结合，用 RL 优化 FigScript 渲染后的几何质量。</li>
 </ul>
-<hr>
-<h1 id="📄-PAPERBANANA-Automating-Academic-Illustration-for-AI-Scientists"><a href="#📄-PAPERBANANA-Automating-Academic-Illustration-for-AI-Scientists" class="headerlink" title="📄 PAPERBANANA: Automating Academic Illustration for AI Scientists"></a>📄 PAPERBANANA: Automating Academic Illustration for AI Scientists</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paperbanana-main.png" srcset="/img/loading.gif" lazyload class="" title="PaperBanana">
-<h2 id="一、问题定义-7"><a href="#一、问题定义-7" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：自动生成 publication-ready 学术插图，并建立专门 benchmark 严格评测 faithful / concise / readable / aesthetic。</li>
-<li>为什么这个问题重要：AI scientist 工作流里“做图”是明显瓶颈，且当前多模态模型缺乏研究社区风格。</li>
-<li>现有方法为什么失败：代码法表达力受限；图像法视觉虽强但文本和逻辑容易出错，缺乏专门 benchmark。</li>
-</ul>
-<h2 id="二、方法机制-7"><a href="#二、方法机制-7" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<hr />
+<h1
+id="paperbanana-automating-academic-illustration-for-ai-scientists">📄
+PAPERBANANA: Automating Academic Illustration for AI Scientists</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paperbanana-main.png" srcset="/img/loading.gif" lazyload class="" title="PaperBanana">
+<h2 id="一问题定义-7">一、问题定义</h2>
 <ul>
-<li>输入是什么：source context S + communicative intent C（方法图）或表格数据 + visual intent（统计图）</li>
-<li>核心机制是什么：<ul>
+<li>真实要解决的问题：自动生成 publication-ready 学术插图，并建立专门
+benchmark 严格评测 faithful / concise / readable / aesthetic。</li>
+<li>为什么这个问题重要：AI scientist
+工作流里“做图”是明显瓶颈，且当前多模态模型缺乏研究社区风格。</li>
+<li>现有方法为什么失败：代码法表达力受限；图像法视觉虽强但文本和逻辑容易出错，缺乏专门
+benchmark。</li>
+</ul>
+<h2 id="二方法机制-7">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：source context S + communicative intent
+C（方法图）或表格数据 + visual intent（统计图）</li>
+<li>核心机制是什么：
+<ul>
 <li>Retriever Agent 选参考图</li>
 <li>Planner Agent 生成详细描述</li>
 <li>Stylist Agent 总结学术视觉风格并润色描述</li>
 <li>Visualizer Agent 生成图</li>
 <li>Critic Agent 迭代批改，形成 refinement loop</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：学术方法图或统计图。</li>
 </ul>
-<h2 id="三、数据集-7"><a href="#三、数据集-7" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
-<li>数据集名称：<ul>
+<h2 id="三数据集-7">三、数据集</h2>
+<ul>
+<li>数据集名称：
+<ul>
 <li>PaperBananaBench（方法图）</li>
 <li>统计图测试集基于 ChartMimic 处理得到</li>
-</ul>
-</li>
-<li>数据来源（公开 / 私有 / 合成 / Web抓取）：NeurIPS 2025 论文人工整理 + ChartMimic</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：从论文随机采样后自动抽取 method description / caption，再人工校验；统计图部分由 ChartMimic 转成 data + visual description</li>
+</ul></li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：NeurIPS 2025 论文人工整理
++ ChartMimic</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：从论文随机采样后自动抽取 method description /
+caption，再人工校验；统计图部分由 ChartMimic 转成 data + visual
+description</li>
 <li>是否清洗 / 过滤 / 增强：有严格过滤、分类与人工修订</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：<ul>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：
+<ul>
 <li>方法图：584 valid samples，均分成 292 test + 292 reference</li>
 <li>统计图：240 test + 240 reference</li>
-</ul>
-</li>
-</ul>
-</li>
+</ul></li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：multimodal</li>
-<li>是否可公开下载：<ul>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：<code>https://github.com/dwzhu-pku/PaperBanana</code></li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-7"><a href="#四、模型结构-7" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：Gemini-3-Pro、Nano-Banana-Pro 等 VLM / image generation model</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-7">四、模型结构</h2>
+<ul>
+<li>backbone模型：Gemini-3-Pro、Nano-Banana-Pro 等 VLM / image
+generation model</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: Retriever Agent</li>
 <li>module 2: Planner + Stylist</li>
 <li>module 3: Visualizer + Critic iterative loop</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: Gemini-3-Pro / Nano-Banana-Pro</li>
 <li>fine-tuning方式：主要是 prompting + agent loop</li>
+</ul></li>
+<li>关键设计思想：把风格学习、语义规划和批判式修正显式分开，并给出
+reference-based benchmark。</li>
 </ul>
-</li>
-<li>关键设计思想：把风格学习、语义规划和批判式修正显式分开，并给出 reference-based benchmark。</li>
-</ul>
-<h2 id="五、计算资源-7"><a href="#五、计算资源-7" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-7">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：API 推理为主</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
@@ -1019,85 +1260,111 @@
 <li>训练时长（如果有）：未提供</li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点-7"><a href="#六、创新点-7" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：把 academic illustration 任务系统化定义，并引入 reference set + test set 的联合 benchmark。</li>
-<li>工程优化（engineering tricks）：retrieval-grounded planning、style guide summarization、critic loop。</li>
+<h2 id="六创新点-7">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把 academic illustration
+任务系统化定义，并引入 reference set + test set 的联合 benchmark。</li>
+<li>工程优化（engineering tricks）：retrieval-grounded planning、style
+guide summarization、critic loop。</li>
 <li>实验或数据贡献：PaperBananaBench 与统计图评测集。</li>
 </ul>
-<h2 id="七、局限性-7"><a href="#七、局限性-7" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
+<h2 id="七局限性-7">七、局限性</h2>
+<ul>
 <li>方法在哪些情况下失败：核心失败模式是连接错误、源目标节点错连、文字渲染问题。</li>
 <li>隐含假设：现代顶会风格可以被总结成较稳定的 style guide。</li>
-<li>未解决问题：输出仍是 raster，编辑精度远不如原生向量图；跨领域泛化仍弱。</li>
+<li>未解决问题：输出仍是
+raster，编辑精度远不如原生向量图；跨领域泛化仍弱。</li>
 </ul>
-<h2 id="八、可复用模块-7"><a href="#八、可复用模块-7" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-7">八、可复用模块</h2>
+<ul>
 <li>reference-grounded retrieval</li>
 <li>stylist agent with corpus-level style synthesis</li>
 <li>critic-driven refinement loop</li>
 <li>benchmark with reference/test split</li>
 </ul>
-<h2 id="九、灵感种子-7"><a href="#九、灵感种子-7" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-7"><a href="#1-改进方向-7" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
+<h2 id="九灵感种子-7">九、灵感种子</h2>
+<h3 id="改进方向-7">1. 改进方向</h3>
+<ul>
 <li>用 editable reconstruction 补上 raster 不可编辑短板。</li>
 </ul>
-<h3 id="2-跨领域迁移-7"><a href="#2-跨领域迁移-7" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-7">2. 跨领域迁移</h3>
+<ul>
 <li>企业咨询图、科研海报、课程插图。</li>
 </ul>
-<h3 id="3-组合机会-7"><a href="#3-组合机会-7" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 AutoFigure-Edit 结合成“先好看生成，再 SVG 重建编辑”双阶段系统。</li>
+<h3 id="组合机会-7">3. 组合机会</h3>
+<ul>
+<li>与 AutoFigure-Edit 结合成“先好看生成，再 SVG
+重建编辑”双阶段系统。</li>
 </ul>
-<hr>
-<h1 id="📄-PaperDraw-Intelligent-generation-system-for-scientific-publications-pipeline-diagrams"><a href="#📄-PaperDraw-Intelligent-generation-system-for-scientific-publications-pipeline-diagrams" class="headerlink" title="📄 PaperDraw: Intelligent generation system for scientific publications pipeline diagrams"></a>📄 PaperDraw: Intelligent generation system for scientific publications pipeline diagrams</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paperdraw-main.png" srcset="/img/loading.gif" lazyload class="" title="PaperDraw">
-<h2 id="一、问题定义-8"><a href="#一、问题定义-8" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：从自然语言描述自动生成 publication-quality pipeline diagram，同时允许用户通过对话持续修正意图。</li>
-<li>为什么这个问题重要：pipeline 图是科研论文高频视觉对象，但其设计同时受逻辑结构和学术审美约束。</li>
-<li>现有方法为什么失败：传统模板法表达力弱；纯 LLM 生成对结构和风格掌控不稳；用户意图常在交互中才逐步明确。</li>
+<hr />
+<h1
+id="paperdraw-intelligent-generation-system-for-scientific-publications-pipeline-diagrams">📄
+PaperDraw: Intelligent generation system for scientific publications
+pipeline diagrams</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/paperdraw-main.png" srcset="/img/loading.gif" lazyload class="" title="PaperDraw">
+<h2 id="一问题定义-8">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：从自然语言描述自动生成 publication-quality
+pipeline diagram，同时允许用户通过对话持续修正意图。</li>
+<li>为什么这个问题重要：pipeline
+图是科研论文高频视觉对象，但其设计同时受逻辑结构和学术审美约束。</li>
+<li>现有方法为什么失败：传统模板法表达力弱；纯 LLM
+生成对结构和风格掌控不稳；用户意图常在交互中才逐步明确。</li>
 </ul>
-<h2 id="二、方法机制-8"><a href="#二、方法机制-8" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-8">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：用户文本描述 + 交互反馈</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>LLM + Conversational Agent 抽取多维语义</li>
 <li>MultiRect-CenterLine 一类布局算法生成结构</li>
 <li>style vector library 检索相似学术风格</li>
 <li>Draw.io / XML 生成视图负责最终图产出与编辑</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：学术风格 pipeline diagram。</li>
 </ul>
-<h2 id="三、数据集-8"><a href="#三、数据集-8" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
+<h2 id="三数据集-8">三、数据集</h2>
+<ul>
 <li>数据集名称：论文自建 pipeline diagram dataset</li>
-<li>数据来源（公开 / 私有 / 合成 / Web抓取）：从 2020-2024 的 300 篇论文收集</li>
-<li>数据是如何获得的（非常重要）：<ul>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：从 2020-2024 的 300
+篇论文收集</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
 <li>标注方式：人工/规则驱动统计分析与风格总结</li>
-<li>是否清洗 / 过滤 / 增强：有结构统计、风格向量提取、相似风格库构造</li>
-</ul>
-</li>
-<li>数据规模：<ul>
+<li>是否清洗 / 过滤 /
+增强：有结构统计、风格向量提取、相似风格库构造</li>
+</ul></li>
+<li>数据规模：
+<ul>
 <li>train / val / test：300 篇论文；未给出标准 train/val/test</li>
-</ul>
-</li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：text + diagram</li>
-<li>是否可公开下载：<ul>
+<li>是否可公开下载：
+<ul>
 <li>下载链接：论文文本未给出</li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-8"><a href="#四、模型结构-8" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：LLM + conversational agent + layout algorithm + style retrieval</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-8">四、模型结构</h2>
+<ul>
+<li>backbone模型：LLM + conversational agent + layout algorithm + style
+retrieval</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: semantic extraction / intent refinement</li>
 <li>module 2: structural layout generation</li>
 <li>module 3: style vector retrieval and adaptation</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: 商业 LLM，具体版本未稳定披露</li>
 <li>fine-tuning方式：未说明</li>
-</ul>
-</li>
+</ul></li>
 <li>关键设计思想：把“内容结构”和“学术风格”拆开建模，并用对话式代理修正初始语义提取偏差。</li>
 </ul>
-<h2 id="五、计算资源-8"><a href="#五、计算资源-8" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-8">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：未明确</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
@@ -1105,290 +1372,375 @@
 <li>训练时长（如果有）：未提供</li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点-8"><a href="#六、创新点-8" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：style vector library + conversational refinement 的 pipeline diagram 生成框架。</li>
-<li>工程优化（engineering tricks）：结构统计先验、风格检索、Draw.io 集成视图。</li>
-<li>实验或数据贡献：300 篇论文的 pipeline diagram 统计分析与设计原则总结。</li>
+<h2 id="六创新点-8">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：style vector library + conversational
+refinement 的 pipeline diagram 生成框架。</li>
+<li>工程优化（engineering tricks）：结构统计先验、风格检索、Draw.io
+集成视图。</li>
+<li>实验或数据贡献：300 篇论文的 pipeline diagram
+统计分析与设计原则总结。</li>
 </ul>
-<h2 id="七、局限性-8"><a href="#七、局限性-8" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：数据集学科覆盖有限时，风格推荐会偏；LLM 自动抽取若错，后续布局会整体错位。</li>
-<li>隐含假设：pipeline diagram 的设计空间可由有限统计规则和风格库有效覆盖。</li>
+<h2 id="七局限性-8">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：数据集学科覆盖有限时，风格推荐会偏；LLM
+自动抽取若错，后续布局会整体错位。</li>
+<li>隐含假设：pipeline diagram
+的设计空间可由有限统计规则和风格库有效覆盖。</li>
 <li>未解决问题：跨学科泛化、复杂非 pipeline 图、公开可复现性不足。</li>
 </ul>
-<h2 id="八、可复用模块-8"><a href="#八、可复用模块-8" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-8">八、可复用模块</h2>
+<ul>
 <li>conversational intent refinement</li>
 <li>style vector library</li>
 <li>structure-first layout algorithm</li>
 <li>draw.io integrated generation</li>
 </ul>
-<h2 id="九、灵感种子-8"><a href="#九、灵感种子-8" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-8"><a href="#1-改进方向-8" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>用 retrieval over DiagramBank 替代小型 style library，提升风格多样性。</li>
+<h2 id="九灵感种子-8">九、灵感种子</h2>
+<h3 id="改进方向-8">1. 改进方向</h3>
+<ul>
+<li>用 retrieval over DiagramBank 替代小型 style
+library，提升风格多样性。</li>
 </ul>
-<h3 id="2-跨领域迁移-8"><a href="#2-跨领域迁移-8" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-8">2. 跨领域迁移</h3>
+<ul>
 <li>商业流程图、实验 protocol 图、软件架构图。</li>
 </ul>
-<h3 id="3-组合机会-8"><a href="#3-组合机会-8" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 FigAgent 的 middleware repository 结合，形成“布局算法 + 组件库”的混合系统。</li>
+<h3 id="组合机会-8">3. 组合机会</h3>
+<ul>
+<li>与 FigAgent 的 middleware repository 结合，形成“布局算法 +
+组件库”的混合系统。</li>
 </ul>
-<hr>
-<h1 id="📄-SciFig-Towards-Automating-Scientific-Figure-Generation"><a href="#📄-SciFig-Towards-Automating-Scientific-Figure-Generation" class="headerlink" title="📄 SciFig: Towards Automating Scientific Figure Generation"></a>📄 SciFig: Towards Automating Scientific Figure Generation</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/scifig-main.png" srcset="/img/loading.gif" lazyload class="" title="SciFig">
-<h2 id="一、问题定义-9"><a href="#一、问题定义-9" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：从论文文本自动生成 publication-ready 方法图，同时具备可评估的质量闭环。</li>
+<hr />
+<h1 id="scifig-towards-automating-scientific-figure-generation">📄
+SciFig: Towards Automating Scientific Figure Generation</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/scifig-main.png" srcset="/img/loading.gif" lazyload class="" title="SciFig">
+<h2 id="一问题定义-9">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：从论文文本自动生成 publication-ready
+方法图，同时具备可评估的质量闭环。</li>
 <li>为什么这个问题重要：方法图制作耗时极高，而现有图像或布局模型不能同时保证科学准确性、结构清晰和审美一致。</li>
-<li>现有方法为什么失败：通用图像生成不适合科学图；通用 layout 生成缺少层级推理和跨粒度反馈。</li>
+<li>现有方法为什么失败：通用图像生成不适合科学图；通用 layout
+生成缺少层级推理和跨粒度反馈。</li>
 </ul>
-<h2 id="二、方法机制-9"><a href="#二、方法机制-9" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-9">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：研究文本 / method description</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>Description Agent 解析组件和关系</li>
 <li>Layout Agent 做 hierarchical reasoning 布局</li>
 <li>Component Generation Agent 渲染部件</li>
 <li>Feedback Agent 发现对齐、箭头、标签、间距等问题并给出 CoT 反馈</li>
-</ul>
-</li>
+</ul></li>
 <li>输出是什么：多轮 refinement 后的方法图。</li>
 </ul>
-<h2 id="三、数据集-9"><a href="#三、数据集-9" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
-<li>数据集名称：论文自建 2,219 pipeline figures 数据集；评测集包含 2K+ annotated methodology figures</li>
+<h2 id="三数据集-9">三、数据集</h2>
+<ul>
+<li>数据集名称：论文自建 2,219 pipeline figures 数据集；评测集包含 2K+
+annotated methodology figures</li>
 <li>数据来源（公开 / 私有 / 合成 / Web抓取）：真实科研论文图</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：自动+人工设计 rubrics，生成 dataset-level 和 paper-specific questions</li>
-<li>是否清洗 / 过滤 / 增强：有质量维度总结和分 conference / domain 统计</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：论文未给出标准 split；明确有 2,219 figures 和 435-paper evaluation statistics</li>
-</ul>
-</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：自动+人工设计 rubrics，生成 dataset-level 和
+paper-specific questions</li>
+<li>是否清洗 / 过滤 / 增强：有质量维度总结和分 conference / domain
+统计</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：论文未给出标准 split；明确有 2,219 figures 和
+435-paper evaluation statistics</li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：text + figure</li>
-<li>是否可公开下载：<ul>
-<li>下载链接：论文称 benchmark 和 pipeline 将开源，但正文未给稳定 URL</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：论文称 benchmark 和 pipeline 将开源，但正文未给稳定
+URL</li>
 <li>是否需要申请：未说明</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-9"><a href="#四、模型结构-9" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
-<li>backbone模型：GPT / Gemini / Claude 类多模型 agent 组合；图像生成基线含 GPT-5-Image、Qwen-Image、SDXL</li>
-<li>模型结构组成模块：<ul>
+<h2 id="四模型结构-9">四、模型结构</h2>
+<ul>
+<li>backbone模型：GPT / Gemini / Claude 类多模型 agent
+组合；图像生成基线含 GPT-5-Image、Qwen-Image、SDXL</li>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: Description Agent</li>
 <li>module 2: Hierarchical Layout Agent</li>
 <li>module 3: Component Agent</li>
 <li>module 4: Feedback Agent with CoT</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: 多个闭源/开源大模型组合</li>
 <li>fine-tuning方式：未报告专门参数微调</li>
+</ul></li>
+<li>关键设计思想：把图生成拆成“语义解析 - 层级布局 - 反馈修正”，强调
+architecture 而不是单模型大小。</li>
 </ul>
-</li>
-<li>关键设计思想：把图生成拆成“语义解析 - 层级布局 - 反馈修正”，强调 architecture 而不是单模型大小。</li>
-</ul>
-<h2 id="五、计算资源-9"><a href="#五、计算资源-9" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-9">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：主要看作多模型推理系统</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
 <li>是否分布式训练：未提供GPU信息</li>
-<li>训练时长（如果有）：<ul>
+<li>训练时长（如果有）：
+<ul>
 <li>单图平均约 9.7 分钟生成</li>
-</ul>
-</li>
+</ul></li>
 <li>batch size / epoch（如果有）：未提供</li>
 </ul>
-<h2 id="六、创新点-9"><a href="#六、创新点-9" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：hierarchical layout + CoT feedback 的 agent architecture，并附带系统化 benchmark。</li>
-<li>工程优化（engineering tricks）：dataset-level 与 paper-specific 双层问题评测；角色分离。</li>
-<li>实验或数据贡献：2K+ methodology figures benchmark，细粒度质量 rubrics。</li>
+<h2 id="六创新点-9">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：hierarchical layout + CoT feedback 的
+agent architecture，并附带系统化 benchmark。</li>
+<li>工程优化（engineering tricks）：dataset-level 与 paper-specific
+双层问题评测；角色分离。</li>
+<li>实验或数据贡献：2K+ methodology figures benchmark，细粒度质量
+rubrics。</li>
 </ul>
-<h2 id="七、局限性-9"><a href="#七、局限性-9" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：复杂层级关系、跨部件逻辑依赖、专业语义过强时，反馈 agent 可能识别不全。</li>
+<h2 id="七局限性-9">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：复杂层级关系、跨部件逻辑依赖、专业语义过强时，反馈
+agent 可能识别不全。</li>
 <li>隐含假设：把布局与部件生成拆开就足以显著提升质量。</li>
 <li>未解决问题：仍依赖闭源模型；没有解决向量级可编辑输出。</li>
 </ul>
-<h2 id="八、可复用模块-9"><a href="#八、可复用模块-9" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-9">八、可复用模块</h2>
+<ul>
 <li>hierarchical layout reasoning</li>
 <li>feedback-as-language supervision</li>
 <li>dataset-level + paper-specific evaluation</li>
 <li>agent latency breakdown</li>
 </ul>
-<h2 id="九、灵感种子-9"><a href="#九、灵感种子-9" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-9"><a href="#1-改进方向-9" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>把 Feedback Agent 产生的语言反馈转成可执行约束，而不是只让下游 agent 自己理解。</li>
+<h2 id="九灵感种子-9">九、灵感种子</h2>
+<h3 id="改进方向-9">1. 改进方向</h3>
+<ul>
+<li>把 Feedback Agent 产生的语言反馈转成可执行约束，而不是只让下游 agent
+自己理解。</li>
 </ul>
-<h3 id="2-跨领域迁移-9"><a href="#2-跨领域迁移-9" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-9">2. 跨领域迁移</h3>
+<ul>
 <li>教材插图、系统架构图、科研教学幻灯片。</li>
 </ul>
-<h3 id="3-组合机会-9"><a href="#3-组合机会-9" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 GeoSVG-RL 结合，SciFig 出语义布局，GeoSVG-RL 保证几何和可编辑 SVG。</li>
+<h3 id="组合机会-9">3. 组合机会</h3>
+<ul>
+<li>与 GeoSVG-RL 结合，SciFig 出语义布局，GeoSVG-RL 保证几何和可编辑
+SVG。</li>
 </ul>
-<hr>
-<h1 id="📄-SciIR-A-Large-scale-Training-Dataset-and-Benchmark-for-Scientific-Image-Reasoning-Generation"><a href="#📄-SciIR-A-Large-scale-Training-Dataset-and-Benchmark-for-Scientific-Image-Reasoning-Generation" class="headerlink" title="📄 SciIR: A Large-scale Training Dataset and Benchmark for Scientific Image Reasoning Generation"></a>📄 SciIR: A Large-scale Training Dataset and Benchmark for Scientific Image Reasoning Generation</h1><img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/sciir-main.png" srcset="/img/loading.gif" lazyload class="" title="SciIR">
-<h2 id="一、问题定义-10"><a href="#一、问题定义-10" class="headerlink" title="一、问题定义"></a>一、问题定义</h2><ul>
-<li>真实要解决的问题：让科学图像生成不仅对 prompt 对齐，还能显式遵守 scientific law、entity structure、scientific process 与文本约束。</li>
-<li>为什么这个问题重要：当前 T2I 模型会画“像图的图”，但不会画“科学上成立的图”。</li>
-<li>现有方法为什么失败：已有数据集 caption 太短、逻辑显式性不足；已有 benchmark 重图像质量，不重科学推理链条。</li>
+<hr />
+<h1
+id="sciir-a-large-scale-training-dataset-and-benchmark-for-scientific-image-reasoning-generation">📄
+SciIR: A Large-scale Training Dataset and Benchmark for Scientific Image
+Reasoning Generation</h1>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/sciir-main.png" srcset="/img/loading.gif" lazyload class="" title="SciIR">
+<h2 id="一问题定义-10">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：让科学图像生成不仅对 prompt 对齐，还能显式遵守
+scientific law、entity structure、scientific process 与文本约束。</li>
+<li>为什么这个问题重要：当前 T2I
+模型会画“像图的图”，但不会画“科学上成立的图”。</li>
+<li>现有方法为什么失败：已有数据集 caption 太短、逻辑显式性不足；已有
+benchmark 重图像质量，不重科学推理链条。</li>
 </ul>
-<h2 id="二、方法机制-10"><a href="#二、方法机制-10" class="headerlink" title="二、方法机制"></a>二、方法机制</h2><p>X → M → Y</p>
+<h2 id="二方法机制-10">二、方法机制</h2>
+<p>X → M → Y</p>
 <ul>
 <li>输入是什么：科学图像 prompt</li>
-<li>核心机制是什么：<ul>
+<li>核心机制是什么：
+<ul>
 <li>构建 SciIR-82k，加入 Sci-RCoT 标注，显式描述潜在视觉推理链</li>
 <li>构建 SciIR-Bench，用 Atomic Checklist 做逐维度判定</li>
-<li>训练 Qwen-Image-SciIR：Qwen2.5-7B-Instruct 负责 reasoning planner，Qwen-Image-2512 负责 visual generator</li>
+<li>训练 Qwen-Image-SciIR：Qwen2.5-7B-Instruct 负责 reasoning
+planner，Qwen-Image-2512 负责 visual generator</li>
+</ul></li>
+<li>输出是什么：带推理中介的科学图像生成结果及更细粒度 benchmark
+评估。</li>
 </ul>
-</li>
-<li>输出是什么：带推理中介的科学图像生成结果及更细粒度 benchmark 评估。</li>
-</ul>
-<h2 id="三、数据集-10"><a href="#三、数据集-10" class="headerlink" title="三、数据集"></a>三、数据集</h2><ul>
-<li>数据集名称：<ul>
+<h2 id="三数据集-10">三、数据集</h2>
+<ul>
+<li>数据集名称：
+<ul>
 <li>SciIR-82k</li>
 <li>SciIR-Bench</li>
-</ul>
-</li>
-<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开论文图文对，来自 Nature 和 Nature Communications 的 CC BY 4.0 文章</li>
-<li>数据是如何获得的（非常重要）：<ul>
-<li>标注方式：自动/模型辅助生成 Sci-RCoT 与 checklist，再通过过滤和规则 refinement 控制误差</li>
-<li>是否清洗 / 过滤 / 增强：严格 license 过滤、test leakage 移除、FPR 控制、semiotic taxonomy 组织</li>
-</ul>
-</li>
-<li>数据规模：<ul>
-<li>train / val / test：<ul>
+</ul></li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开论文图文对，来自
+Nature 和 Nature Communications 的 CC BY 4.0 文章</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：自动/模型辅助生成 Sci-RCoT 与 checklist，再通过过滤和规则
+refinement 控制误差</li>
+<li>是否清洗 / 过滤 / 增强：严格 license 过滤、test leakage 移除、FPR
+控制、semiotic taxonomy 组织</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：
+<ul>
 <li>SciIR-82k：82k+ 图文对</li>
 <li>SciIR-Bench：800 test instances</li>
-</ul>
-</li>
-</ul>
-</li>
+</ul></li>
+</ul></li>
 <li>数据模态（text / image / multimodal / graph）：multimodal</li>
-<li>是否可公开下载：<ul>
-<li>下载链接：<ul>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：
+<ul>
 <li><code>https://github.com/MAIR-Lab-HUST/SciIR</code></li>
 <li><code>https://huggingface.co/datasets/MAIR-Lab-HUST/SciIR-82k</code></li>
-</ul>
-</li>
+</ul></li>
 <li>是否需要申请：看起来不需要</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="四、模型结构-10"><a href="#四、模型结构-10" class="headerlink" title="四、模型结构"></a>四、模型结构</h2><ul>
+<h2 id="四模型结构-10">四、模型结构</h2>
+<ul>
 <li>backbone模型：Qwen2.5-7B-Instruct + Qwen-Image-2512</li>
-<li>模型结构组成模块：<ul>
+<li>模型结构组成模块：
+<ul>
 <li>module 1: reasoning planner</li>
 <li>module 2: visual generator</li>
 <li>module 3: atomic checklist evaluator</li>
-</ul>
-</li>
-<li>是否使用预训练模型：<ul>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
 <li>base model: Qwen2.5-7B-Instruct；Qwen-Image-2512</li>
-<li>fine-tuning方式：<ul>
+<li>fine-tuning方式：
+<ul>
 <li>planner：all-linear LoRA</li>
 <li>generator：diffusion transformer LoRA</li>
+</ul></li>
+</ul></li>
+<li>关键设计思想：先显式生成
+Sci-RCoT，再据此生成图，把“图像生成”改写成“推理后渲染”。</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>关键设计思想：先显式生成 Sci-RCoT，再据此生成图，把“图像生成”改写成“推理后渲染”。</li>
-</ul>
-<h2 id="五、计算资源-10"><a href="#五、计算资源-10" class="headerlink" title="五、计算资源"></a>五、计算资源</h2><ul>
+<h2 id="五计算资源-10">五、计算资源</h2>
+<ul>
 <li>是否使用GPU：论文应使用 GPU 训练，但正文片段未清晰披露</li>
 <li>GPU型号：未提供GPU信息</li>
 <li>GPU数量：未提供GPU信息</li>
 <li>是否分布式训练：未提供GPU信息</li>
 <li>训练时长（如果有）：未提供</li>
-<li>batch size / epoch（如果有）：<ul>
+<li>batch size / epoch（如果有）：
+<ul>
 <li>planner 使用 2048 token context</li>
 <li>generator 分辨率 1024×1024</li>
 <li>其余 batch/epoch 未可靠披露</li>
+</ul></li>
 </ul>
-</li>
+<h2 id="六创新点-10">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：用 semiotic triad（law / structure /
+process）重新定义 scientific correctness，并给出 Sci-RCoT。</li>
+<li>工程优化（engineering tricks）：atomic checklist、strict veto
+scoring、双模块 reasoning-to-render pipeline。</li>
+<li>实验或数据贡献：SciIR-82k 与 SciIR-Bench，并给出强 open-source
+baseline。</li>
 </ul>
-<h2 id="六、创新点-10"><a href="#六、创新点-10" class="headerlink" title="六、创新点"></a>六、创新点</h2><ul>
-<li>真正创新（real novelty）：用 semiotic triad（law / structure / process）重新定义 scientific correctness，并给出 Sci-RCoT。</li>
-<li>工程优化（engineering tricks）：atomic checklist、strict veto scoring、双模块 reasoning-to-render pipeline。</li>
-<li>实验或数据贡献：SciIR-82k 与 SciIR-Bench，并给出强 open-source baseline。</li>
+<h2 id="七局限性-10">七、局限性</h2>
+<ul>
+<li>方法在哪些情况下失败：文字生成尤其弱；高密度样本与复杂科学约束下仍易
+hallucinate。</li>
+<li>隐含假设：科学图正确性可以被分解到 semiotic triad 上，并由自动
+checklist 近似评估。</li>
+<li>未解决问题：数据偏向 Nature
+系列期刊；跨领域、跨语言和多模态外部知识接入仍不足。</li>
 </ul>
-<h2 id="七、局限性-10"><a href="#七、局限性-10" class="headerlink" title="七、局限性"></a>七、局限性</h2><ul>
-<li>方法在哪些情况下失败：文字生成尤其弱；高密度样本与复杂科学约束下仍易 hallucinate。</li>
-<li>隐含假设：科学图正确性可以被分解到 semiotic triad 上，并由自动 checklist 近似评估。</li>
-<li>未解决问题：数据偏向 Nature 系列期刊；跨领域、跨语言和多模态外部知识接入仍不足。</li>
-</ul>
-<h2 id="八、可复用模块-10"><a href="#八、可复用模块-10" class="headerlink" title="八、可复用模块"></a>八、可复用模块</h2><ul>
+<h2 id="八可复用模块-10">八、可复用模块</h2>
+<ul>
 <li>Sci-RCoT annotation scheme</li>
 <li>atomic checklist evaluation</li>
 <li>reasoning-planner + visual-generator decoupling</li>
 <li>semiotic triad taxonomy</li>
 </ul>
-<h2 id="九、灵感种子-10"><a href="#九、灵感种子-10" class="headerlink" title="九、灵感种子"></a>九、灵感种子</h2><h3 id="1-改进方向-10"><a href="#1-改进方向-10" class="headerlink" title="1. 改进方向"></a>1. 改进方向</h3><ul>
-<li>把 Sci-RCoT 变成结构图或程序约束，再接可执行 SVG/graph renderer。</li>
+<h2 id="九灵感种子-10">九、灵感种子</h2>
+<h3 id="改进方向-10">1. 改进方向</h3>
+<ul>
+<li>把 Sci-RCoT 变成结构图或程序约束，再接可执行 SVG/graph
+renderer。</li>
 </ul>
-<h3 id="2-跨领域迁移-10"><a href="#2-跨领域迁移-10" class="headerlink" title="2. 跨领域迁移"></a>2. 跨领域迁移</h3><ul>
+<h3 id="跨领域迁移-10">2. 跨领域迁移</h3>
+<ul>
 <li>教学示意图、工程流程图、医学机制图生成。</li>
 </ul>
-<h3 id="3-组合机会-10"><a href="#3-组合机会-10" class="headerlink" title="3. 组合机会"></a>3. 组合机会</h3><ul>
-<li>与 GeoSVG-RL 结合：SciIR 负责科学推理，GeoSVG-RL 负责几何约束和可编辑输出。</li>
+<h3 id="组合机会-10">3. 组合机会</h3>
+<ul>
+<li>与 GeoSVG-RL 结合：SciIR 负责科学推理，GeoSVG-RL
+负责几何约束和可编辑输出。</li>
 </ul>
-<hr>
-<h1 id="📊-跨论文总结"><a href="#📊-跨论文总结" class="headerlink" title="📊 跨论文总结"></a>📊 跨论文总结</h1><h2 id="1-方法族群分类"><a href="#1-方法族群分类" class="headerlink" title="1. 方法族群分类"></a>1. 方法族群分类</h2><ul>
-<li>generation类：<ul>
+<hr />
+<h1 id="跨论文总结">📊 跨论文总结</h1>
+<h2 id="方法族群分类">1. 方法族群分类</h2>
+<ul>
+<li>generation类：
+<ul>
 <li>AutoFigure-Edit</li>
 <li>GenGA</li>
 <li>GeoSVG-RL</li>
 <li>SciFig</li>
-</ul>
-</li>
-<li>reasoning类：<ul>
+</ul></li>
+<li>reasoning类：
+<ul>
 <li>SciIR</li>
 <li>SciFig</li>
 <li>Paper2Figure</li>
-</ul>
-</li>
-<li>agent类：<ul>
+</ul></li>
+<li>agent类：
+<ul>
 <li>PAPERBANANA</li>
 <li>Paper2Figure</li>
 <li>FigAgent</li>
 <li>SciFig</li>
-</ul>
-</li>
-<li>retrieval类：<ul>
+</ul></li>
+<li>retrieval类：
+<ul>
 <li>DiagramRAG</li>
 <li>PAPERBANANA</li>
 <li>GenGA</li>
 <li>DiagramBank（作为资源层）</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="2-共性模块库"><a href="#2-共性模块库" class="headerlink" title="2. 共性模块库"></a>2. 共性模块库</h2><ul>
+<h2 id="共性模块库">2. 共性模块库</h2>
+<ul>
 <li>参考图检索器</li>
 <li>规划器（plan / concept graph / reasoning chain）</li>
-<li>中间表示层（FigScript / SVG / DrawIO XML / Sci-RCoT / layout plan）</li>
+<li>中间表示层（FigScript / SVG / DrawIO XML / Sci-RCoT / layout
+plan）</li>
 <li>批判-修正闭环（critic / feedback / self-correction）</li>
-<li>风格提炼器（style guide / style vector / reference-guided styling）</li>
-<li>可执行验证器（browser verifier / checklist judge / graph-based evaluator）</li>
+<li>风格提炼器（style guide / style vector / reference-guided
+styling）</li>
+<li>可执行验证器（browser verifier / checklist judge / graph-based
+evaluator）</li>
 <li>组件库机制（middleware repository / reusable assets）</li>
 </ul>
-<h2 id="3-矛盾点"><a href="#3-矛盾点" class="headerlink" title="3. 矛盾点"></a>3. 矛盾点</h2><ul>
-<li>“先代码后渲染” vs “先图像后重建”<ul>
+<h2 id="矛盾点">3. 矛盾点</h2>
+<ul>
+<li>“先代码后渲染” vs “先图像后重建”
+<ul>
 <li>GeoSVG-RL、Paper2Figure、FigAgent 偏代码优先</li>
 <li>PaperBanana、AutoFigure-Edit 偏图像优先</li>
-</ul>
-</li>
-<li>“可编辑性优先” vs “视觉表现优先”<ul>
+</ul></li>
+<li>“可编辑性优先” vs “视觉表现优先”
+<ul>
 <li>SVG/DrawIO 系统更可编辑</li>
 <li>image-generation 系统更容易出视觉上讨好的结果</li>
-</ul>
-</li>
-<li>“显式结构约束” vs “隐式大模型判断”<ul>
+</ul></li>
+<li>“显式结构约束” vs “隐式大模型判断”
+<ul>
 <li>GeoSVG-RL / SciIR 偏显式可验证约束</li>
 <li>PaperBanana / SciFig 偏 critic 的自然语言判断</li>
-</ul>
-</li>
-<li>“数据资源建设” vs “系统能力建设”<ul>
+</ul></li>
+<li>“数据资源建设” vs “系统能力建设”
+<ul>
 <li>DiagramBank / SciIR 强在资源</li>
 <li>FigAgent / Paper2Figure / PaperBanana 强在系统</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="4-研究空白（Research-Gaps）"><a href="#4-研究空白（Research-Gaps）" class="headerlink" title="4. 研究空白（Research Gaps）"></a>4. 研究空白（Research Gaps）</h2><ul>
-<li>缺少真正统一的“科研图生成 + 可编辑 + 科学正确 + 几何正确”全栈系统。</li>
+<h2 id="研究空白research-gaps">4. 研究空白（Research Gaps）</h2>
+<ul>
+<li>缺少真正统一的“科研图生成 + 可编辑 + 科学正确 +
+几何正确”全栈系统。</li>
 <li>多数方法在 benchmark 上做得好，但跨学科泛化证据弱。</li>
 <li>评测体系碎片化：有的评结构，有的评美观，有的评科学性，缺少统一指标体系。</li>
 <li>很少有方法把局部组件检索、局部约束验证和全局布局优化放在同一闭环里。</li>
@@ -1396,77 +1748,915 @@
 <li>对真实人机协作流程的建模不足，尤其是“用户中途修改意图”的长期交互。</li>
 <li>对 text rendering、符号排版、数学标注的系统性解决依然薄弱。</li>
 </ul>
-<h2 id="5-高潜力研究方向（Top-10）"><a href="#5-高潜力研究方向（Top-10）" class="headerlink" title="5. 高潜力研究方向（Top 10）"></a>5. 高潜力研究方向（Top 10）</h2><ul>
-<li><ol>
+<h2 id="高潜力研究方向top-10">5. 高潜力研究方向（Top 10）</h2>
+<ul>
+<li><ol type="1">
 <li>科学推理到向量图的双阶段系统</li>
 </ol>
 <ul>
-<li>先用 SciIR 风格推理链生成结构，再用 GeoSVG-RL 风格渲染约束生成 SVG。</li>
-</ul>
-</li>
-<li><ol>
+<li>先用 SciIR 风格推理链生成结构，再用 GeoSVG-RL 风格渲染约束生成
+SVG。</li>
+</ul></li>
+<li><ol start="2" type="1">
 <li>检索增强的可编辑图生成</li>
 </ol>
 <ul>
-<li>用 DiagramBank / DiagramRAG 做结构与风格检索，再输出 FigScript / SVG。</li>
-</ul>
-</li>
-<li><ol>
+<li>用 DiagramBank / DiagramRAG 做结构与风格检索，再输出 FigScript /
+SVG。</li>
+</ul></li>
+<li><ol start="3" type="1">
 <li>局部组件级 RAG</li>
 </ol>
 <ul>
 <li>不检索整图，改检索图元、子图和连接模式，更利于组合创新。</li>
-</ul>
-</li>
-<li><ol>
+</ul></li>
+<li><ol start="4" type="1">
 <li>可执行图约束语言</li>
 </ol>
 <ul>
-<li>为科研图定义 DSL + constraint checker，让 critic 不只是写自然语言意见。</li>
-</ul>
-</li>
-<li><ol>
+<li>为科研图定义 DSL + constraint checker，让 critic
+不只是写自然语言意见。</li>
+</ul></li>
+<li><ol start="5" type="1">
 <li>人机共编图工作台</li>
 </ol>
 <ul>
-<li>结合 Paper2Figure Web Editor 与 AutoFigure-Edit，支持自然语言和直接拖拽共编。</li>
-</ul>
-</li>
-<li><ol>
+<li>结合 Paper2Figure Web Editor 与
+AutoFigure-Edit，支持自然语言和直接拖拽共编。</li>
+</ul></li>
+<li><ol start="6" type="1">
 <li>跨学科 scientific figure foundation benchmark</li>
 </ol>
 <ul>
-<li>把 AI、biology、materials、medicine 的图统一到一个结构化 benchmark。</li>
-</ul>
-</li>
-<li><ol>
+<li>把 AI、biology、materials、medicine 的图统一到一个结构化
+benchmark。</li>
+</ul></li>
+<li><ol start="7" type="1">
 <li>真实资产保真生成</li>
 </ol>
 <ul>
-<li>借鉴 GenGA，把实验图片、显微图、结果图作为硬约束，而不是模型“想象”生成。</li>
-</ul>
-</li>
-<li><ol>
+<li>借鉴
+GenGA，把实验图片、显微图、结果图作为硬约束，而不是模型“想象”生成。</li>
+</ul></li>
+<li><ol start="8" type="1">
 <li>Middleware + RL 混合系统</li>
 </ol>
 <ul>
 <li>FigAgent 管组件库，GeoSVG-RL 管几何奖励，兼顾可复用性与可用性。</li>
-</ul>
-</li>
-<li><ol>
+</ul></li>
+<li><ol start="9" type="1">
 <li>细粒度失败模式诊断器</li>
 </ol>
 <ul>
-<li>把“箭头错连、文字溢出、模块遗漏、科学逻辑冲突”做成统一错误 taxonomy。</li>
-</ul>
-</li>
-<li><ol>
+<li>把“箭头错连、文字溢出、模块遗漏、科学逻辑冲突”做成统一错误
+taxonomy。</li>
+</ul></li>
+<li><ol start="10" type="1">
 <li>低闭源依赖的开源复现路线</li>
 </ol>
 <ul>
-<li>用开源 planner、开源 VLM、开源 SVG policy 构建完整替代栈，提升可复现科研价值。</li>
+<li>用开源 planner、开源 VLM、开源 SVG policy
+构建完整替代栈，提升可复现科研价值。</li>
+</ul></li>
 </ul>
-</li>
+<h1 id="论文汇总">7.7 论文汇总</h1>
+<h1
+id="automatikz-text-guided-synthesis-of-scientific-vector-graphics-with-tikz">📄
+AutomaTikZ: Text-Guided Synthesis of Scientific Vector Graphics with
+TikZ</h1>
+<h2 id="零模型主图">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/automatikz-main.png" srcset="/img/loading.gif" lazyload class="" title="AutomaTikZ 主图">
+<h2 id="一问题定义-11">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：把自然语言描述直接生成可编译、可编辑的 TikZ
+科学矢量图。</li>
+<li>为什么这个问题重要：TikZ
+是学术写作里高质量矢量图的重要格式，但门槛高，人工编写慢。</li>
+<li>现有方法为什么失败：通用图像生成不输出结构化代码；已有 SVG
+路线往往停留在低层 path，难以保持逻辑层级和可编辑性。</li>
+</ul>
+<h2 id="二方法机制-11">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：自然语言 caption / 图形描述。</li>
+<li>核心机制是什么：构建 DaTikZ 数据集后，微调 LLaMA 与 CLIP-augmented
+LLaMA（CLiMA），生成 TikZ
+代码；再通过编译错误回溯与局部重采样机制做纠错。</li>
+<li>输出是什么：可编译的 TikZ 科学图。</li>
+</ul>
+<h2 id="三数据集dataset">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：DaTikZ</li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：公开 + Web 收集 +
+人工构造</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：收集 TikZ 图及其 caption 配对</li>
+<li>是否清洗 / 过滤 / 增强：对 caption 做 augmentation；来源包括 TeX
+Stack Exchange、arXiv papers、artificial examples</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：总计约 119,789 对；文中未清晰分出标准
+train/val/test</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：text + vector
+code</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：<code>https://github.com/potamides/AutomaTikZ</code></li>
+<li>是否需要申请：否</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：LLaMA，CLiMA（CLIP + LLaMA 适配）</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: caption 到 TikZ 的语言模型生成器</li>
+<li>module 2: CLIP 适配层，用于增强文本-图像对齐</li>
+<li>module 3: 编译错误定位与局部回溯纠错</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: LLaMA + CLIP</li>
+<li>fine-tuning方式：监督微调；CLIP 与 LLaMA 之间加入适配层</li>
+</ul></li>
+<li>关键设计思想：用高层图形语言 TikZ 代替低层 SVG
+path，把图生成转化成更适合 LLM 的代码生成任务。</li>
+</ul>
+<h2 id="五计算资源compute-gpu">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：是</li>
+<li>GPU型号：文中未明确，只提到 Hugging Face 社区 GPU grant</li>
+<li>GPU数量：未提供GPU信息</li>
+<li>是否分布式训练（DDP / FSDP）：未提供GPU信息</li>
+<li>训练时长（如果有）：CLIP 适配层在 595K 通用图文对上预训练 1
+epoch</li>
+<li>batch size / epoch（如果有）：
+<ul>
+<li>batch size 128</li>
+<li>主训练 12 epochs</li>
+</ul></li>
+</ul>
+<h2 id="六创新点-11">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：首次构建大规模 TikZ
+图文数据集，并证明高层图形 DSL 比低层矢量路径更适合 LLM。</li>
+<li>工程优化（engineering tricks）：编译日志驱动的局部回溯纠错。</li>
+<li>实验或数据贡献：DaTikZ 数据集与公开模型权重。</li>
+</ul>
+<h2 id="七局限性必须写">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：输出仍可能违反 TeX/TikZ
+语法和语义规则，导致不可编译。</li>
+<li>隐含假设：caption 足以决定图形的结构与排版。</li>
+<li>未解决问题：复杂跨层图关系、超长上下文图、LoRA
+在相关层上的系统性研究还不充分。</li>
+</ul>
+<h2 id="八可复用模块非常重要">八、可复用模块（非常重要）</h2>
+<ul>
+<li>caption-to-TikZ generation</li>
+<li>compile-log-driven error correction</li>
+<li>CLIP-LLaMA alignment adaptor</li>
+<li>high-level graphics DSL generation</li>
+</ul>
+<h2 id="九灵感种子核心输出">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-11">1. 改进方向</h3>
+<ul>
+<li>引入结构约束解码器，避免只在编译后补救。</li>
+<li>将 TikZ 中间表示与布局规划器结合，先布局后代码化。</li>
+</ul>
+<h3 id="跨领域迁移-11">2. 跨领域迁移</h3>
+<ul>
+<li>适合公式示意图、教学图、流程图、理论图。</li>
+</ul>
+<h3 id="组合机会-11">3. 组合机会</h3>
+<ul>
+<li>可与 GeoSVG-RL 一类几何约束方法结合，做“TikZ 规划 + 几何验证”。</li>
+</ul>
+<hr />
+<h1
+id="autofigure-generating-and-refining-publication-ready-scientific-illustrations">📄
+AUTOFIGURE: Generating and Refining Publication-Ready Scientific
+Illustrations</h1>
+<h2 id="零模型主图-1">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/autofigure-0707-main.png" srcset="/img/loading.gif" lazyload class="" title="AUTOFIGURE 主图">
+<h2 id="一问题定义-12">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：从长篇科研文本自动生成 publication-ready
+科学插图，同时兼顾结构完整性与审美质量。</li>
+<li>为什么这个问题重要：长文本到科研图是高信息密度任务，人工通常要数天完成。</li>
+<li>现有方法为什么失败：端到端 T2I
+缺少结构控制；纯代码图生成又牺牲视觉表现；既有 benchmark
+也主要只看短文本或 caption。</li>
+</ul>
+<h2 id="二方法机制-12">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：长篇 scientific document。</li>
+<li>核心机制是什么：Decoupled Generative Paradigm
+<ul>
+<li>Stage I: Concept Extraction，生成符号布局草图</li>
+<li>Stage II: Critique-and-Refine，对布局进行多轮自检与修正</li>
+<li>Stage III: Rendering Strategy Synthesis，综合布局与风格完成渲染</li>
+</ul></li>
+<li>输出是什么：结构正确且视觉精致的科学插图。</li>
+</ul>
+<h2 id="三数据集dataset-1">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：FigureBench</li>
+<li>数据来源（公开 / 私有 / 合成 /
+Web抓取）：公开论文、survey、blog、textbook 等多源构建</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：从 Research-14K 等来源抽样，使用 GPT-5
+选出最相关插图，再经人工过滤</li>
+<li>是否清洗 / 过滤 / 增强：多阶段清洗；测试集经过人工高质量筛选</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：共 3,300 对 text-figure pairs；300 test，其余
+development</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：multimodal</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：<code>https://github.com/ResearAI/AutoFigure</code></li>
+<li>是否需要申请：否</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model-1">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：Gemini-2.5-Pro / Qwen-3-VL 作为主要 reasoning /
+rendering 引擎</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: Concept Extraction</li>
+<li>module 2: Critique-and-Refine</li>
+<li>module 3: Rendering Module / Final Composition</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: Gemini-2.5-Pro, Qwen-3-VL</li>
+<li>fine-tuning方式：以 agentic orchestration / prompting 为主</li>
+</ul></li>
+<li>关键设计思想：把 reasoning 和 rendering
+解耦，先求结构对，再求图好看。</li>
+</ul>
+<h2 id="五计算资源compute-gpu-1">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：是</li>
+<li>GPU型号：NVIDIA H100</li>
+<li>GPU数量：2× NVIDIA H100 GPUs</li>
+<li>是否分布式训练（DDP / FSDP）：未说明</li>
+<li>训练时长（如果有）：本地部署单图生成约 9.3 分钟</li>
+<li>batch size / epoch（如果有）：未提供</li>
+</ul>
+<h2 id="六创新点-12">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：提出 FigureBench，并将“reasoned
+rendering”明确为核心范式。</li>
+<li>工程优化（engineering tricks）：结构草图、多轮
+critique、VLM-as-a-judge 评测。</li>
+<li>实验或数据贡献：FigureBench 3,300 对长文本科研图 benchmark。</li>
+</ul>
+<h2 id="七局限性必须写-1">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：复杂
+taxonomy、专业领域图、极高文本密度图仍然困难。</li>
+<li>隐含假设：VLM 的多轮 critique 足以逼近专家排版修图能力。</li>
+<li>未解决问题：仍依赖强闭源模型；高度专业知识图生成尚未解决。</li>
+</ul>
+<h2 id="八可复用模块非常重要-1">八、可复用模块（非常重要）</h2>
+<ul>
+<li>long-context concept extractor</li>
+<li>critique-and-refine layout loop</li>
+<li>decoupled reasoning/rendering paradigm</li>
+<li>FigureBench evaluation protocol</li>
+</ul>
+<h2 id="九灵感种子核心输出-1">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-12">1. 改进方向</h3>
+<ul>
+<li>将 Stage I 的符号布局显式变成可执行 SVG/graph
+DSL，而不只作为中间草图。</li>
+</ul>
+<h3 id="跨领域迁移-12">2. 跨领域迁移</h3>
+<ul>
+<li>可迁移到 graphical abstract、科研海报、技术路线图。</li>
+</ul>
+<h3 id="组合机会-12">3. 组合机会</h3>
+<ul>
+<li>可与 AutoFigure-Edit / CRAFTEDITOR 结合，把最终输出直接变成 editable
+SVG。</li>
+</ul>
+<hr />
+<h1
+id="crafter-a-multi-agent-harness-for-editable-scientific-figure-generation-from-diverse-inputs">📄
+CRAFTER: A Multi-Agent Harness for Editable Scientific Figure Generation
+from Diverse Inputs</h1>
+<h2 id="零模型主图-2">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/crafter-main.png" srcset="/img/loading.gif" lazyload class="" title="CRAFTER 主图">
+<h2 id="一问题定义-13">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：让科学图生成同时支持多图类型、多输入条件，并最终得到可编辑输出。</li>
+<li>为什么这个问题重要：真实科研工作流不只“text-to-image”，还包括
+sketch、mask completion、key-element composition 等条件输入。</li>
+<li>现有方法为什么失败：大多数系统只做单图类型、单输入模式，且输出不可编辑。</li>
+</ul>
+<h2 id="二方法机制-13">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：文本、草图、mask、关键元素等多种输入条件。</li>
+<li>核心机制是什么：
+<ul>
+<li>CRAFTER：多 agent harness，共享 evolving figure specification
+作为结构记忆</li>
+<li>CRAFTEDITOR：把 raster figure 分三阶段转为 SVG，含
+extraction、processing、composition</li>
+</ul></li>
+<li>输出是什么：更高质量的 scientific figure，以及进一步可编辑的
+SVG。</li>
+</ul>
+<h2 id="三数据集dataset-2">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：CRAFTBENCH</li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：published
+papers、award-tier posters、research blogs</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：多阶段筛选 + human quality annotation</li>
+<li>是否清洗 / 过滤 / 增强：强人工审查与任务平衡</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：279 个 curated samples；其中文本到图约
+179，另外有 mask completion 30、sketch-conditioned 40、key-element
+composition 30</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：multimodal</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：<code>https://github.com/HaozheZhao/Crafter</code></li>
+<li>是否需要申请：否</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model-2">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：多 agent harness + image-generation backend + VLM
+judge</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: intent reasoner</li>
+<li>module 2: plan generator / SVG skeleton generator</li>
+<li>module 3: critic / reviser / convergence judge</li>
+<li>module 4: CRAFTEDITOR 的 extraction-processing-composition
+三阶段</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: Nano Banana 2、Gemini-3.1-Pro / 3.5
+Flash、Gemini-3.0-Pro-Image-Preview 等</li>
+<li>fine-tuning方式：主要依赖 prompt orchestration</li>
+</ul></li>
+<li>关键设计思想：把“结构记忆”做成共享 spec，让不同 agent
+在同一个中间状态上协同修正。</li>
+</ul>
+<h2 id="五计算资源compute-gpu-2">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：主要为 API / VLM 推理</li>
+<li>GPU型号：未提供GPU信息</li>
+<li>GPU数量：未提供GPU信息</li>
+<li>是否分布式训练（DDP / FSDP）：未提供GPU信息</li>
+<li>训练时长（如果有）：未给出</li>
+<li>batch size / epoch（如果有）：未给出</li>
+<li>额外成本信息：生成全部 279 个 CRAFTBENCH 样本总成本低于 90
+美元；CRAFTEDITOR 每次 raster-to-SVG 约 0.85 美元</li>
+</ul>
+<h2 id="六创新点-13">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：提出 harness
+作为主要创新对象，而不是单纯换更强 backbone。</li>
+<li>工程优化（engineering tricks）：共享 figure specification、directive
+critic、hybrid critic、raster-to-SVG 组合式编辑。</li>
+<li>实验或数据贡献：CRAFTBENCH 与可编辑输出专门评测。</li>
+</ul>
+<h2 id="七局限性必须写-2">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：跨图类型泛化仍不均匀，某些复杂条件下仍会失败。</li>
+<li>隐含假设：executor 不需要改，只靠 orchestration layer
+就足以显著提升。</li>
+<li>未解决问题：API 成本与 wall-clock time 随规模上升；279
+样本仍偏小。</li>
+</ul>
+<h2 id="八可复用模块非常重要-2">八、可复用模块（非常重要）</h2>
+<ul>
+<li>evolving figure specification memory</li>
+<li>multi-agent harness abstraction</li>
+<li>raster-to-SVG composition loop</li>
+<li>directive critic + convergence judge</li>
+</ul>
+<h2 id="九灵感种子核心输出-2">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-13">1. 改进方向</h3>
+<ul>
+<li>将 figure specification 变成统一
+DSL，便于跨系统共享和可解释编辑。</li>
+</ul>
+<h3 id="跨领域迁移-13">2. 跨领域迁移</h3>
+<ul>
+<li>可用于海报生成、教学图、演讲幻灯插图、多模态设计任务。</li>
+</ul>
+<h3 id="组合机会-13">3. 组合机会</h3>
+<ul>
+<li>可与 FigureBench、VisBench、SridBench 结合，形成多 benchmark
+统一评测体系。</li>
+</ul>
+<hr />
+<h1
+id="chart-plot-closing-the-last-mile-of-academic-chart-generation">📄
+chart-plot: Closing the Last Mile of Academic Chart Generation</h1>
+<h2 id="零模型主图-3">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/chartplot-main.png" srcset="/img/loading.gif" lazyload class="" title="chart-plot 主图">
+<h2 id="一问题定义-14">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：LLM 虽然能写出可运行 matplotlib
+代码，但生成的图往往无法直接投稿，缺最后一公里。</li>
+<li>为什么这个问题重要：研究者真正需要的是符合期刊/会议风格、能适配版面、还可做细粒度几何编辑的图。</li>
+<li>现有方法为什么失败：主要有三类失配，style mismatch、deployment
+mismatch、edit mismatch。</li>
+</ul>
+<h2 id="二方法机制-14">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：数据、可视化意图、目标 venue、可选参考风格。</li>
+<li>核心机制是什么：
+<ul>
+<li>style-aware code generation，加载 distilled style skill</li>
+<li>deployment-aware render loop，在目标 LaTeX /
+版面环境中编译和检查</li>
+<li>structured edit layer，把 matplotlib 元素暴露为可稳定修改的对象</li>
+</ul></li>
+<li>输出是什么：publication-ready chart + reproducible matplotlib
+source。</li>
+</ul>
+<h2 id="三数据集dataset-3">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：论文本身不引入新 benchmark
+数据集，主要在五个现有数据集上测试</li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：已有公开数据集</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：围绕五个数据集的 chart generation
+任务，不依赖新的人工大规模标注</li>
+<li>是否清洗 / 过滤 / 增强：主要由 harness
+注入风格、版面和编辑层约束</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：文中仅说明跨五个数据集测试，包括
+ICEWS14、ICEWS05-15、YAGO11k、Wikidata12k、GDELT</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：data + code +
+rendered chart</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：文段未直接给出仓库链接</li>
+<li>是否需要申请：未说明</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model-3">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：code LLM + harness</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: style skill distillation</li>
+<li>module 2: deployment-aware compilation / render loop</li>
+<li>module 3: structured edit layer over matplotlib figure tree</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: code LLM（具体型号文段未稳定披露）</li>
+<li>fine-tuning方式：更像 harness augmentation，不强调模型微调</li>
+</ul></li>
+<li>关键设计思想：把“投稿级图表质量”定义为 harness
+问题，而不是原始代码生成问题。</li>
+</ul>
+<h2 id="五计算资源compute-gpu-3">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：未明确</li>
+<li>GPU型号：未提供GPU信息</li>
+<li>GPU数量：未提供GPU信息</li>
+<li>是否分布式训练（DDP / FSDP）：未提供GPU信息</li>
+<li>训练时长（如果有）：未提供</li>
+<li>batch size / epoch（如果有）：未提供</li>
+</ul>
+<h2 id="六创新点-14">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把 academic chart generation
+的最后一公里拆成风格、部署、编辑三个显式 harness 层。</li>
+<li>工程优化（engineering tricks）：distilled style skill、LaTeX
+column-width deployment loop、stable element ID edit layer。</li>
+<li>实验或数据贡献：主要是任务 framing 与 system demo，而不是新
+benchmark。</li>
+</ul>
+<h2 id="七局限性必须写-3">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：若 venue 风格超出 skill
+覆盖、代码生成器本身语义错得太多，后端 harness 也救不回。</li>
+<li>隐含假设：chart quality
+的关键问题主要出在外层环境约束，而不是图表语义本身。</li>
+<li>未解决问题：没有完整公开大规模 academic chart
+benchmark；GPU/训练细节不透明。</li>
+</ul>
+<h2 id="八可复用模块非常重要-3">八、可复用模块（非常重要）</h2>
+<ul>
+<li>style skill distillation</li>
+<li>deployment-aware render loop</li>
+<li>stable-ID edit layer</li>
+<li>publication-aware chart harness</li>
+</ul>
+<h2 id="九灵感种子核心输出-3">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-14">1. 改进方向</h3>
+<ul>
+<li>把 harness 扩展到 SVG / PPT chart，不只限于 matplotlib。</li>
+</ul>
+<h3 id="跨领域迁移-14">2. 跨领域迁移</h3>
+<ul>
+<li>商业报表、论文插图中的统计图、数据新闻图。</li>
+</ul>
+<h3 id="组合机会-14">3. 组合机会</h3>
+<ul>
+<li>可与 PaperDraw、PlotGen、CRAfter 等 agent
+系统结合，做图表与图解统一工作流。</li>
+</ul>
+<hr />
+<h1
+id="from-pixels-to-paths-a-multi-agent-framework-for-editable-scientific-illustration">📄
+From Pixels to Paths: A Multi-Agent Framework for Editable Scientific
+Illustration</h1>
+<h2 id="零模型主图-4">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/vispainter-main.png" srcset="/img/loading.gif" lazyload class="" title="VisPainter 主图">
+<h2 id="一问题定义-15">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：把自由形式指令转成真正可编辑的 scientific
+illustration，而不是静态 raster 图。</li>
+<li>为什么这个问题重要：科研图要反复迭代，最终可编辑性几乎和初始质量一样重要。</li>
+<li>现有方法为什么失败：image generation 输出不可拆分；TikZ/SVG
+代码法虽可控，但交互体验差、编辑门槛高。</li>
+</ul>
+<h2 id="二方法机制-15">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：text-only 或 text+image 指令。</li>
+<li>核心机制是什么：VisPainter 基于 MCP 协议，通过
+Manager、Designer、Toolbox 驱动 Visio 等专业软件；Designer
+生成草图，Manager 调工具执行并截图，Designer 再迭代修正。</li>
+<li>输出是什么：可编辑 scientific diagram。</li>
+</ul>
+<h2 id="三数据集dataset-4">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：VisBench</li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：arXiv、GitHub
+等公开来源，带许可过滤</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：自动预筛 + 专家三轮人工检查</li>
+<li>是否清洗 / 过滤 / 增强：按元素数量做难度分层与 cohort 平衡；采用
+seasonal update policy</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：初始 release 360 fully annotated
+diagrams；season 评估 cohort 大小在 5-20 的 rolling setup 中抽样</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：multimodal</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：论文称 VisPainter、VisBench 和采样算法将一起发布</li>
+<li>是否需要申请：未说明</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model-4">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：MCP-based multi-agent system + VLM Designer + Visio
+Toolbox</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: Manager</li>
+<li>module 2: Designer</li>
+<li>module 3: Toolbox（30+ Visio MCP tools）</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: VLM（如 Gemini-2.5-Pro 作为 Designer）</li>
+<li>fine-tuning方式：未强调微调，核心是工具编排</li>
+</ul></li>
+<li>关键设计思想：用 MCP 把高层 reasoning 和低层 GUI/COM
+操作分开，让专业绘图软件成为 agent 的执行器。</li>
+</ul>
+<h2 id="五计算资源compute-gpu-4">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：主要是模型推理，不强调训练</li>
+<li>GPU型号：未提供GPU信息</li>
+<li>GPU数量：未提供GPU信息</li>
+<li>是否分布式训练（DDP / FSDP）：未提供GPU信息</li>
+<li>训练时长（如果有）：未提供</li>
+<li>batch size / epoch（如果有）：未提供</li>
+</ul>
+<h2 id="六创新点-15">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：把 MCP +
+专业软件工具链引入科研图生成，强调可观察、可回滚、可编辑。</li>
+<li>工程优化（engineering tricks）：Manager-Designer-Toolbox
+分层；VisBench 的 streaming benchmark 设计。</li>
+<li>实验或数据贡献：VisBench，覆盖 T2I 与
+TI2I，两种设置下的七维评测。</li>
+</ul>
+<h2 id="七局限性必须写-4">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：评测仍依赖自动
+judge；高自由度创意设计的“审美上限”难定义。</li>
+<li>隐含假设：专业图形工具的操作可以通过 MCP 调用稳定抽象出来。</li>
+<li>未解决问题：benchmark
+ceiling、审美主观性、更多图类覆盖仍待扩展。</li>
+</ul>
+<h2 id="八可复用模块非常重要-4">八、可复用模块（非常重要）</h2>
+<ul>
+<li>MCP-based tool orchestration</li>
+<li>Manager-Designer-Toolbox architecture</li>
+<li>streaming benchmark with rolling cohorts</li>
+<li>editable-vector-first generation</li>
+</ul>
+<h2 id="九灵感种子核心输出-4">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-15">1. 改进方向</h3>
+<ul>
+<li>把 Visio-specific toolbox 抽象成跨软件层，支持 Figma / PowerPoint /
+SVG editor。</li>
+</ul>
+<h3 id="跨领域迁移-15">2. 跨领域迁移</h3>
+<ul>
+<li>教学插图、企业流程图、产品架构图、实验装置图。</li>
+</ul>
+<h3 id="组合机会-15">3. 组合机会</h3>
+<ul>
+<li>可与 CRAFTER 的 harness 记忆层结合，形成“工具代理 +
+中间规范”双层系统。</li>
+</ul>
+<hr />
+<h1
+id="sridbench-benchmark-of-scientific-research-illustration-drawing-of-image-generation-model">📄
+SridBench: Benchmark of Scientific Research Illustration Drawing of
+Image Generation Model</h1>
+<h2 id="零模型主图-5">零、模型主图</h2>
+<img src="/2026/07/06/%E7%A0%94%E7%A9%B6-text2fig/sridbench-main.png" srcset="/img/loading.gif" lazyload class="" title="SridBench 主图">
+<h2 id="一问题定义-16">一、问题定义</h2>
+<ul>
+<li>真实要解决的问题：系统评估多模态模型生成科学研究插图的能力。</li>
+<li>为什么这个问题重要：科学插图和普通 T2I
+不同，既要文本信息完整，又要图形结构和逻辑正确。</li>
+<li>现有方法为什么失败：此前缺少专门
+benchmark，模型能力评估分散且不针对科研图。</li>
+</ul>
+<h2 id="二方法机制-16">二、方法机制</h2>
+<p>X → M → Y</p>
+<ul>
+<li>输入是什么：来自真实论文的文本描述与三元组数据。</li>
+<li>核心机制是什么：收集真实 scientific illustration drawing
+data，设计六个评测维度，并通过 MLLM 打分框架进行模型比较。</li>
+<li>输出是什么：对不同图像生成模型在 scientific drawing
+任务上的系统评分。</li>
+</ul>
+<h2 id="三数据集dataset-5">三、数据集（Dataset）</h2>
+<ul>
+<li>数据集名称：SridBench</li>
+<li>数据来源（公开 / 私有 / 合成 / Web抓取）：真实 peer-reviewed
+publications</li>
+<li>数据是如何获得的（非常重要）：
+<ul>
+<li>标注方式：专家设定数据下载和过滤标准；再通过 MLLM
+辅助筛选与打分</li>
+<li>是否清洗 / 过滤 / 增强：多学科来源、人工与模型混合筛选</li>
+</ul></li>
+<li>数据规模：
+<ul>
+<li>train / val / test：1,120 generation instances，覆盖 13 个学科</li>
+</ul></li>
+<li>数据模态（text / image / multimodal / graph）：multimodal</li>
+<li>是否可公开下载：
+<ul>
+<li>下载链接：论文片段未给出稳定仓库链接</li>
+<li>是否需要申请：未说明</li>
+</ul></li>
+</ul>
+<h2 id="四模型结构model-5">四、模型结构（Model）</h2>
+<ul>
+<li>backbone模型：作为 benchmark，本身不是新生成模型；主要评测
+GPT-4o-image、Gemini-2.0-Flash、Emu-3 等</li>
+<li>模型结构组成模块：
+<ul>
+<li>module 1: 数据收集与过滤流程</li>
+<li>module 2: 六维评测框架</li>
+<li>module 3: MLLM-based scoring</li>
+</ul></li>
+<li>是否使用预训练模型：
+<ul>
+<li>base model: 被评测模型包括 diffusion / autoregressive / multimodal
+generation models</li>
+<li>fine-tuning方式：不适用，论文主要是 benchmark</li>
+</ul></li>
+<li>关键设计思想：把“科学研究插图绘制能力”独立成
+benchmark，并用多维度标准评估。</li>
+</ul>
+<h2 id="五计算资源compute-gpu-5">五、计算资源（Compute / GPU）</h2>
+<ul>
+<li>是否使用GPU：主要依赖 API 生成与评测</li>
+<li>GPU型号：未提供GPU信息</li>
+<li>GPU数量：未提供GPU信息</li>
+<li>是否分布式训练（DDP / FSDP）：未提供GPU信息</li>
+<li>训练时长（如果有）：不适用</li>
+<li>batch size / epoch（如果有）：不适用</li>
+</ul>
+<h2 id="六创新点-16">六、创新点</h2>
+<ul>
+<li>真正创新（real novelty）：首个专门针对 scientific research
+illustration drawing 的 benchmark。</li>
+<li>工程优化（engineering tricks）：六维指标框架、13 学科覆盖、MLLM
+judge。</li>
+<li>实验或数据贡献：1,120 条高质量 scientific illustration generation
+instances。</li>
+</ul>
+<h2 id="七局限性必须写-5">七、局限性（必须写）</h2>
+<ul>
+<li>方法在哪些情况下失败：受输入长度限制，只评测少数模型；评测也受 judge
+模型能力约束。</li>
+<li>隐含假设：MLLM 评分足以代理人类专家在 scientific figure quality
+上的判断。</li>
+<li>未解决问题：缺少可编辑性维度；未覆盖更复杂 agentic / vector-based
+系统。</li>
+</ul>
+<h2 id="八可复用模块非常重要-5">八、可复用模块（非常重要）</h2>
+<ul>
+<li>scientific illustration benchmark protocol</li>
+<li>multi-discipline sampling</li>
+<li>six-axis evaluation rubric</li>
+<li>MLLM scoring framework</li>
+</ul>
+<h2 id="九灵感种子核心输出-5">九、灵感种子（核心输出）</h2>
+<h3 id="改进方向-16">1. 改进方向</h3>
+<ul>
+<li>加入 editable output
+和结构恢复能力评测，补足当前只看图像结果的不足。</li>
+</ul>
+<h3 id="跨领域迁移-16">2. 跨领域迁移</h3>
+<ul>
+<li>可迁移到教育图、专利图、医学插图 benchmark。</li>
+</ul>
+<h3 id="组合机会-16">3. 组合机会</h3>
+<ul>
+<li>可与 FigureBench、VisBench、CRAFTBENCH 拼接，形成科研图统一
+benchmark 族。</li>
+</ul>
+<hr />
+<h1 id="跨论文总结-1">📊 跨论文总结</h1>
+<h2 id="方法族群分类-1">1. 方法族群分类</h2>
+<ul>
+<li>generation类
+<ul>
+<li>AutomaTikZ</li>
+<li>AUTOFIGURE</li>
+<li>CRAFTER</li>
+<li>VisPainter</li>
+</ul></li>
+<li>reasoning类
+<ul>
+<li>AUTOFIGURE</li>
+<li>CRAFTER</li>
+<li>chart-plot</li>
+</ul></li>
+<li>agent类
+<ul>
+<li>CRAFTER</li>
+<li>chart-plot</li>
+<li>VisPainter</li>
+</ul></li>
+<li>retrieval类
+<ul>
+<li>CRAFTER 中的 editable pipeline 有弱检索/资产组装味道</li>
+<li>这一批整体上 retrieval 不是最强主线</li>
+</ul></li>
+<li>benchmark类
+<ul>
+<li>FigureBench</li>
+<li>CRAFTBENCH</li>
+<li>VisBench</li>
+<li>SridBench</li>
+</ul></li>
+</ul>
+<h2 id="共性模块库-1">2. 共性模块库</h2>
+<ul>
+<li>harness / orchestration layer</li>
+<li>中间规范层（TikZ / figure specification / SVG skeleton / MCP
+message）</li>
+<li>critic / refinement loop</li>
+<li>可编辑输出层（TikZ / SVG / Visio objects）</li>
+<li>benchmark with multi-axis scoring</li>
+<li>结构先验或版面约束</li>
+</ul>
+<h2 id="矛盾点-1">3. 矛盾点</h2>
+<ul>
+<li>更强 backbone vs 更强 harness
+<ul>
+<li>CRAFTER、chart-plot 明确主张“不是更强模型，而是更强外层
+harness”</li>
+<li>AutomaTikZ 更像“让模型适配更合适的图形语言”</li>
+</ul></li>
+<li>可编辑性优先 vs 视觉丰富度优先
+<ul>
+<li>TikZ / VisPainter / CRAFTEDITOR 偏可编辑</li>
+<li>AUTOFIGURE 偏 publication-ready 视觉表现</li>
+</ul></li>
+<li>benchmark 目标不同
+<ul>
+<li>SridBench 偏图像质量与科研绘图能力</li>
+<li>VisBench 偏高密度可编辑图</li>
+<li>CRAFTBENCH 偏跨图类与跨条件泛化</li>
+</ul></li>
+</ul>
+<h2 id="研究空白research-gaps-1">4. 研究空白（Research Gaps）</h2>
+<ul>
+<li>缺少统一 benchmark
+同时覆盖：科学正确性、视觉审美、可编辑性、交互成本。</li>
+<li>多数方法仍依赖闭源 API，复现性和成本不稳定。</li>
+<li>真正跨学科泛化仍不足，尤其是 biology / chemistry / medicine
+的复杂规范图。</li>
+<li>中间表示尚未统一，不同系统之间难以模块级互操作。</li>
+<li>评测仍缺“长期修改可维护性”指标，例如改一处会不会牵一片。</li>
+</ul>
+<h2 id="高潜力研究方向top-10-1">5. 高潜力研究方向（Top 10）</h2>
+<ul>
+<li><ol type="1">
+<li>Harness-first scientific figure stack</li>
+</ol>
+<ul>
+<li>把 backbone 视为可替换执行器，重点优化 spec
+memory、critic、verification。</li>
+</ul></li>
+<li><ol start="2" type="1">
+<li>Unified figure DSL</li>
+</ol>
+<ul>
+<li>统一 TikZ / SVG / DrawIO / Visio 的中间结构表示。</li>
+</ul></li>
+<li><ol start="3" type="1">
+<li>Editable benchmark unification</li>
+</ol>
+<ul>
+<li>合并 VisBench、CRAFTBENCH、SridBench、FigureBench 的优点做总
+benchmark。</li>
+</ul></li>
+<li><ol start="4" type="1">
+<li>Scientific chart + scientific figure fusion</li>
+</ol>
+<ul>
+<li>把 chart-plot 的投稿级图表能力并入更大的科研图系统。</li>
+</ul></li>
+<li><ol start="5" type="1">
+<li>MCP-native figure agents</li>
+</ol>
+<ul>
+<li>像 VisPainter 一样，把专业图形软件直接纳入 agent 执行层。</li>
+</ul></li>
+<li><ol start="6" type="1">
+<li>Structure-aware raster-to-vector editing</li>
+</ol>
+<ul>
+<li>在 CRAFTEDITOR 基础上进一步提高图元级可修改性。</li>
+</ul></li>
+<li><ol start="7" type="1">
+<li>Domain-specialized scientific figure generation</li>
+</ol>
+<ul>
+<li>针对 biology、chemistry、materials 建专门结构库和校验器。</li>
+</ul></li>
+<li><ol start="8" type="1">
+<li>Compile-and-verify graphics generation</li>
+</ol>
+<ul>
+<li>借鉴 AutomaTikZ 的 compile feedback 与 GeoSVG-RL 的几何奖励，做统一
+verifier。</li>
+</ul></li>
+<li><ol start="9" type="1">
+<li>Cost-aware agent design</li>
+</ol>
+<ul>
+<li>在保持质量的前提下减少多轮 API 迭代成本。</li>
+</ul></li>
+<li><ol start="10" type="1">
+<li>Human-in-the-loop controllable editing</li>
+</ol>
+<ul>
+<li>把自动生成与人工微调做成连续工作流，而不是两张皮。</li>
+</ul></li>
 </ul>
 
                 
