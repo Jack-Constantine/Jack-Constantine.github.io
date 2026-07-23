@@ -1,0 +1,1649 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DevInfra Agent Platform 后端零基础交互教程：从目录、入口、API、Worker、Agent Runtime、审批、RAG、评测到生产部署与调试。">
+  <title>DevInfra Agent 后端通关教程</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link id="prism-theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css">
+  <style>
+    :root {
+      --bg: #f4f1e9;
+      --paper: #fffdf7;
+      --paper-2: #f8f5ed;
+      --ink: #17201c;
+      --muted: #627068;
+      --line: #d9d5c9;
+      --brand: #0b6b52;
+      --brand-2: #18a77d;
+      --accent: #e85d3f;
+      --gold: #b37a16;
+      --code: #171d1b;
+      --ok: #117a55;
+      --warn: #9a5d08;
+      --danger: #b73d33;
+      --shadow: 0 18px 46px rgba(29, 39, 34, .09);
+      --sidebar: 286px;
+      --radius: 18px;
+    }
+    html[data-theme="dark"] {
+      --bg: #101614;
+      --paper: #17201d;
+      --paper-2: #1c2824;
+      --ink: #f2f6f3;
+      --muted: #a8b6ae;
+      --line: #34423c;
+      --brand: #5ed7ae;
+      --brand-2: #2cb98c;
+      --accent: #ff8d73;
+      --gold: #f4bf55;
+      --code: #0d1210;
+      --ok: #74ddb6;
+      --warn: #f4bf55;
+      --danger: #ff8f82;
+      --shadow: 0 18px 46px rgba(0, 0, 0, .24);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 88% 4%, rgba(24,167,125,.13), transparent 25rem),
+        radial-gradient(circle at 12% 24%, rgba(232,93,63,.08), transparent 22rem),
+        var(--bg);
+      font-family: "Noto Sans SC", system-ui, sans-serif;
+      line-height: 1.78;
+    }
+    button, input { font: inherit; }
+    a { color: var(--brand); text-decoration-thickness: .08em; text-underline-offset: .18em; }
+    code, pre, kbd { font-family: "JetBrains Mono", Consolas, monospace; }
+    code:not([class*="language-"]) {
+      padding: .12rem .38rem;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper-2);
+      font-size: .88em;
+    }
+    .topbar {
+      position: fixed;
+      z-index: 30;
+      inset: 0 0 auto 0;
+      height: 68px;
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(220px, 760px) auto;
+      align-items: center;
+      gap: 18px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 91%, transparent);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      color: #fff;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0b6b52, #18a77d);
+      box-shadow: 0 8px 18px rgba(11,107,82,.22);
+    }
+    .search-wrap { position: relative; }
+    #global-search {
+      width: 100%;
+      height: 42px;
+      padding: 0 44px 0 42px;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      background: var(--paper-2);
+    }
+    #global-search:focus { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent); }
+    .search-icon { position: absolute; left: 14px; top: 9px; color: var(--muted); }
+    .search-key { position: absolute; right: 10px; top: 10px; color: var(--muted); font-size: 12px; }
+    .toolbar { display: flex; justify-content: flex-end; gap: 8px; }
+    .icon-btn, .ghost-btn, .copy-btn, .flow-step, .tab-btn {
+      cursor: pointer;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+    }
+    .icon-btn { width: 40px; height: 40px; }
+    .icon-btn:hover, .ghost-btn:hover, .copy-btn:hover, .tab-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      min-height: 100vh;
+      padding-top: 68px;
+    }
+    .sidebar {
+      position: fixed;
+      inset: 68px auto 0 0;
+      width: var(--sidebar);
+      overflow-y: auto;
+      padding: 20px 16px 40px;
+      border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 82%, transparent);
+    }
+    .progress-card {
+      padding: 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+    }
+    .progress-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
+    .progress-track { height: 7px; margin-top: 10px; overflow: hidden; border-radius: 9px; background: var(--line); }
+    #progress-bar { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--brand), var(--brand-2)); transition: width .25s ease; }
+    .nav-label {
+      margin: 18px 10px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .chapter-nav { display: grid; gap: 4px; }
+    .chapter-nav a {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: center;
+      min-height: 38px;
+      padding: 6px 10px;
+      color: var(--muted);
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .chapter-nav a:hover, .chapter-nav a.active { color: var(--brand); background: color-mix(in srgb, var(--brand) 11%, transparent); }
+    .nav-num { font-family: "JetBrains Mono"; font-size: 11px; }
+    .main { grid-column: 2; width: 100%; min-width: 0; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 76px clamp(28px, 7vw, 110px) 54px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(125deg, color-mix(in srgb, var(--paper) 94%, transparent), color-mix(in srgb, var(--brand) 8%, var(--paper)));
+    }
+    .hero::after {
+      content: "API → SERVICE → WORKER → AGENT";
+      position: absolute;
+      right: -30px;
+      bottom: -18px;
+      color: color-mix(in srgb, var(--brand) 7%, transparent);
+      font: 900 clamp(30px, 5vw, 74px)/1 "JetBrains Mono";
+      white-space: nowrap;
+      transform: rotate(-3deg);
+    }
+    .eyebrow { color: var(--brand); font: 700 12px/1.4 "JetBrains Mono"; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -.035em; }
+    h1 { max-width: 900px; margin: 14px 0 20px; font-size: clamp(38px, 6vw, 76px); }
+    .hero-lead { max-width: 830px; color: var(--muted); font-size: clamp(17px, 2vw, 21px); }
+    .hero-meta, .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .chip, .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .content { width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding: 40px 0 100px; }
+    .chapter {
+      position: relative;
+      padding: clamp(30px, 5vw, 62px);
+      margin: 30px 0;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .chapter-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 18px;
+      align-items: start;
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .chapter-no {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      color: #fff;
+      border-radius: 15px;
+      background: var(--brand);
+      font: 700 15px "JetBrains Mono";
+    }
+    .chapter h2 { margin: 0 0 6px; font-size: clamp(28px, 4vw, 44px); }
+    .subtitle { margin: 0; color: var(--muted); }
+    .done-label { display: inline-flex; gap: 7px; align-items: center; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .done-check { width: 18px; height: 18px; accent-color: var(--brand); }
+    h3 { margin-top: 34px; font-size: 24px; }
+    h4 { margin: 22px 0 8px; font-size: 18px; }
+    .grid-2, .grid-3, .glossary-grid, .recipe-grid { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .glossary-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .recipe-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .card, .callout, .term-card, .recipe, .flow-panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--paper-2);
+    }
+    .card h4, .term-card h4, .recipe h4 { margin-top: 0; }
+    .callout { margin: 20px 0; border-left: 5px solid var(--brand); }
+    .callout.warn { border-left-color: var(--warn); }
+    .callout.danger { border-left-color: var(--danger); }
+    .callout.beginner { border-left-color: var(--accent); }
+    .callout-title { margin-bottom: 5px; font-weight: 900; }
+    .muted, .small { color: var(--muted); }
+    .small { font-size: 13px; }
+    .path {
+      display: inline-flex;
+      padding: 5px 9px;
+      color: var(--brand);
+      border-radius: 7px;
+      background: color-mix(in srgb, var(--brand) 10%, transparent);
+      font: 600 12px "JetBrains Mono";
+    }
+    .tree {
+      overflow: auto;
+      padding: 20px;
+      color: #d9f6e9;
+      border-radius: 14px;
+      background: var(--code);
+      font: 13px/1.72 "JetBrains Mono";
+      white-space: pre;
+    }
+    .tree .hot { color: #69e0b6; font-weight: 700; }
+    .code-card {
+      position: relative;
+      overflow: hidden;
+      margin: 22px 0;
+      border: 1px solid #2e3b37;
+      border-radius: 15px;
+      background: var(--code);
+    }
+    .code-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      min-height: 46px;
+      padding: 8px 12px 8px 16px;
+      color: #b9c9c1;
+      border-bottom: 1px solid #2e3b37;
+      background: #111815;
+      font: 12px "JetBrains Mono";
+    }
+    .code-actions { display: flex; gap: 7px; }
+    .copy-btn { padding: 5px 9px; color: #d6e1dc; border-color: #3a4943; background: #1b2521; font-size: 11px; }
+    pre[class*="language-"] { max-height: 660px; margin: 0 !important; padding: 20px !important; border-radius: 0 !important; font-size: 13px; line-height: 1.7; }
+    .annotation {
+      display: grid;
+      grid-template-columns: minmax(130px, .34fr) 1fr;
+      margin: 14px 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .annotation dt, .annotation dd { margin: 0; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+    .annotation dt { color: var(--brand); background: var(--paper-2); font: 600 12px/1.5 "JetBrains Mono"; }
+    .annotation dd { background: var(--paper); }
+    .annotation dt:last-of-type, .annotation dd:last-of-type { border-bottom: 0; }
+    .table-wrap { overflow-x: auto; margin: 18px 0; border: 1px solid var(--line); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; background: var(--paper); font-size: 14px; }
+    th, td { min-width: 130px; padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { position: sticky; top: 0; color: var(--brand); background: var(--paper-2); font-size: 12px; }
+    tr:last-child td { border-bottom: 0; }
+    details {
+      margin: 13px 0;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    summary { padding: 14px 18px; cursor: pointer; font-weight: 800; }
+    details > div { padding: 0 18px 18px; }
+    .flow-steps { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+    .flow-step { padding: 9px 12px; font-size: 12px; }
+    .flow-step.active { color: #fff; border-color: var(--brand); background: var(--brand); }
+    .flow-panel { min-height: 140px; }
+    .flow-panel h4 { margin-top: 0; }
+    .tabs { display: flex; gap: 8px; margin: 20px 0 0; }
+    .tab-btn { padding: 8px 13px; }
+    .tab-btn.active { color: #fff; border-color: var(--brand); background: var(--brand); }
+    .tab-panel { display: none; padding: 18px; border: 1px solid var(--line); border-radius: 0 14px 14px; background: var(--paper-2); }
+    .tab-panel.active { display: block; }
+    .mermaid-wrap { overflow: auto; padding: 16px; margin: 20px 0; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    html[data-theme="dark"] .mermaid-wrap { filter: brightness(.91) saturate(.94); }
+    .exercise {
+      padding: 20px;
+      margin: 24px 0;
+      border: 1px dashed var(--brand);
+      border-radius: 15px;
+      background: color-mix(in srgb, var(--brand) 6%, var(--paper));
+    }
+    .exercise h4 { margin-top: 0; color: var(--brand); }
+    kbd { padding: 2px 7px; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 5px; background: var(--paper); font-size: 12px; }
+    .search-results {
+      position: fixed;
+      z-index: 60;
+      top: 60px;
+      left: calc(var(--sidebar) + 24px);
+      width: min(760px, calc(100vw - var(--sidebar) - 48px));
+      max-height: 62vh;
+      display: none;
+      overflow-y: auto;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .search-results.open { display: block; }
+    .search-result { display: block; padding: 11px 12px; color: var(--ink); border-radius: 9px; text-decoration: none; }
+    .search-result:hover { background: var(--paper-2); }
+    .search-result strong { display: block; color: var(--brand); }
+    .search-result span { color: var(--muted); font-size: 12px; }
+    .index-tools { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    .ghost-btn { padding: 7px 11px; }
+    .hidden-row { display: none; }
+    footer { padding: 30px; color: var(--muted); text-align: center; border-top: 1px solid var(--line); }
+    @media (max-width: 980px) {
+      :root { --sidebar: 0px; }
+      .topbar { grid-template-columns: 1fr auto; padding: 0 14px; }
+      .brand span:last-child { display: none; }
+      .search-wrap { grid-column: 1; grid-row: 1; margin-left: 50px; }
+      .toolbar { grid-column: 2; grid-row: 1; }
+      .sidebar {
+        z-index: 45;
+        width: min(330px, 88vw);
+        transform: translateX(-102%);
+        transition: transform .2s ease;
+      }
+      body.nav-open .sidebar { transform: translateX(0); box-shadow: var(--shadow); }
+      .main { grid-column: 1; }
+      .search-results { left: 14px; width: calc(100vw - 28px); }
+      .grid-3 { grid-template-columns: 1fr; }
+      .annotation { grid-template-columns: 1fr; }
+      .annotation dt { border-bottom: 0; }
+      .chapter-head { grid-template-columns: auto 1fr; }
+      .done-label { grid-column: 1 / -1; }
+    }
+    @media (max-width: 700px) {
+      .content { width: min(100% - 20px, 1180px); }
+      .hero { padding: 48px 18px 38px; }
+      .chapter { padding: 24px 18px; border-radius: 18px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .chapter-no { width: 42px; height: 42px; }
+      h1 { font-size: 38px; }
+      .search-key { display: none; }
+      #global-search { padding-right: 12px; }
+    }
+    @media print {
+      .topbar, .sidebar, .done-label, .copy-btn, .tabs, .index-tools { display: none !important; }
+      .layout, .main { display: block; }
+      .hero, .chapter { box-shadow: none; break-inside: avoid; }
+      .content { width: 100%; }
+      details > div { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">D</span><span>DevInfra 后端教程</span></div>
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input id="global-search" type="search" autocomplete="off" aria-label="搜索教程" placeholder="搜索：create_run、审批、Celery、断点……">
+      <span class="search-key">Ctrl K</span>
+    </div>
+    <div class="toolbar">
+      <button class="icon-btn" id="nav-toggle" aria-label="打开章节导航" title="章节导航">☰</button>
+      <button class="icon-btn" id="theme-toggle" aria-label="切换深浅主题" title="切换主题">◐</button>
+    </div>
+  </header>
+  <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="章节导航">
+      <div class="progress-card">
+        <div class="progress-row"><span>学习进度</span><span id="progress-text">0 / 17</span></div>
+        <div class="progress-track"><div id="progress-bar"></div></div>
+      </div>
+      <div class="nav-label">从请求到结果</div>
+      <nav class="chapter-nav">
+        <a href="#ch00"><span class="nav-num">00</span><span>先学会怎么用本教程</span></a>
+        <a href="#ch01"><span class="nav-num">01</span><span>项目目录与后端边界</span></a>
+        <a href="#ch02"><span class="nav-num">02</span><span>够用的 Python 与 Web 基础</span></a>
+        <a href="#ch03"><span class="nav-num">03</span><span>离线启动与第一次调试</span></a>
+        <a href="#ch04"><span class="nav-num">04</span><span>入口与依赖组装</span></a>
+        <a href="#ch05"><span class="nav-num">05</span><span>登录、JWT 与 API 外壳</span></a>
+        <a href="#ch06"><span class="nav-num">06</span><span>请求模型与共享契约</span></a>
+        <a href="#ch07"><span class="nav-num">07</span><span>创建 Run 与幂等 Outbox</span></a>
+        <a href="#ch08"><span class="nav-num">08</span><span>仓库、数据库、事件与 SSE</span></a>
+        <a href="#ch09"><span class="nav-num">09</span><span>分发、Worker 与投影</span></a>
+        <a href="#ch10"><span class="nav-num">10</span><span>Agent Runtime 与 LangGraph</span></a>
+        <a href="#ch11"><span class="nav-num">11</span><span>Skill、Tool、Policy 与审批</span></a>
+        <a href="#ch12"><span class="nav-num">12</span><span>证据、RAG 与外部适配器</span></a>
+        <a href="#ch13"><span class="nav-num">13</span><span>评测 Harness 与失败分析</span></a>
+        <a href="#ch14"><span class="nav-num">14</span><span>健康、监控与生产组合</span></a>
+        <a href="#ch15"><span class="nav-num">15</span><span>测试、断点与修改配方</span></a>
+        <a href="#ch16"><span class="nav-num">16</span><span>包、文件与函数总索引</span></a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero" data-search data-title="教程首页">
+        <div class="eyebrow">BACKEND · BEGINNER TO DEBUGGER · COMMIT e92d894</div>
+        <h1>从 <code>main.py</code> 出发，亲手走完一个企业级 Agent 后端</h1>
+        <p class="hero-lead">这不是把名词堆给你的架构说明。你会跟着一条真实请求，依次看懂入口、API、Service、Repository、Worker、Agent、工具、证据、审批、RAG、评测与生产设施，最后能自己定位、调试和修改代码。</p>
+        <div class="hero-meta">
+          <span class="chip">44 个 Python 源码文件</span>
+          <span class="chip">31 个 API 路由</span>
+          <span class="chip">144 个测试</span>
+          <span class="chip">离线模式先学</span>
+          <span class="chip">生产模式后拆</span>
+        </div>
+      </section>
+
+      <div class="content">
+        <section class="chapter" id="ch00" data-chapter data-search data-title="00 如何使用教程">
+          <div class="chapter-head">
+            <div class="chapter-no">00</div>
+            <div><h2>先学会怎么用这份教程</h2><p class="subtitle">你的目标不是背代码，而是形成“看到现象 → 找到入口 → 沿调用链定位”的能力。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch00"> 学完本章</label>
+          </div>
+          <div class="grid-3">
+            <article class="card"><h4>第一遍：只走主链</h4><p>从第 01 章读到第 11 章。先接受“一个请求会经过很多层”，不要急着记每个方法。</p></article>
+            <article class="card"><h4>第二遍：边跑边断</h4><p>照第 03、15 章启动离线服务，在 <code>create_run</code>、<code>RunService.create</code>、<code>RunWorker.execute</code> 处打断点。</p></article>
+            <article class="card"><h4>第三遍：改一个小功能</h4><p>从修改配方挑一个任务，先找测试，再改实现。此时第 16 章是你的后端地图。</p></article>
+          </div>
+          <div class="callout beginner">
+            <div class="callout-title">第一次看到陌生词怎么办？</div>
+            <p>先看它旁边的“新手补课”和变量表。页面顶部可搜索任何函数、变量、包或接口。代码里的 <code>self</code>、<code>await</code>、<code>Depends</code> 等只在第一次出现时完整解释，后面会链接回来。</p>
+          </div>
+          <h3>整条故事线</h3>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+flowchart LR
+  A["浏览器/Swagger"] --> B["FastAPI 路由"]
+  B --> C["领域 Service"]
+  C --> D["Repository"]
+  C --> E["Dispatcher"]
+  E --> F["Worker"]
+  F --> G["Agent Runtime"]
+  G --> H["Skill + Tool + Policy"]
+  H --> I["Evidence / Approval"]
+  F --> D
+  D --> J["Trace / SSE / Result"]
+            </pre>
+          </div>
+          <p class="small">图加载失败也不影响阅读：它表达的就是“请求进入 API，经服务和仓库存下任务，由 Worker 执行 Agent，最后把可审计结果写回仓库”。</p>
+        </section>
+
+        <section class="chapter" id="ch01" data-chapter data-search data-title="01 项目目录 后端边界">
+          <div class="chapter-head">
+            <div class="chapter-no">01</div>
+            <div><h2>项目目录与后端边界</h2><p class="subtitle">先知道每个房间放什么，再进房间看家具。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch01"> 学完本章</label>
+          </div>
+          <div class="tree"><span class="hot">devinfra-agent-platform/</span>
+├─ <span class="hot">backend/</span>                       ← 本教程主角：Python 后端
+│  ├─ pyproject.toml                ← 包信息、依赖、命令与质量工具
+│  ├─ uv.lock                       ← 锁定可复现的精确依赖版本
+│  ├─ Dockerfile                    ← 生产镜像怎么构建、以谁运行
+│  ├─ alembic.ini / alembic/        ← 数据库版本迁移
+│  ├─ scripts/                      ← 导出 OpenAPI、负载测试
+│  ├─ tests/                        ← 144 个后端行为测试
+│  └─ <span class="hot">src/devinfra_agent/</span>         ← 真正的业务源码包
+│     ├─ main.py                    ← Uvicorn 导入的 API 入口
+│     ├─ composition.py             ← 离线/生产依赖装配
+│     ├─ app.py                     ← FastAPI 路由与 AppServices
+│     ├─ services.py                ← Run 与审批业务规则
+│     ├─ repositories.py            ← 内存/SQLAlchemy 数据访问
+│     ├─ worker.py                  ← 后台任务执行与持久化投影
+│     ├─ runtime.py / graph.py      ← Agent 状态与 LangGraph
+│     ├─ skills.py / tools.py       ← 工作流和工具目录
+│     ├─ policy.py / evidence.py    ← 权限决策和证据规范化
+│     ├─ rag.py                     ← 切块、向量、BM25、RRF、Qdrant
+│     ├─ evaluation.py / harness/   ← 持久评测与离线评测场
+│     └─ adapters/                  ← MCP、GitHub、HTTP 外部边界
+├─ mcp/                             ← TypeScript 工具服务；只讲 Python 如何调用
+├─ scenarios/                       ← 固定案例、工具 fixture、72 道评测题
+├─ ops/                             ← Prometheus、OTel、Grafana 等运维配置
+├─ frontend/                        ← 本教程不展开其 React 实现
+└─ compose.yaml                     ← 把全部生产服务接起来</div>
+          <h3>三个容易混淆的词</h3>
+          <div class="grid-3">
+            <article class="term-card"><h4>项目（project）</h4><p>整个仓库。里面既有 Python 后端，也有前端、MCP 服务、场景数据和运维文件。</p></article>
+            <article class="term-card"><h4>包（package）</h4><p><code>devinfra_agent</code> 是可导入的 Python 包；目录里有 <code>__init__.py</code>。</p></article>
+            <article class="term-card"><h4>模块（module）</h4><p>一个 <code>.py</code> 文件就是模块，例如 <code>services.py</code>；用 <code>from .services import RunService</code> 引入。</p></article>
+          </div>
+          <h3>为什么使用 <code>src/</code> 布局？</h3>
+          <p>源码不直接躺在 <code>backend/</code> 根目录，而在 <code>backend/src/devinfra_agent</code>。这样测试必须像真实安装后的用户一样导入包，可避免“只因当前目录碰巧在搜索路径里所以能运行”的假成功。</p>
+          <div class="callout warn"><div class="callout-title">后端边界不是“只看 backend 文件夹”</div><p><code>compose.yaml</code> 决定生产后端依赖哪些服务；<code>mcp/</code> 向后端暴露工具协议；<code>scenarios/</code> 是评测和固定工具数据。我们会讲接口和数据流，但不展开 React 或 TypeScript 内部写法。</p></div>
+        </section>
+
+        <section class="chapter" id="ch02" data-chapter data-search data-title="02 Python Web 基础 async await dataclass type hint">
+          <div class="chapter-head">
+            <div class="chapter-no">02</div>
+            <div><h2>读这个项目之前，补齐刚好够用的基础</h2><p class="subtitle">所有概念都用项目里真实会出现的写法解释。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch02"> 学完本章</label>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>写法</th><th>小白翻译</th><th>本项目为什么用</th></tr></thead>
+            <tbody>
+              <tr><td><code>def f(x: str) -&gt; bool</code></td><td>定义函数；<code>x</code> 建议传字符串；返回布尔值。</td><td>类型标注帮助 IDE、Ruff 和读者理解接口，但 Python 运行时并不自动强制。</td></tr>
+              <tr><td><code>async def</code> / <code>await</code></td><td>这个函数会等待网络、数据库或其他任务；等待时可以让事件循环做别的事。</td><td>API、数据库、模型、工具都可能慢，不能让整个服务原地干等。</td></tr>
+              <tr><td><code>class</code> / <code>self</code></td><td>类是对象模板；<code>self</code> 是“当前这个对象自己”。</td><td><code>RunService</code> 把 repository、events、dispatcher 保存为自己的属性。</td></tr>
+              <tr><td><code>@dataclass</code></td><td>自动生成初始化、比较、显示等样板代码的数据类。</td><td>内部记录、工具结果、策略上下文主要装数据，不需要复杂行为。</td></tr>
+              <tr><td><code>@classmethod</code></td><td>方法收到的是类 <code>cls</code>，常用于工厂方法。</td><td><code>AppServices.offline()</code> 负责构造一整套离线服务。</td></tr>
+              <tr><td><code>Protocol</code></td><td>只规定“必须有哪些方法”，不要求继承某个父类。</td><td>内存仓库和 SQL 仓库可以互换；真实/假模型也能互换。</td></tr>
+              <tr><td><code>UUID</code></td><td>几乎不会撞车的全局唯一编号。</td><td>Run、审批、评测记录都要跨进程稳定识别。</td></tr>
+              <tr><td><code>dict[str, Any]</code></td><td>键是字符串，值可以是任意类型的字典。</td><td>灵活承载 metadata、JSON 和外部工具结果。</td></tr>
+              <tr><td><code>None</code> / <code>X | None</code></td><td>没有值；后者表示可能是 X，也可能没有。</td><td>未配置 API Key、没有 checkpoint、尚无最终结果都用它表达。</td></tr>
+              <tr><td><code>try / except / finally</code></td><td>尝试执行、捕获错误、无论如何都清理。</td><td>Worker 出错仍必须释放 lease；工具超时必须转成可审计错误。</td></tr>
+            </tbody>
+          </table></div>
+          <h3>HTTP 请求在后端眼里是什么？</h3>
+          <div class="grid-2">
+            <article class="card"><h4>输入</h4><p><strong>方法</strong>（GET/POST）、<strong>路径</strong>（<code>/api/runs</code>）、请求头、JSON body、登录身份。</p></article>
+            <article class="card"><h4>输出</h4><p><strong>状态码</strong>（200/202/404…）、响应头和 JSON；持续推送则用 SSE 的 <code>text/event-stream</code>。</p></article>
+          </div>
+          <div class="callout beginner"><div class="callout-title">同步与异步不要死记</div><p>看到 <code>await repository.get_run(...)</code>，先翻译成“暂停当前协程，等数据读取完成”。它不等于开新线程，也不等于函数会自动并行。</p></div>
+        </section>
+
+        <section class="chapter" id="ch03" data-chapter data-search data-title="03 离线启动 调试 Uvicorn Swagger pytest 断点">
+          <div class="chapter-head">
+            <div class="chapter-no">03</div>
+            <div><h2>离线启动与第一次调试</h2><p class="subtitle">先把变量减少：不接真实模型、不启动数据库，也能走完整调用链。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch03"> 学完本章</label>
+          </div>
+          <h3>这些命令分别做什么</h3>
+          <div class="code-card">
+            <div class="code-head"><span>PowerShell · 在项目根目录执行</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-powershell">cd C:\Users\Jack1\Desktop\offer\devinfra-agent-platform\backend
+uv sync --all-groups
+$env:DEVINFRA_MODE="offline"
+$env:DEVINFRA_OFFLINE_EAGER="1"
+uv run uvicorn devinfra_agent.main:app --reload</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>cd</dt><dd>把当前工作目录切到 <code>backend</code>，后面的 <code>pyproject.toml</code> 才能被找到。</dd>
+            <dt>uv sync</dt><dd><code>uv</code> 读取项目清单和锁文件，创建/更新 <code>.venv</code> 并安装运行、开发依赖。</dd>
+            <dt>DEVINFRA_MODE</dt><dd>环境变量；<code>offline</code> 让组合根选择内存仓库、确定性模型和 fixture 工具。</dd>
+            <dt>DEVINFRA_OFFLINE_EAGER</dt><dd>设为 1 后，内存 dispatcher 收到 Run 就立即安排 Worker 执行，适合本地演示。</dd>
+            <dt>uv run</dt><dd>在项目虚拟环境里执行后面的命令，不必手动激活 <code>.venv</code>。</dd>
+            <dt>uvicorn</dt><dd>ASGI 服务器；它导入 <code>devinfra_agent.main</code> 模块中的 <code>app</code> 对象。</dd>
+            <dt>--reload</dt><dd>源码保存后自动重启开发服务器；只用于开发，不用于生产。</dd>
+          </dl>
+          <h3>第一次手动验证</h3>
+          <ol>
+            <li>打开 <a href="http://127.0.0.1:8000/docs">http://127.0.0.1:8000/docs</a>，这是 FastAPI 自动生成的 Swagger UI。</li>
+            <li>调用 <code>POST /api/auth/login</code>，用户名 <code>maintainer</code>，密码 <code>maintainer-password</code>。</li>
+            <li>复制 <code>access_token</code>，点 Swagger 右上角 Authorize，填 <code>Bearer 空格 token</code>。</li>
+            <li>调用 <code>POST /api/runs</code>，body 使用 <code>{"workflow":"ci_triage","prompt":"分析退款测试失败","metadata":{}}</code>。</li>
+            <li>拿响应里的 Run ID 调用 <code>GET /api/runs/{run_id}/trace</code>，观察 step、model_call、tool_call、evidence。</li>
+          </ol>
+          <h3>建议的第一组断点</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>断点</th><th>你应该观察</th><th>继续运行后去哪里</th></tr></thead>
+            <tbody>
+              <tr><td><code>app.py:create_run</code></td><td><code>request</code> 已被 Pydantic 验证；<code>user</code> 已由 JWT 依赖解析。</td><td><code>RunService.create</code></td></tr>
+              <tr><td><code>services.py:RunService.create</code></td><td><code>fingerprint</code>、<code>key</code>、<code>created</code>。</td><td><code>repository.create_run_request</code></td></tr>
+              <tr><td><code>worker.py:RunWorker.execute</code></td><td><code>delivery_id</code>、lease 是否拿到、构造出的 <code>RunRequest</code>。</td><td><code>AgentRuntime.run</code></td></tr>
+              <tr><td><code>runtime.py:_invoke_tool</code></td><td>工具名、参数、风险、超时、调用次数和返回的 <code>ToolResult</code>。</td><td><code>EvidenceNormalizer.normalize</code></td></tr>
+            </tbody>
+          </table></div>
+          <div class="exercise"><h4>动手 01：证明离线 eager 真在后台执行</h4><p>先把 <code>DEVINFRA_OFFLINE_EAGER</code> 改为 0，创建 Run 后看它停在 pending；再改回 1 重启并重试。你会理解“API 创建任务”和“Worker 执行任务”本来是两件事。</p></div>
+        </section>
+
+        <section class="chapter" id="ch04" data-chapter data-search data-title="04 入口 main composition AppSettings AppServices 依赖注入">
+          <div class="chapter-head">
+            <div class="chapter-no">04</div>
+            <div><h2>入口文件与依赖组装</h2><p class="subtitle">真正的入口只有 5 行；复杂度被有意放进组合根。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch04"> 学完本章</label>
+          </div>
+          <span class="path">backend/src/devinfra_agent/main.py</span>
+          <div class="code-card">
+            <div class="code-head"><span>main.py · 完整文件</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">"""FastAPI application entry point."""
+
+from .composition import create_app_from_environment
+
+app = create_app_from_environment()</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>"""..."""</dt><dd>模块文档字符串，告诉读者这个文件的职责。</dd>
+            <dt>from .composition</dt><dd>开头的点表示“从当前 <code>devinfra_agent</code> 包内导入”。</dd>
+            <dt>create_app_from_environment</dt><dd>工厂函数：读环境变量、组装服务、创建 FastAPI 对象。</dd>
+            <dt>app</dt><dd>模块级变量。命令里的 <code>devinfra_agent.main:app</code>，冒号后就是它。</dd>
+          </dl>
+          <h3>为什么不在入口里直接连接数据库？</h3>
+          <p>入口只声明“我要一个 app”。<code>composition.py</code> 才负责根据环境选择内存实现或生产实现。这叫<strong>组合根（composition root）</strong>：所有具体依赖集中装配，业务类只接收自己需要的对象。</p>
+          <div class="tabs" role="tablist">
+            <button class="tab-btn active" data-tab="offline-composition">离线组合</button>
+            <button class="tab-btn" data-tab="production-composition">生产组合</button>
+          </div>
+          <div class="tab-panel active" id="offline-composition">
+            <p><code>AppSettings.from_env()</code> 看到 <code>DEVINFRA_MODE=offline</code>，只解析 <code>DEVINFRA_OFFLINE_EAGER</code>。<code>build_services()</code> 返回 <code>AppServices.offline()</code>：内存仓库、内存 dispatcher、确定性模型、内存 LangGraph checkpoint、fixture 工具、内存对象存储。</p>
+          </div>
+          <div class="tab-panel" id="production-composition">
+            <p>生产模式先强校验必要环境变量，再创建 SQLAlchemy engine、PostgreSQL repository、Celery dispatcher、MCP/GitHub 工具、OpenAI-compatible 或确定性模型、Postgres checkpoint、Qdrant RAG、MinIO 和组件健康探针。</p>
+          </div>
+          <h3><code>AppServices</code> 是什么？</h3>
+          <p>它是应用的“服务箱”：repository、dispatcher、events、runs、approvals、worker、auth、skills、tools、knowledge、evaluations、health 都放在同一个数据类里。<code>app.state.services</code> 保存这只箱子，测试也能换入自定义假实现。</p>
+          <div class="code-card">
+            <div class="code-head"><span>app.py · AppServices.offline 核心</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">tools = runtime.tools if runtime is not None else ToolRegistry.fixture()
+skills = runtime.skills if runtime is not None else SkillRegistry.default()
+actual_runtime = runtime or AgentRuntime(
+    gateway=DeterministicModelGateway(),
+    tools=tools,
+    skills=skills,
+    graph=LangGraphAdapter(checkpointer=InMemorySaver()),
+)
+dispatcher = InMemoryDispatcher()
+services = cls.compose(
+    repository=InMemoryRepository(),
+    dispatcher=dispatcher,
+    runtime=actual_runtime,
+    jwt_secret="offline-development-secret",
+    user_store=UserStore.seeded(),
+)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>runtime is not None</dt><dd>调用方传了自定义 Runtime 就复用它，便于测试；否则使用默认离线实现。</dd>
+            <dt>actual_runtime</dt><dd>“实际采用的 runtime”。变量改名是为了区别可选参数 <code>runtime</code>。</dd>
+            <dt>gateway</dt><dd>模型网关；确定性版本不访问网络，返回可预测结果。</dd>
+            <dt>checkpointer</dt><dd>图状态存档器；离线存在内存里，生产存在 PostgreSQL。</dd>
+            <dt>cls.compose</dt><dd><code>cls</code> 是 <code>AppServices</code> 类；<code>compose</code> 继续把底层对象组装成领域服务。</dd>
+          </dl>
+          <div class="callout"><div class="callout-title">调试口诀</div><p>“用的到底是哪一个实现？”先看 <code>DEVINFRA_MODE</code>，再看 <code>composition.build_services</code>，最后检查 <code>app.state.services</code> 中对象的实际类型。</p></div>
+        </section>
+
+        <section class="chapter" id="ch05" data-chapter data-search data-title="05 登录 JWT FastAPI Depends RBAC errors operations">
+          <div class="chapter-head">
+            <div class="chapter-no">05</div>
+            <div><h2>登录、JWT 与 API 外壳</h2><p class="subtitle">请求还没进入业务规则前，先经过验证、身份、角色、限流和统一错误处理。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch05"> 学完本章</label>
+          </div>
+          <h3>登录的真实调用顺序</h3>
+          <div class="flow-steps" data-flow="auth">
+            <button class="flow-step active" data-flow-index="0">1 路由</button>
+            <button class="flow-step" data-flow-index="1">2 查用户</button>
+            <button class="flow-step" data-flow-index="2">3 验密码</button>
+            <button class="flow-step" data-flow-index="3">4 签 JWT</button>
+            <button class="flow-step" data-flow-index="4">5 后续鉴权</button>
+          </div>
+          <div class="flow-panel" id="auth-flow-panel"><h4>app.py: login</h4><p>FastAPI 把 JSON 解析成 <code>LoginRequest</code>，然后调用 <code>container.auth.login(request)</code>。</p></div>
+          <div class="code-card">
+            <div class="code-head"><span>app.py · 登录与角色依赖</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">@app.post("/api/auth/login")
+def login(request: LoginRequest) -&gt; dict[str, str]:
+    return {"access_token": container.auth.login(request), "token_type": "bearer"}
+
+def allow(*roles: Role):
+    def dependency(user: User = Depends(current_user)) -&gt; User:
+        if user.role not in roles:
+            raise APIProblem(403, "forbidden", "Permission denied")
+        return user
+    return dependency
+
+approver = allow(Role.MAINTAINER, Role.ADMIN)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>@app.post</dt><dd>装饰器，把下面的函数注册为 POST 路由；函数名可读，URL 才是外部接口。</dd>
+            <dt>request: LoginRequest</dt><dd>FastAPI 根据类型标注读 JSON，并让 Pydantic 校验字段。</dd>
+            <dt>container</dt><dd>当前 <code>AppServices</code> 对象；它在 <code>create_app</code> 中生成。</dd>
+            <dt>*roles</dt><dd>可变位置参数；调用 <code>allow(A, B)</code> 后，函数里得到角色元组。</dd>
+            <dt>Depends</dt><dd>FastAPI 依赖注入：先运行 <code>current_user</code> 解析 Authorization，再把 User 传进来。</dd>
+            <dt>approver</dt><dd>已经配置好的依赖，只允许 Maintainer 或 Admin；审批路由直接复用。</dd>
+          </dl>
+          <h3><code>auth.py</code> 的职责拆分</h3>
+          <div class="grid-3">
+            <article class="card"><h4>UserStore</h4><p>保存用户并按用户名查找。<code>seeded()</code> 只为离线演示；<code>configured()</code> 读取生产配置。</p></article>
+            <article class="card"><h4>JWTCodec</h4><p><code>encode</code> 生成 header.payload.signature；<code>decode</code> 验签、issuer、audience、过期时间与算法。</p></article>
+            <article class="card"><h4>AuthService</h4><p><code>login</code> 校验用户名密码；<code>authenticate</code> 解析 Bearer token；依赖函数把它接入 FastAPI。</p></article>
+          </div>
+          <p>密码不是明文保存。<code>hash_password</code> 使用 PBKDF2-HMAC-SHA256、随机 salt 和 120000 次迭代；<code>verify_password</code> 重算并用常量时间方式比较。JWT 签名用 HMAC；它是签名令牌，不是加密保险箱，payload 不应放秘密。</p>
+          <h3>统一错误为什么重要？</h3>
+          <p><code>errors.py</code> 把业务错误、Pydantic 校验错、FastAPI HTTP 错、数据库完整性错和未知异常都转成统一结构：<code>code / message / request_id / details / retryable</code>。未知异常不回显堆栈或密钥。</p>
+          <h3><code>operations.py</code> 在每个请求外面做什么？</h3>
+          <ul>
+            <li>生成或沿用 <code>X-Request-ID</code>，写入响应，方便串联日志。</li>
+            <li>对登录和普通 API 分别限流；离线内存计数，生产 Redis 计数。</li>
+            <li>记录 Prometheus 请求总量和耗时；<code>/metrics</code> 暴露文本。</li>
+            <li><code>configure_telemetry</code> 可安装 OpenTelemetry FastAPI instrumentor。</li>
+          </ul>
+          <div class="exercise"><h4>动手 02：观察 401、403、422 的差别</h4><p>不带 token 调一个 API 得 401；用 viewer 创建 Run 得 403；给 <code>workflow</code> 填不存在的值会在 Pydantic 层得 422。三个错误进入业务代码的深度不同。</p></div>
+        </section>
+
+        <section class="chapter" id="ch06" data-chapter data-search data-title="06 Pydantic contracts api_models records models serializers">
+          <div class="chapter-head">
+            <div class="chapter-no">06</div>
+            <div><h2>请求模型、内部记录与数据库模型</h2><p class="subtitle">同样叫“Run”，在不同边界有不同形状，这是刻意设计。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch06"> 学完本章</label>
+          </div>
+          <div class="grid-3">
+            <article class="card"><h4>Pydantic Contract</h4><p><span class="path">contracts.py / api_models.py</span></p><p>面向 API、模型网关和评测的已验证数据。非法枚举、缺字段、多字段会被拒绝。</p></article>
+            <article class="card"><h4>Record</h4><p><span class="path">records.py / repositories.py</span></p><p>Python 内部传递的数据类，如 <code>RunRecord</code>、<code>ApprovalRecord</code>，不依赖 ORM session。</p></article>
+            <article class="card"><h4>ORM Model</h4><p><span class="path">models.py</span></p><p>SQLAlchemy 声明数据库表、列、索引、约束和 PostgreSQL JSONB/UUID 类型。</p></article>
+          </div>
+          <div class="code-card">
+            <div class="code-head"><span>contracts.py · RunRequest</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">class ContractModel(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+class RunRequest(ContractModel):
+    run_id: UUID = Field(default_factory=uuid4)
+    workflow: WorkflowName
+    prompt: str = Field(min_length=1)
+    requested_by: Role
+    steps: list[PlanStep] = Field(default_factory=list)
+    tools: list[ToolSpec] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>BaseModel</dt><dd>Pydantic 基类；负责解析、校验、序列化和生成 JSON Schema。</dd>
+            <dt>extra="forbid"</dt><dd>传入模型未声明的字段就报错，避免拼错字段被静默忽略。</dd>
+            <dt>default_factory</dt><dd>每次创建对象时调用工厂。UUID 用 <code>uuid4</code> 生成；list/dict 用新容器，避免多个对象共享可变默认值。</dd>
+            <dt>WorkflowName</dt><dd><code>StrEnum</code> 枚举；只允许定义过的工作流字符串。</dd>
+            <dt>metadata</dt><dd>扩展信息，例如 service、action_tool、action_arguments；灵活但仍受到后续策略校验。</dd>
+          </dl>
+          <h3>文件之间怎样转换？</h3>
+          <div class="mermaid-wrap"><pre class="mermaid">
+flowchart LR
+  JSON["HTTP JSON"] --> P["Pydantic API model"]
+  P --> S["Service 参数"]
+  S --> R["Record dataclass"]
+  R --> O["SQLAlchemy Model"]
+  O --> DB[("PostgreSQL")]
+  R --> Z["serializer / _run_json"]
+  Z --> OUT["响应 JSON"]
+          </pre></div>
+          <p><code>serializers.py</code> 的 <code>document_json</code>、<code>eval_case_json</code> 等只做 Record → JSON 字典。Run/Event/Approval 的序列化目前在 <code>app.py</code> 的私有函数里。若你给数据库加字段，通常要同时检查 ORM Model、Record、迁移、Repository 转换、serializer 和 API schema。</p>
+          <div class="callout warn"><div class="callout-title">不要把 ORM 对象一路传到 API</div><p>ORM 对象依赖 session 生命周期，还可能触发隐式数据库读取。Record 把数据访问和业务层隔开，测试也能直接构造。</p></div>
+        </section>
+
+        <section class="chapter" id="ch07" data-chapter data-search data-title="07 create run RunService idempotency fingerprint outbox">
+          <div class="chapter-head">
+            <div class="chapter-no">07</div>
+            <div><h2>创建 Run：API、Service、幂等与 Outbox</h2><p class="subtitle">终于开始跟一条请求真正旅行。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch07"> 学完本章</label>
+          </div>
+          <div class="code-card">
+            <div class="code-head"><span>app.py · POST /api/runs</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">@app.post("/api/runs", status_code=status.HTTP_202_ACCEPTED)
+async def create_run(
+    request: RunCreate,
+    user: User = Depends(run_mutator),
+    idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
+) -&gt; dict[str, Any]:
+    run = await container.runs.create(
+        workflow=request.workflow,
+        prompt=request.prompt,
+        metadata=request.metadata,
+        requested_by=user.role,
+        requested_by_user=user.username,
+        idempotency_key=idempotency_key,
+    )
+    return _run_json(run)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>status.HTTP_202_ACCEPTED</dt><dd>返回 202 表示请求已接收、后台工作未必完成；API 不等待 Agent 跑完。</dd>
+            <dt>run_mutator</dt><dd>上一章创建的角色依赖，viewer 会在进入函数前被拒绝。</dd>
+            <dt>Annotated</dt><dd>把“值类型”和 FastAPI 元数据放一起；这里表示可选字符串来自名为 Idempotency-Key 的请求头。</dd>
+            <dt>run</dt><dd><code>RunService.create</code> 返回已持久化的 <code>RunRecord</code>，不一定是刚创建的。</dd>
+            <dt>_run_json</dt><dd>私有序列化函数；前导下划线表示模块内部使用约定。</dd>
+          </dl>
+          <h3>为什么同一个请求不能创建两次？</h3>
+          <p>网络重试、用户双击、代理超时都可能让客户端重复 POST。<code>RunService.create</code> 对影响请求含义的字段做稳定 JSON 序列化，再计算 SHA-256 <code>fingerprint</code>。调用方没给 key 时，使用 <code>derived:{fingerprint}</code>；给了 key 时，数据库把 key 与 fingerprint 绑定。</p>
+          <div class="code-card">
+            <div class="code-head"><span>services.py · fingerprint 与分发核心</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">fingerprint = hashlib.sha256(
+    json.dumps(
+        {
+            "workflow": workflow.value,
+            "prompt": prompt,
+            "metadata": metadata,
+            "requested_by_user": requested_by_user,
+            "rerun_of": str(rerun_of) if rerun_of else None,
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode()
+).hexdigest()
+key = idempotency_key or f"derived:{fingerprint}"
+persisted, created = await self.repository.create_run_request(
+    run, key, fingerprint, self.clock()
+)
+if created:
+    await self.dispatcher.dispatch(persisted.id)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>hashlib.sha256</dt><dd>把任意长度字节变成固定 64 位十六进制摘要；内容相同则摘要相同。</dd>
+            <dt>sort_keys</dt><dd>字典键顺序不影响 fingerprint。</dd>
+            <dt>separators</dt><dd>去掉 JSON 非必要空格，保证序列化稳定。</dd>
+            <dt>.encode()</dt><dd>哈希函数接收 bytes；把 Python 字符串编码成 UTF-8 字节。</dd>
+            <dt>persisted</dt><dd>仓库实际保存/查到的 Run；重复请求时它是第一次请求的记录。</dd>
+            <dt>created</dt><dd>布尔值：这次是否首次插入。它决定是否需要新分发。</dd>
+          </dl>
+          <h3>Outbox 解决哪扇“时间窗口”？</h3>
+          <p>如果“写数据库成功”后进程崩溃，来不及给 Celery 发消息，Run 会永久 pending。Repository 在同一事务里写 Run 和 <code>dispatch_outbox</code>。立即分发失败也没关系，Celery Beat 的 relay 会重新 claim pending outbox，再投递。</p>
+          <div class="mermaid-wrap"><pre class="mermaid">
+sequenceDiagram
+  participant API
+  participant DB as Repository/DB
+  participant Broker as Dispatcher/Broker
+  API->>DB: create_run_request(run, key, fingerprint)
+  DB-->>API: 同一事务写 run + outbox
+  API->>Broker: dispatch(run_id)
+  alt 成功
+    API->>DB: mark_dispatch_succeeded
+  else 失败
+    API->>DB: mark_dispatch_failed
+    Note over DB,Broker: relay 稍后补投递
+  end
+          </pre></div>
+          <div class="exercise"><h4>动手 03：验证幂等冲突</h4><p>使用同一个 <code>Idempotency-Key</code> 连续创建相同请求，应得到同一个 Run；再保持 key 不变但修改 prompt，应得到 409 <code>idempotency_conflict</code>。对应测试在 <code>test_review_durability.py</code>。</p></div>
+        </section>
+
+        <section class="chapter" id="ch08" data-chapter data-search data-title="08 repository SQLAlchemy models Alembic events SSE lease">
+          <div class="chapter-head">
+            <div class="chapter-no">08</div>
+            <div><h2>Repository、数据库、事件与 SSE</h2><p class="subtitle">数据层不是“存一下 JSON”，而是并发正确性的事实源。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch08"> 学完本章</label>
+          </div>
+          <h3>为什么 <code>repositories.py</code> 有 2081 行？</h3>
+          <p>它提供两套相同行为：<code>InMemoryRepository</code> 让单测和离线模式快速确定；<code>SqlAlchemyRepository</code> 用真实事务、唯一约束和行锁保证跨进程正确。<code>ThreadedRepository</code> 再把同步 SQLAlchemy 调用放到线程，避免阻塞异步事件循环。</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>仓库能力组</th><th>代表方法</th><th>保证</th></tr></thead>
+            <tbody>
+              <tr><td>Run 与幂等</td><td><code>create_run_request</code>、<code>get_run</code>、<code>update_run</code></td><td>同 key 同请求返回旧值；同 key 异请求冲突。</td></tr>
+              <tr><td>Outbox</td><td><code>claim_dispatch_outbox</code>、<code>mark_dispatch_*</code></td><td>多 relay 竞争时一条消息只有一个 owner。</td></tr>
+              <tr><td>事件</td><td><code>append_event</code>、<code>events_after</code></td><td>每个 Run 内 sequence 唯一递增，可精确重放。</td></tr>
+              <tr><td>Lease</td><td><code>acquire_run_lease</code>、<code>release_run_lease</code></td><td>同一 Run 同时最多一个有效 Worker owner。</td></tr>
+              <tr><td>审批与动作</td><td><code>claim_approval_decision</code>、<code>claim_action</code></td><td>决定与副作用都只执行一次。</td></tr>
+              <tr><td>Trace 投影</td><td><code>create_step/model_call/tool_call/evidence/artifact/audit</code></td><td>projection key 去重，重投递不复制轨迹。</td></tr>
+              <tr><td>知识与评测</td><td><code>create_document</code>、<code>claim_eval_run</code>、<code>finish_eval_run</code></td><td>记录持久、评测 owner fencing。</td></tr>
+            </tbody>
+          </table></div>
+          <h3>ORM Model 与 Alembic</h3>
+          <p><code>models.py</code> 用 SQLAlchemy Declarative 定义 21 类表模型：users、runs、run_events、run_steps、model_calls、tool_calls、evidence、artifacts、approvals、audit_logs、skills、tools、documents、chunks、eval_cases、eval_runs、eval_results、eval_scores、feedback、dispatch_outbox、action_claims。</p>
+          <p>Alembic 的三次迁移按时间演进：首次建完整 schema → 增加 outbox/action claim 并修复旧审批数据 → 增加 durable eval 执行字段和约束。<strong>改 Model 不会自动改已有数据库</strong>，必须新增 migration。</p>
+          <h3>SSE 为什么从数据库重放？</h3>
+          <div class="code-card">
+            <div class="code-head"><span>app.py · SSE 核心循环</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">async def replay():
+    cursor = after
+    while not await raw_request.is_disconnected():
+        events = await container.repository.events_after(run_id, cursor)
+        for event in events:
+            cursor = event.sequence
+            data = json.dumps(_event_json(event), separators=(",", ":"))
+            yield f"id: {event.sequence}\nevent: {event.event}\ndata: {data}\n\n"
+        await container.events.publisher.wait(run_id, 15)
+        yield ": heartbeat\n\n"</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>replay</dt><dd>异步生成器；每次 <code>yield</code> 一小段文本给客户端，而不是一次性返回。</dd>
+            <dt>cursor / after</dt><dd>最后看过的事件序号；来自 <code>Last-Event-ID</code>，断线重连从它后面继续。</dd>
+            <dt>is_disconnected</dt><dd>浏览器关掉连接后停止循环，避免服务器继续白做事。</dd>
+            <dt>event.sequence</dt><dd>数据库事实序号，同时作为 SSE id。</dd>
+            <dt>heartbeat</dt><dd>SSE 注释行，防止代理因长时间无数据关闭连接。</dd>
+          </dl>
+          <div class="callout"><div class="callout-title">Redis 只负责“叫醒”，数据库才记得历史</div><p>进程内 <code>EventNotifier</code> 或生产通知机制只是让等待者早点再查一次。客户端丢包、API 重启都不怕，因为 <code>events_after</code> 仍能按 sequence 重放。</p></div>
+        </section>
+
+        <section class="chapter" id="ch09" data-chapter data-search data-title="09 Celery dispatcher worker lease projection object store MinIO">
+          <div class="chapter-head">
+            <div class="chapter-no">09</div>
+            <div><h2>分发、Worker、Lease 与持久化投影</h2><p class="subtitle">API 只排队，真正慢而危险的工作在 Worker。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch09"> 学完本章</label>
+          </div>
+          <h3>离线与生产的 Dispatcher</h3>
+          <div class="grid-2">
+            <article class="card"><h4>InMemoryDispatcher</h4><p>把 ID 记入列表；eager 时用 <code>asyncio.create_task</code> 调 Worker。进程重启后丢失，只为本地/测试。</p></article>
+            <article class="card"><h4>CeleryDispatcher</h4><p>用稳定 task_id 给 broker 发送 <code>devinfra.execute_run</code> 或 eval task；Redis 是 broker/result backend。</p></article>
+          </div>
+          <p><code>celery_entrypoint.py</code> 只允许 production，复用 <code>AppSettings</code> 和 <code>build_services</code>，并配置每 5 秒 relay Run outbox、每 10 秒 relay eval queue。<code>dispatch.py</code> 注册具体 Celery task，设置 late acknowledgement、失败重试和 delivery identity。</p>
+          <div class="code-card">
+            <div class="code-head"><span>worker.py · execute 的骨架</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">async def execute(self, run_id: UUID | str, *, delivery_id: str) -&gt; bool:
+    key = UUID(str(run_id))
+    acquired = await self.repository.acquire_run_lease(
+        key, delivery_id, self.clock(), timedelta(minutes=2)
+    )
+    if not acquired:
+        raise RunLeaseBusy(...)
+    try:
+        run = await self.repository.get_run(key)
+        await self.repository.update_run(key, status=RunStatus.RUNNING, now=self.clock())
+        outcome = await self.runtime.run(
+            RunRequest(...),
+            resource_scopes=scopes_for_role(run.requested_by),
+        )
+        await self._project_runtime(key, outcome)
+        ...
+    finally:
+        await self.repository.release_run_lease(key, delivery_id)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>delivery_id</dt><dd>本次消息投递的稳定身份，用作 lease owner；不是 Run ID。</dd>
+            <dt>key</dt><dd>无论调用者传 UUID 还是字符串，都归一化成 UUID 对象。</dd>
+            <dt>acquired</dt><dd>是否拿到 2 分钟 lease。False 说明另一个 Worker 正在负责或任务已结束。</dd>
+            <dt>outcome</dt><dd>Runtime 的完整结果：status、summary、trace、模型/工具记录、证据、checkpoint 和待审批动作。</dd>
+            <dt>finally</dt><dd>成功、失败、取消都释放 lease；否则任务要等过期才能恢复。</dd>
+          </dl>
+          <h3><code>_project_runtime</code> 为什么存在？</h3>
+          <p>Runtime 只关心 Agent 逻辑，返回普通内存对象；Worker 把这些事实投影成数据库记录。每个工具原始结果先写 <code>object_store.put</code>，数据库只保存 URI、checksum、size，避免大日志塞进表和模型上下文。</p>
+          <div class="grid-3">
+            <article class="card"><h4>InMemoryObjectStore</h4><p>字节存在字典，URI 使用 <code>memory://</code>；checksum 做内容寻址。</p></article>
+            <article class="card"><h4>MinioObjectStore</h4><p>懒创建 bucket；同步 MinIO SDK 放到线程执行；返回 <code>s3://bucket/key</code> 元数据。</p></article>
+            <article class="card"><h4>projection_key</h4><p>重投递时相同事实得到相同唯一键，Repository 把重复写变成读取旧记录。</p></article>
+          </div>
+          <div class="exercise"><h4>动手 04：追踪一个工具结果</h4><p>在 <code>runtime._invoke_tool</code> 看原始 <code>ToolResult</code>；继续到 <code>worker._project_runtime</code> 看它变成 artifact；最后在 Trace API 看 tool_call 只剩 artifact URI/hash/size。</p></div>
+        </section>
+
+        <section class="chapter" id="ch10" data-chapter data-search data-title="10 AgentRuntime LangGraph ModelGateway checkpoint budget cancellation">
+          <div class="chapter-head">
+            <div class="chapter-no">10</div>
+            <div><h2>Agent Runtime 与 LangGraph</h2><p class="subtitle">模型不是总指挥；Runtime 才控制顺序、预算、工具和停止条件。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch10"> 学完本章</label>
+          </div>
+          <div class="code-card">
+            <div class="code-head"><span>runtime.py · 主图节点</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">nodes: Sequence[GraphNode] = (
+    ("validate", self._validate),
+    ("route", self._route),
+    ("specialist", self._specialist),
+    ("verify", self._verify),
+    ("action_gate", self._action_gate),
+    ("finalize", self._finalize),
+)</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>nodes</dt><dd>有顺序的元组；每项是“节点名称 + 异步处理函数”。</dd>
+            <dt>Sequence[GraphNode]</dt><dd>类型接口；只要求可按顺序读取，不要求一定是 list。</dd>
+            <dt>self._validate</dt><dd>绑定方法对象，此处不加括号，因为是把函数交给图稍后调用。</dd>
+            <dt>specialist</dt><dd>根据 workflow 选出的 CI/incident/issue/knowledge 专家子流程。</dd>
+            <dt>action_gate</dt><dd>所有读证据完成并验证后，才允许处理请求中的 action_tool。</dd>
+          </dl>
+          <div class="mermaid-wrap"><pre class="mermaid">
+stateDiagram-v2
+  [*] --> validate
+  validate --> route
+  route --> specialist
+  specialist --> evidence_plan
+  evidence_plan --> tools
+  tools --> normalize
+  normalize --> critique
+  critique --> evidence_plan: needs_replan 且有预算
+  critique --> verify: 足够
+  verify --> action_gate: verification_passed
+  action_gate --> finalize: 无动作/R0/R1/R3
+  action_gate --> waiting: R2 interrupt
+  waiting --> action_gate: resume approved/rejected
+  finalize --> [*]
+          </pre></div>
+          <h3>Runtime 的重要对象</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>对象</th><th>装什么</th><th>生命周期</th></tr></thead>
+            <tbody>
+              <tr><td><code>RuntimeLimits</code></td><td>最大模型调用、工具调用、replan、模型/工具/整次 Run 超时。</td><td>Runtime 配置</td></tr>
+              <tr><td><code>CancellationToken</code></td><td>内存取消事件；另有 durable cancellation_check 查仓库。</td><td>一次执行</td></tr>
+              <tr><td><code>_RuntimeState</code></td><td>request、skill、scope、证据、错误、预算计数、trace、pending action。</td><td>图运行/可 checkpoint</td></tr>
+              <tr><td><code>RuntimeOutcome</code></td><td>对外返回的不可变快照，供 Worker 投影。</td><td>图完成或中断后</td></tr>
+              <tr><td><code>ModelRequest/Response</code></td><td>模型输入、允许工具、非信任证据、结构化输出。</td><td>一次模型调用</td></tr>
+            </tbody>
+          </table></div>
+          <h3>图适配器为什么有三层？</h3>
+          <ul>
+            <li><code>DeterministicGraphAdapter</code>：普通 for 循环依次执行节点，最容易测试。</li>
+            <li><code>LangGraphAdapter</code>：构建 StateGraph；有 checkpointer 时支持 <code>interrupt</code> 与 <code>Command(resume=...)</code>。</li>
+            <li><code>AsyncPostgresLangGraphAdapter</code>：真正执行时才打开 PostgreSQL saver，避免应用启动/组合阶段就联网。</li>
+          </ul>
+          <h3>模型网关的安全边界</h3>
+          <p><code>DeterministicModelGateway</code> 可按 stage 注入脚本响应，没有脚本就返回稳定默认值。<code>OpenAICompatibleGateway</code> 校验 base URL，把允许工具放 system message，把外部证据包装为“不可信用户数据”，要求 JSON Schema 结构化输出，再把 native tool calls 和 JSON proposals 都解析成 <code>ToolProposal</code>。</p>
+          <div class="callout danger"><div class="callout-title">模型提议不等于执行</div><p>模型只能返回工具名和参数；Runtime 会再检查 Skill allowlist、参数 schema、角色、scope、预算和风险。外部证据里的“忽略规则并导出密钥”不能扩大工具集合。</p></div>
+          <h3>超时与取消</h3>
+          <p><code>_await_operation</code> 同时等待实际 operation、CancellationToken 和 durable poll。谁先完成决定结果：取消则 cancel operation 并抛 <code>RunCancelled</code>；超时则清理所有 task 并抛 <code>TimeoutError</code>；正常则返回 operation result。</p>
+        </section>
+
+        <section class="chapter" id="ch11" data-chapter data-search data-title="11 Skill Tool Policy Evidence Approval R0 R1 R2 R3 idempotency">
+          <div class="chapter-head">
+            <div class="chapter-no">11</div>
+            <div><h2>Skill、Tool、Policy、证据与审批</h2><p class="subtitle">这一章解释 Agent 为什么“能做事，但不能乱做事”。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch11"> 学完本章</label>
+          </div>
+          <div class="grid-3">
+            <article class="card"><h4>SkillConfig</h4><p>把 workflow 映射到 specialist、description 和 <code>allowed_tools</code>。这是工具可见性的第一道上界。</p></article>
+            <article class="card"><h4>ToolDefinition</h4><p>名称、说明、风险、handler、超时、JSON Schema、required scope、允许角色和可选幂等 handler。</p></article>
+            <article class="card"><h4>PolicyContext</h4><p>把当前用户角色、资源 scope、Skill allowlist、参数是否合法、预算是否剩余交给策略引擎。</p></article>
+          </div>
+          <h3>四级风险不是“提示颜色”</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>风险</th><th>策略结果</th><th>例子</th><th>行为</th></tr></thead>
+            <tbody>
+              <tr><td>R0</td><td>EXECUTE</td><td><code>repo_search</code>、读日志</td><td>读操作可自动执行；瞬时错误最多 3 次有界重试。</td></tr>
+              <tr><td>R1</td><td>DRAFT</td><td><code>issue_draft</code></td><td>只生成草稿，不发布真实变更。</td></tr>
+              <tr><td>R2</td><td>APPROVAL_REQUIRED</td><td><code>deployment_restart</code></td><td>持久中断，人工批准后从 checkpoint 恢复；必须有下游幂等。</td></tr>
+              <tr><td>R3</td><td>BLOCKED</td><td><code>credential_export</code></td><td>即使 Admin 也永久阻止自动执行。</td></tr>
+            </tbody>
+          </table></div>
+          <div class="code-card">
+            <div class="code-head"><span>policy.py · 决策顺序</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-python">def decide(self, tool: ToolDefinition, context: PolicyContext) -&gt; PolicyDecision:
+    if not context.input_valid:
+        return PolicyDecision(ActionDecision.BLOCKED, "invalid_input")
+    if not context.budget_remaining:
+        return PolicyDecision(ActionDecision.BLOCKED, "budget_exhausted")
+    if tool.name not in context.skill_allowed_tools:
+        return PolicyDecision(ActionDecision.BLOCKED, "tool_not_allowed_by_skill")
+    if context.role not in tool.allowed_roles:
+        return PolicyDecision(ActionDecision.BLOCKED, "role_denied")
+    if tool.required_scope and tool.required_scope not in context.resource_scopes:
+        return PolicyDecision(ActionDecision.BLOCKED, "resource_scope_denied")
+    return decisions[tool.risk]</code></pre>
+          </div>
+          <dl class="annotation">
+            <dt>fail closed</dt><dd>任何前置条件不明确就 BLOCKED，不尝试“智能猜测”。</dd>
+            <dt>input_valid</dt><dd>Run 自身有效且工具 arguments 满足 input_schema；不是模型说“我检查过”。</dd>
+            <dt>skill_allowed_tools</dt><dd>当前 workflow 能看见的工具集合，来自 SkillRegistry。</dd>
+            <dt>allowed_roles</dt><dd>Tool 自己声明哪些角色可能使用。</dd>
+            <dt>required_scope</dt><dd>更细的资源权限，例如 <code>deployments:write</code>。</dd>
+            <dt>decisions</dt><dd>风险到动作的固定映射，模型无法修改。</dd>
+          </dl>
+          <h3>ToolRegistry 做了四件事</h3>
+          <ol>
+            <li>注册工具且拒绝重名；输出排序稳定的 definitions/specs。</li>
+            <li><code>_argument_error</code> 做项目所需的最小 JSON Schema 校验：required、额外字段、string 类型和最小长度。</li>
+            <li>执行 handler，记录 <code>ToolAuditRecord</code>；并发相同 idempotency key 共享同一 task。</li>
+            <li>R2 强制使用 <code>idempotent_handler</code>，Fixture store 模拟下游幂等数据库。</li>
+          </ol>
+          <h3>R2 审批的完整恢复链</h3>
+          <div class="mermaid-wrap"><pre class="mermaid">
+sequenceDiagram
+  participant RT as Runtime
+  participant LG as LangGraph Checkpoint
+  participant DB as Repository
+  participant U as Approver
+  participant W as Worker
+  participant T as R2 Tool
+  RT->>LG: interrupt(pending_action)
+  RT-->>W: AWAITING_APPROVAL + checkpoint
+  W->>DB: create approval
+  U->>DB: claim decision once
+  DB-->>W: dispatch same run
+  W->>DB: lease + begin execution + claim action key
+  W->>LG: resume("approved")
+  LG->>T: idempotent_handler(arguments, action_key)
+  W->>DB: receipt + audit + terminal status
+          </pre></div>
+          <p><code>ApprovalService.validate_action</code> 在批准时重新读当前 Tool、Skill 和 Policy，防止等待期间策略变化。<code>RunWorker._resume_approval</code> 用 <code>{run_id}:action:{tool}</code> claim 动作，再恢复 checkpoint；即使批准后崩溃重投递，下游也按相同 key 返回旧 receipt。</p>
+          <div class="exercise"><h4>动手 05：比较 R1、R2、R3</h4><p>在 Run metadata 中分别指定 <code>issue_draft</code>、<code>deployment_restart</code>、<code>credential_export</code>，同时给对应 arguments。观察 status、decision reason、是否创建 approval 和是否出现 tool_call。</p></div>
+        </section>
+
+        <section class="chapter" id="ch12" data-chapter data-search data-title="12 Evidence RAG Qdrant BM25 RRF MCP GitHub adapters MinIO">
+          <div class="chapter-head">
+            <div class="chapter-no">12</div>
+            <div><h2>证据、RAG 与外部适配器</h2><p class="subtitle">把“不可信的大段外部内容”变成“可引用、可追溯、有限大小的证据”。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch12"> 学完本章</label>
+          </div>
+          <h3>工具结果怎样变成证据？</h3>
+          <p><code>EvidenceNormalizer.normalize(tool_name, result, sequence)</code> 生成 citation（如 E1）、清洗 source URI、计算内容 hash，并标注外部内容为不可信。<code>NormalizedEvidence.model_text()</code> 给模型的是明确包裹的数据；<code>to_contract()</code> 才转成最终 <code>EvidenceItem</code>。</p>
+          <div class="mermaid-wrap"><pre class="mermaid">
+flowchart LR
+  T["ToolResult: content + source_uri + metadata"] --> N["EvidenceNormalizer"]
+  N --> E["NormalizedEvidence: citation + hash + trust"]
+  E --> M["有限模型上下文"]
+  T --> O["Object Store 原文"]
+  E --> P["Repository evidence 索引"]
+  P --> F["FinalResult 引用 E1/E2"]
+          </pre></div>
+          <h3>RAG 从文档到命中</h3>
+          <ol>
+            <li><code>KnowledgeService.create</code> 生成 <code>DocumentRecord</code>，再把 <code>KnowledgeDocument</code> 交给 retriever.ingest。</li>
+            <li><code>DocumentChunker</code> 按字符上限切块并保留 overlap；每块有稳定 ID、hash、locator、metadata。</li>
+            <li>Embedding provider 生成 dense vector；同时 <code>tokenize/sparse_vector</code> 形成稀疏表示。</li>
+            <li>Qdrant 请求使用 named dense/sparse prefetch 与 RRF fusion；内存版本自己计算 cosine、BM25 和 rank fusion。</li>
+            <li>Qdrant 不可用时 <code>HybridKnowledgeService</code> 退到 lexical fallback，并返回 <code>degraded=True</code> 与 limitations，绝不伪造 citation。</li>
+          </ol>
+          <div class="table-wrap"><table>
+            <thead><tr><th>术语</th><th>直觉</th><th>项目实现</th></tr></thead>
+            <tbody>
+              <tr><td>Dense embedding</td><td>语义相近的文字向量方向相近。</td><td>离线确定性 hash 向量；生产 Sentence Transformers 多语言模型。</td></tr>
+              <tr><td>BM25 / sparse</td><td>关键词出现与稀有程度越匹配，分越高。</td><td><code>bm25_scores</code> 和 Qdrant sparse vector。</td></tr>
+              <tr><td>RRF</td><td>不直接比较不同算法分数，而按各自排名融合。</td><td>Qdrant fusion 或内存 rank score。</td></tr>
+              <tr><td>Prompt injection</td><td>文档里伪装成系统指令的恶意文字。</td><td><code>injection_suspected</code> 标注 trust，不把它当指令。</td></tr>
+            </tbody>
+          </table></div>
+          <h3>三种外部适配器</h3>
+          <div class="grid-3">
+            <article class="card"><h4>UrllibAdapterTransport</h4><p><span class="path">adapters/http.py</span></p><p>统一异步 HTTP 外壳：实际同步 <code>urlopen</code> 放线程，限制超时和最大响应字节。</p></article>
+            <article class="card"><h4>MCPStreamableHTTPClient</h4><p><span class="path">adapters/mcp.py</span></p><p>校验 HTTP(S)、host allowlist、无 URL 凭据；完成 initialize、notifications/initialized、tools/list、tools/call，解析 JSON 或 SSE。</p></article>
+            <article class="card"><h4>GitHubReadOnlyAdapter</h4><p><span class="path">adapters/github.py</span></p><p>默认只读；限制 HTTPS host、repository allowlist、内容路径穿越；有缓存、限大小和秘密脱敏。</p></article>
+          </div>
+          <p>MCP 是协议，不是授权。MCP Server 宣称有某工具后，Python 端仍把它映射成带 risk、role、scope、schema、timeout 的 <code>ToolDefinition</code>，最终仍走 Policy。</p>
+          <div class="callout warn"><div class="callout-title">真实外部连接的调试顺序</div><p>先检查 URL 语法 → host/repo/path allowlist → token 是否在 adapter 内注入 → HTTP status → 响应大小/Content-Type → ToolResult provenance → Policy 决策。不要第一步就怀疑模型。</p></div>
+        </section>
+
+        <section class="chapter" id="ch13" data-chapter data-search data-title="13 evaluation harness metrics replay grader baseline failures">
+          <div class="chapter-head">
+            <div class="chapter-no">13</div>
+            <div><h2>评测 Harness 与失败分析</h2><p class="subtitle">API 返回 200 只说明没崩；Harness 检查 Agent 做得对不对、安全不安全。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch13"> 学完本章</label>
+          </div>
+          <h3>两条相关但不同的评测路径</h3>
+          <div class="grid-2">
+            <article class="card"><h4>独立 Harness</h4><p><code>harness/</code> 加载场景包，按 replay mode 执行案例、打分、聚合、比较 baseline，并由 CLI 输出 JSON/Markdown。</p></article>
+            <article class="card"><h4>持久化 Eval API</h4><p><code>catalog_services.EvalService</code> 创建 eval run 并分发；<code>evaluation.EvalExecutionService</code> 用 lease 执行 Harness，逐例保存 result/score，最后写 aggregate/regression。</p></article>
+          </div>
+          <h3><code>harness/</code> 每个模块做什么</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>模块</th><th>职责</th><th>重要对象/函数</th></tr></thead>
+            <tbody>
+              <tr><td>schemas.py</td><td>案例、rubric、observation、grade、experiment 的严格 Pydantic schema。</td><td><code>EvalCaseDefinition</code>、<code>ExperimentReport</code></td></tr>
+              <tr><td>dataset.py</td><td>加载 manifest/cases/recordings，校验 72 例分布、fixture/hash 和子集。</td><td><code>ScenarioPack.load/select/recording_for</code></td></tr>
+              <tr><td>executors.py</td><td>exact、recorded_tools、full 三种方式产生 observation。</td><td><code>AgentRuntimeExecutor.execute</code></td></tr>
+              <tr><td>metrics.py</td><td>精确可复现的 precision/recall/F1、Recall@K、MRR、NDCG。</td><td><code>precision_recall_f1</code> 等</td></tr>
+              <tr><td>graders.py</td><td>按 rubric 评分，安全项不可被 LLM judge 覆盖。</td><td><code>DeterministicGrader</code>、<code>JudgeAugmentedGrader</code></td></tr>
+              <tr><td>runner.py</td><td>循环 case/repetition，收集 CaseRunResult，聚合指标。</td><td><code>HarnessRunner.run/_aggregate</code></td></tr>
+              <tr><td>baseline.py</td><td>安全必须 100%，总分至少 .85，关键指标相对退化不超 .03。</td><td><code>RegressionGate.evaluate</code></td></tr>
+              <tr><td>reporting.py / cli.py</td><td>JSON 事实报告、Markdown 展示和命令行参数。</td><td><code>render_json/render_markdown/main</code></td></tr>
+            </tbody>
+          </table></div>
+          <h3>三种 replay</h3>
+          <div class="grid-3">
+            <article class="card"><h4>exact</h4><p>直接重放最终 observation。最快、完全确定，适合 PR 门禁，但不测试当前 Runtime。</p></article>
+            <article class="card"><h4>recorded_tools</h4><p>真正跑 Runtime，工具返回冻结录制值。能测规划/策略/证据链，隔离网络波动。</p></article>
+            <article class="card"><h4>full</h4><p>Runtime 与 fixture 工具全走，适合集成与鲁棒性；仍不触碰真实生产资源。</p></article>
+          </div>
+          <div class="code-card">
+            <div class="code-head"><span>PowerShell · 运行评测</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-powershell">cd backend
+uv run devinfra-eval --name pr-smoke --mode exact --subset smoke
+uv run devinfra-eval --name robustness --mode full --subset robustness --repetitions 3</code></pre>
+          </div>
+          <p><code>devinfra-eval</code> 来自 <code>pyproject.toml [project.scripts]</code>，入口是 <code>devinfra_agent.harness.cli:main</code>。</p>
+          <h3>失败标注</h3>
+          <p><code>FailureService.list</code> 找失败/取消 Run 并附已有 feedback；<code>label</code> 校验 Run 存在且确实失败，再保存 reviewer、label、comment。它让人工失败分类反哺评测集和修复优先级，但当前代码不会自动训练模型。</p>
+        </section>
+
+        <section class="chapter" id="ch14" data-chapter data-search data-title="14 health observability Docker PostgreSQL Redis Qdrant MinIO OpenTelemetry Prometheus">
+          <div class="chapter-head">
+            <div class="chapter-no">14</div>
+            <div><h2>健康检查、可观测性与生产组合</h2><p class="subtitle">把离线积木逐个换成可持久、可扩展的生产积木。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch14"> 学完本章</label>
+          </div>
+          <h3>三个健康接口不是重复</h3>
+          <div class="grid-3">
+            <article class="card"><h4>/healthz</h4><p>进程活着就 200。容器编排据此判断是否需要重启。</p></article>
+            <article class="card"><h4>/readyz</h4><p>关键依赖可用才 200。未 ready 时负载均衡不应发新请求。</p></article>
+            <article class="card"><h4>/api/health/components</h4><p>登录后查看 repository、broker、worker、object store、Redis、MCP、Qdrant 各自状态。</p></article>
+          </div>
+          <p><code>ComponentCheck.required</code> 区分关键和可降级依赖：Qdrant 可选，因为 RAG 能 lexical fallback；Redis/MCP 生产组合中是 required。<code>HTTPHealthProbe</code> 同样执行 scheme/host allowlist，避免健康检查变成 SSRF 工具。</p>
+          <h3>离线 → 生产替换表</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>能力</th><th>离线</th><th>生产</th><th>为什么换</th></tr></thead>
+            <tbody>
+              <tr><td>业务数据</td><td>InMemoryRepository</td><td>PostgreSQL + SQLAlchemy + Alembic</td><td>跨进程持久、事务、唯一约束、行锁。</td></tr>
+              <tr><td>任务队列</td><td>InMemoryDispatcher</td><td>Redis + Celery</td><td>独立 Worker、重试、并发、定时 relay。</td></tr>
+              <tr><td>图 checkpoint</td><td>InMemorySaver</td><td>Postgres AsyncPostgresSaver</td><td>审批等待和崩溃恢复不丢状态。</td></tr>
+              <tr><td>知识检索</td><td>InMemoryHybridIndex</td><td>Qdrant + lexical fallback</td><td>大规模 dense/sparse 向量与持久索引。</td></tr>
+              <tr><td>原始大对象</td><td>InMemoryObjectStore</td><td>MinIO</td><td>日志/diff/报告不塞数据库。</td></tr>
+              <tr><td>工具</td><td>fixture registry</td><td>MCP + 可选 GitHub + fixture 补位</td><td>接入真实外部能力又保持统一策略。</td></tr>
+              <tr><td>模型</td><td>Deterministic</td><td>Deterministic 或 OpenAI-compatible</td><td>演示可复现；生产可选择真实模型。</td></tr>
+              <tr><td>限流</td><td>内存窗口</td><td>Redis 计数</td><td>多 API 实例共享。</td></tr>
+            </tbody>
+          </table></div>
+          <h3>Docker Compose 启动顺序</h3>
+          <p>Postgres、Redis、Qdrant、MinIO、MCP 先各自健康 → API 运行 <code>alembic upgrade head</code> 后启动 Uvicorn → Worker 等 API 健康再启动 Celery worker + beat → Web 等 API。可观测 profile 额外启动 OTel Collector、Prometheus 和 Grafana。</p>
+          <div class="code-card">
+            <div class="code-head"><span>PowerShell · 生产参考组合</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-powershell">docker compose --profile observability up --build</code></pre>
+          </div>
+          <h3>观测链</h3>
+          <p><code>operations.py</code> 结构化 JSON 日志带 request_id；Prometheus client 统计 route/status/latency；OpenTelemetry instrumentation 产生 HTTP trace 并经 OTLP HTTP exporter 发到 Collector；Prometheus 拉 <code>/metrics</code>；Grafana 展示。它们解决的是“发生了什么、慢在哪、请求如何串起来”，不是业务事实存储。</p>
+          <div class="callout danger"><div class="callout-title">Compose 里的凭据只为本机演示</div><p>真实部署要用企业 IdP、Secret Manager、托管数据服务、TLS 和网络隔离。不要把固定 JWT/MCP/MinIO 密钥暴露到公网。</p></div>
+        </section>
+
+        <section class="chapter" id="ch15" data-chapter data-search data-title="15 tests debug breakpoint modify recipes pytest ruff">
+          <div class="chapter-head">
+            <div class="chapter-no">15</div>
+            <div><h2>测试、断点与修改配方</h2><p class="subtitle">把“我看懂了”变成“我能安全地改”。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch15"> 学完本章</label>
+          </div>
+          <h3>最实用的测试命令</h3>
+          <div class="code-card">
+            <div class="code-head"><span>PowerShell · 从仓库根目录</span><div class="code-actions"><button class="copy-btn">复制</button></div></div>
+            <pre><code class="language-powershell"># 只跑一个行为，失败时显示完整信息
+uv run --project backend pytest backend/tests/test_run_api.py -vv
+
+# 只跑一个测试函数
+uv run --project backend pytest backend/tests/test_runtime.py::test_ci_runtime_normalizes_evidence_and_finalizes_with_citations -vv
+
+# 全部后端测试与覆盖率门禁
+uv run --project backend pytest backend/tests --cov=devinfra_agent --cov-fail-under=85
+
+# 静态检查：导入、未使用变量、异步误用、风格
+uv run --project backend ruff check backend/src backend/tests</code></pre>
+          </div>
+          <h3>按现象找第一断点</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>现象</th><th>先看</th><th>第一断点</th><th>相关测试</th></tr></thead>
+            <tbody>
+              <tr><td>登录失败/401</td><td>Authorization、token issuer/audience/exp</td><td><code>AuthService.authenticate</code></td><td>test_auth_api.py</td></tr>
+              <tr><td>创建 Run 409</td><td>Idempotency-Key 与 fingerprint</td><td><code>RunService.create</code></td><td>test_review_durability.py</td></tr>
+              <tr><td>Run 一直 pending</td><td>outbox 状态、dispatcher、eager/worker</td><td><code>OutboxRelay.relay_once</code></td><td>test_outbox_relay.py</td></tr>
+              <tr><td>Worker 重复/抢占</td><td>lease owner/expiry/delivery_id</td><td><code>RunWorker.execute</code></td><td>test_delivery_leases.py</td></tr>
+              <tr><td>工具没执行</td><td>Skill allowlist、schema、scope、risk、budget</td><td><code>PolicyEngine.decide</code></td><td>test_policy.py</td></tr>
+              <tr><td>审批后没恢复</td><td>approval status/execution_state/checkpoint/action claim</td><td><code>_resume_approval</code></td><td>test_runtime_checkpoint_resume.py</td></tr>
+              <tr><td>SSE 丢/重复事件</td><td>Last-Event-ID、sequence、terminal race</td><td><code>run_events.replay</code></td><td>test_sse.py</td></tr>
+              <tr><td>RAG 无结果</td><td>chunk、filter、Qdrant health、degraded</td><td><code>HybridKnowledgeService.search</code></td><td>test_rag.py</td></tr>
+              <tr><td>评测重复结果</td><td>eval lease、projection key、owner fencing</td><td><code>EvalExecutionService.execute</code></td><td>test_evaluation_execution.py</td></tr>
+            </tbody>
+          </table></div>
+          <h3>六个安全修改配方</h3>
+          <div class="recipe-grid">
+            <article class="recipe"><h4>新增一个 API 字段</h4><ol><li>先在 API 测试写期望。</li><li>改 Pydantic request/response。</li><li>若要持久化，继续改 Record、Model、migration、Repository 转换。</li><li>改 serializer/OpenAPI。</li><li>跑目标测试、全套测试、Ruff。</li></ol></article>
+            <article class="recipe"><h4>新增只读工具</h4><ol><li>写 ToolRegistry/adapter 测试。</li><li>定义 <code>ToolDefinition</code>：R0、schema、scope、role、timeout。</li><li>加入相应 Skill 的 allowed_tools。</li><li>写 Policy 拒绝用例和 Runtime 调用用例。</li><li>添加 Harness gold/forbidden tool 期望。</li></ol></article>
+            <article class="recipe"><h4>新增 Workflow/Skill</h4><ol><li>扩展 <code>WorkflowName</code> 与 RUNTIME_WORKFLOWS。</li><li>新增 SkillConfig，选择最小工具集。</li><li>确认 Runtime specialist 前缀和默认工具参数。</li><li>增加路由/运行/Harness case。</li><li>更新索引和文档。</li></ol></article>
+            <article class="recipe"><h4>新增数据库字段</h4><ol><li>先写 repository round-trip 测试。</li><li>改 SQLAlchemy Model 与 Record。</li><li>创建新 Alembic migration，不改旧 migration。</li><li>改两套 repository 和转换函数。</li><li>验证空库升级到 head 与旧库升级。</li></ol></article>
+            <article class="recipe"><h4>调整审批规则</h4><ol><li>先写 R0–R3 policy matrix 测试。</li><li>改 PolicyEngine 或 ToolDefinition。</li><li>检查批准时 revalidation。</li><li>检查 checkpoint resume、action claim、下游幂等。</li><li>跑 durability/safety Harness。</li></ol></article>
+            <article class="recipe"><h4>增加评测指标</h4><ol><li>先在 metrics 测试手算一个小例子。</li><li>实现纯函数。</li><li>在 grader 生成 metric。</li><li>在 aggregate/report/baseline 明确权重和门禁。</li><li>保证安全硬门禁不被平均分掩盖。</li></ol></article>
+          </div>
+          <h3>读测试的正确顺序</h3>
+          <ol>
+            <li>先读测试名，它是一句行为规范。</li>
+            <li>看 Arrange：构造了哪些服务、假时间、脚本模型和工具。</li>
+            <li>看 Act：真正调用哪个公开入口。</li>
+            <li>看 Assert：系统承诺什么，而不只是实现细节。</li>
+            <li>用测试名反搜源码，再在入口打断点单步。</li>
+          </ol>
+          <div class="callout"><div class="callout-title">修改时不要从 2081 行 Repository 中间猜</div><p>先找最小失败测试，再找公开调用入口，再沿对象属性进入具体实现。改完至少跑：目标测试 → 同模块测试 → 全套后端测试 → Ruff。</p></div>
+        </section>
+
+        <section class="chapter" id="ch16" data-chapter data-search data-title="16 dependencies modules functions index packages">
+          <div class="chapter-head">
+            <div class="chapter-no">16</div>
+            <div><h2>包、文件、类与函数总索引</h2><p class="subtitle">以后忘了某功能在哪，回到这里反查。</p></div>
+            <label class="done-label"><input class="done-check" type="checkbox" data-progress="ch16"> 学完本章</label>
+          </div>
+          <h3>运行与开发依赖：每个包为什么存在</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>包/工具</th><th>项目里负责什么</th><th>主要出现位置</th></tr></thead>
+            <tbody>
+              <tr><td>FastAPI</td><td>路由、依赖注入、请求解析、OpenAPI、异常处理、StreamingResponse。</td><td>app.py、errors.py、operations.py</td></tr>
+              <tr><td>Starlette（间接）</td><td>FastAPI 底层 ASGI、Request/Response/中间件能力。</td><td>经 FastAPI 使用</td></tr>
+              <tr><td>Uvicorn</td><td>运行 ASGI app 的 HTTP 服务器和开发 reload。</td><td>启动命令、Dockerfile</td></tr>
+              <tr><td>Pydantic / pydantic-core</td><td>严格数据模型、字段校验、JSON Schema、序列化。</td><td>contracts.py、api_models.py、harness/schemas.py</td></tr>
+              <tr><td>SQLAlchemy</td><td>ORM 模型、session、查询、事务、数据库异常。</td><td>models.py、repositories.py、composition.py</td></tr>
+              <tr><td>psycopg（间接）</td><td>SQLAlchemy 与 PostgreSQL 的驱动；也供 LangGraph saver。</td><td>数据库 URL</td></tr>
+              <tr><td>Alembic</td><td>数据库 schema 版本管理与升级/降级脚本。</td><td>backend/alembic/</td></tr>
+              <tr><td>Celery</td><td>Run/Eval 后台任务、重试、late ack、Beat 定时 relay。</td><td>dispatch.py、celery_entrypoint.py</td></tr>
+              <tr><td>Redis</td><td>Celery broker/result、生产限流、健康检查；不是业务事实源。</td><td>operations.py、health.py、compose.yaml</td></tr>
+              <tr><td>LangGraph</td><td>Agent StateGraph、节点执行、interrupt/resume。</td><td>graph.py、runtime.py</td></tr>
+              <tr><td>langgraph-checkpoint-postgres</td><td>把图 checkpoint 持久到 PostgreSQL。</td><td>graph.py</td></tr>
+              <tr><td>MinIO SDK</td><td>上传/读取原始工具输出与大 artifact。</td><td>object_store.py</td></tr>
+              <tr><td>prometheus-client</td><td>Counter/Histogram 和 <code>/metrics</code> 文本。</td><td>operations.py</td></tr>
+              <tr><td><code>opentelemetry-exporter-otlp-proto-http</code> / <code>opentelemetry-instrumentation-fastapi</code>（连带 API/SDK）</td><td>前者把 trace 通过 OTLP HTTP 发给 Collector；后者自动包住 FastAPI 请求并生成 span。</td><td>operations.py、compose/ops</td></tr>
+              <tr><td>sentence-transformers（rag extra）</td><td>生产多语言文本 embedding；连带 torch/transformers/numpy 等大依赖。</td><td>rag.py</td></tr>
+              <tr><td>httpx（dev）</td><td>FastAPI TestClient 底层 HTTP 测试客户端。</td><td>backend/tests</td></tr>
+              <tr><td>pytest</td><td>测试发现、fixture、参数化、异常断言。</td><td>backend/tests</td></tr>
+              <tr><td>pytest-cov / coverage</td><td>测量覆盖率并执行 85% 门禁。</td><td>质量命令</td></tr>
+              <tr><td>Ruff</td><td>静态检查、导入排序、异步与常见 bug 规则。</td><td>pyproject.toml</td></tr>
+              <tr><td>Hatchling</td><td>把 <code>src/devinfra_agent</code> 构建为 Python wheel。</td><td>pyproject build-system</td></tr>
+              <tr><td>uv</td><td>虚拟环境、依赖解析/锁定、运行命令；不是应用运行时库。</td><td>uv.lock、Dockerfile、开发命令</td></tr>
+            </tbody>
+          </table></div>
+          <h3>实际使用的标准库模块</h3>
+          <div class="glossary-grid">
+            <article class="term-card"><h4>异步与并发</h4><p><code>asyncio</code> 管协程/task/锁/超时；<code>threading.RLock</code> 保护内存仓库；<code>collections.deque/defaultdict/Counter</code> 管队列与统计。</p></article>
+            <article class="term-card"><h4>数据与类型</h4><p><code>dataclasses</code>、<code>enum.StrEnum</code>、<code>typing</code>、<code>collections.abc</code>、<code>uuid</code>、<code>datetime</code>。</p></article>
+            <article class="term-card"><h4>序列化与安全摘要</h4><p><code>json</code>、<code>hashlib</code>、<code>hmac</code>、<code>base64</code>、<code>secrets</code>。</p></article>
+            <article class="term-card"><h4>网络</h4><p><code>urllib.request/error/parse</code> 实现不额外依赖客户端库的 HTTP adapters；<code>urlsplit</code> 用于安全验证。</p></article>
+            <article class="term-card"><h4>运行与工具</h4><p><code>os</code> 读环境变量；<code>logging</code>；<code>argparse</code>；<code>pathlib</code>；<code>time</code>；<code>math</code>；<code>re</code>。</p></article>
+          </div>
+          <details>
+            <summary>展开：标准库逐个对照</summary>
+            <div><p><code>argparse</code> 解析 Harness CLI；<code>asyncio</code> 管协程、Task、Lock、超时和取消；<code>base64</code> 编解码 JWT/password 字段；<code>collections</code> 的 Counter/defaultdict/deque 做检索统计与脚本响应队列；<code>collections.abc</code> 提供 Mapping/Iterable/Sequence/Awaitable/Callable 等运行时接口；<code>dataclasses</code> 生成数据类并用 replace 复制修改；<code>datetime</code> 统一 UTC 时间、过期与 lease；<code>enum</code> 提供 StrEnum；<code>hashlib</code> 做请求/内容摘要；<code>hmac</code> 做 JWT 签名和安全比较；<code>importlib.util</code> 检查 LangGraph 是否安装；<code>itertools</code> 生成 MCP request id；<code>json</code> 处理 API/配置/报告；<code>logging</code> 输出结构化日志；<code>math</code> 做向量与排名指标；<code>os</code> 读环境变量；<code>pathlib</code> 安全处理场景文件；<code>re</code> 做 tokenization、脱敏和 injection 规则；<code>secrets</code> 生成 salt；<code>threading</code> 的 RLock 保护内存仓库；<code>time</code> 做限流窗口和性能计时；<code>typing</code> 提供 Any/Protocol/Annotated/TypeVar；<code>urllib.error</code>、<code>urllib.parse</code>、<code>urllib.request</code> 负责底层 HTTP 与 URL 安全解析；<code>uuid</code> 生成和解析实体 ID。</p></div>
+          </details>
+          <h3>全部源码模块与公开/关键私有入口</h3>
+          <div class="index-tools">
+            <button class="ghost-btn" data-index-filter="all">全部</button>
+            <button class="ghost-btn" data-index-filter="api">API</button>
+            <button class="ghost-btn" data-index-filter="runtime">Agent</button>
+            <button class="ghost-btn" data-index-filter="data">数据</button>
+            <button class="ghost-btn" data-index-filter="eval">评测</button>
+            <button class="ghost-btn" data-index-filter="ops">外部/运维</button>
+          </div>
+          <div class="table-wrap"><table id="module-index">
+            <thead><tr><th>模块</th><th>类/函数入口（都在这里）</th><th>职责与修改定位</th></tr></thead>
+            <tbody>
+              <tr data-kind="api"><td><code>__init__.py</code></td><td>导出 <code>main.app</code></td><td>包导入便利入口；本身没有业务逻辑。</td></tr>
+              <tr data-kind="ops"><td><code>adapters/__init__.py</code></td><td>无</td><td>标记 adapters 子包。</td></tr>
+              <tr data-kind="ops"><td><code>adapters/http.py</code></td><td><code>AdapterHttpResponse</code>、<code>AdapterHttpTransport.request</code>、<code>UrllibAdapterTransport.request/_request</code></td><td>统一 HTTP transport、线程化 urlopen、超时和响应大小。</td></tr>
+              <tr data-kind="ops"><td><code>adapters/mcp.py</code></td><td><code>MCPStreamableHTTPClient</code> 的 <code>call_tool/close/tool_definitions/_initialize/_rpc/_notification/_headers/_parse_response/parse_rpc_body/_structured_from_text/_raise_http_error</code>；<code>_header/_bounded_redacted</code></td><td>MCP Streamable HTTP 生命周期、SSE/JSON 解析、认证与脱敏。</td></tr>
+              <tr data-kind="ops"><td><code>adapters/github.py</code></td><td><code>GitHubReadOnlyAdapter</code> 的 <code>get_issue/get_pull_request/get_check_runs/get_content/search_code/tool_definitions/_get/_request/_response_body/_validate_repository/_validate_number</code>；<code>_bounded_redacted_json/_schema</code></td><td>GitHub 只读工具、allowlist、缓存、路径/响应安全。</td></tr>
+              <tr data-kind="api"><td><code>api_models.py</code></td><td><code>APIRequest</code>、<code>ToolTestRequest</code>、<code>DocumentCreate</code>、<code>KnowledgeSearchRequest</code>、<code>EvalCaseCreate</code>、<code>EvalRunCreate</code>、<code>EvalResultCreate</code>、<code>EvalScoreCreate</code>、<code>FailureLabelCreate</code></td><td>非 Run/Approval 的 HTTP body schema。</td></tr>
+              <tr data-kind="api"><td><code>app.py</code></td><td><code>AppServices.offline/compose</code>、<code>RunCreate</code>、<code>ApprovalDecision</code>、<code>_run_json/_event_json/_approval_json</code>、<code>create_app</code>；其内 31 个 route handler</td><td>FastAPI 组合、RBAC 路由、REST/SSE 边界。新增接口先来这里。</td></tr>
+              <tr data-kind="api"><td><code>auth.py</code></td><td><code>_encode/_decode/hash_password/verify_password</code>；<code>UserStore.seeded/by_username/configured</code>；<code>JWTCodec.encode/decode</code>；<code>AuthService.login/authenticate</code>；<code>auth_dependency</code></td><td>本地凭据、JWT、FastAPI 当前用户依赖。</td></tr>
+              <tr data-kind="api"><td><code>catalog_services.py</code></td><td><code>RegistryService.list_skills/list_tools/test_tool</code>；<code>KnowledgeService.create/list/search</code>；<code>EvalService.create_case/create_run/create_result/create_score/detail</code>；<code>FailureService.label/list</code>；<code>HealthService.components/ready</code></td><td>目录、知识、评测、失败、健康的领域服务。</td></tr>
+              <tr data-kind="ops"><td><code>celery_entrypoint.py</code></td><td>模块级 <code>settings/services/celery_app</code> 与 beat_schedule</td><td>Celery worker/beat 进程入口，只允许 production。</td></tr>
+              <tr data-kind="ops"><td><code>composition.py</code></td><td><code>AppSettings.from_env</code>、<code>build_services</code>、<code>create_app_from_environment</code></td><td>环境校验、离线/生产依赖选择，排查“实际用了谁”。</td></tr>
+              <tr data-kind="api"><td><code>contracts.py</code></td><td><code>Role/RiskLevel/RunStatus/WorkflowName</code>；<code>ContractModel/PlanStep/ToolSpec/EvidenceItem/ApprovalRequest/FinalResult/RunRequest/EvalCase/APIError/TraceEvent</code></td><td>API 与 Agent 共享的严格 Pydantic 合同。</td></tr>
+              <tr data-kind="ops"><td><code>dispatch.py</code></td><td><code>CeleryLike</code>、<code>CeleryDispatcher.dispatch/dispatch_eval/health</code>、<code>OutboxRelay.relay_once</code>、<code>create_celery_app</code>、四个 <code>register_*_task</code></td><td>Celery 配置、任务注册、outbox/eval relay。</td></tr>
+              <tr data-kind="api"><td><code>errors.py</code></td><td><code>APIProblem</code>、<code>error_response</code>、<code>install_error_handlers</code> 及内部 5 类 handler</td><td>统一、安全的错误 envelope。</td></tr>
+              <tr data-kind="eval"><td><code>evaluation.py</code></td><td><code>EvalExecutionService.execute/_ensure_case/_config/_fail</code>、<code>EvalQueueRelay.relay_once</code></td><td>持久 eval lease、Harness 执行、逐例结果/分数、恢复与 fencing。</td></tr>
+              <tr data-kind="data"><td><code>events.py</code></td><td><code>EventPublisher</code>、<code>NullEventPublisher.publish</code>、<code>EventNotifier.publish/wait</code>、<code>EventService.append</code></td><td>事件先持久化再通知；SSE 唤醒。</td></tr>
+              <tr data-kind="runtime"><td><code>evidence.py</code></td><td><code>NormalizedEvidence.to_contract/model_text</code>、<code>EvidenceNormalizer.normalize</code>、<code>_safe_source_uri</code></td><td>citation、hash、URI、trust 和模型上下文隔离。</td></tr>
+              <tr data-kind="runtime"><td><code>gateways.py</code></td><td><code>ToolProposal/ModelRequest/ModelResponse/ModelGateway</code>；<code>DeterministicModelGateway.complete</code>；<code>OpenAICompatibleGateway.complete</code>；<code>_parse_model_response/_default_transport</code></td><td>模型协议、确定性假模型、OpenAI-compatible JSON Schema 调用。</td></tr>
+              <tr data-kind="runtime"><td><code>graph.py</code></td><td><code>GraphState/GraphAdapter</code>；<code>DeterministicGraphAdapter.execute</code>；<code>LangGraphAdapter.execute/_runtime_graph/execute_runtime/resume_runtime/_execution</code>；<code>RuntimeGraphExecution</code>；Postgres adapters；<code>default_graph_adapter</code></td><td>普通图、LangGraph、checkpoint interrupt/resume。</td></tr>
+              <tr data-kind="eval"><td><code>harness/__init__.py</code></td><td>导出 Harness 常用类型</td><td>评测子包公共入口。</td></tr>
+              <tr data-kind="eval"><td><code>harness/baseline.py</code></td><td><code>RegressionGate.evaluate</code></td><td>总分、安全与相对退化门禁。</td></tr>
+              <tr data-kind="eval"><td><code>harness/cli.py</code></td><td><code>parser</code>、<code>main</code></td><td><code>devinfra-eval</code> 命令行入口。</td></tr>
+              <tr data-kind="eval"><td><code>harness/dataset.py</code></td><td><code>ScenarioPack.load_default/load/asset_paths/smoke_cases/robustness_cases/select/recording_for/_hash_dataset/_validate</code></td><td>版本化场景包加载、hash 与完整性。</td></tr>
+              <tr data-kind="eval"><td><code>harness/executors.py</code></td><td><code>AgentRuntimeExecutor.execute/_evidence_ids/_recorded_registry/_full_registry</code></td><td>recorded/full Runtime 执行与工具注册。</td></tr>
+              <tr data-kind="eval"><td><code>harness/graders.py</code></td><td><code>StructuredJudge.score</code>、<code>DeterministicGrader.grade/_factual_score</code>、<code>JudgeAugmentedGrader.grade</code></td><td>确定性评分与受限语义 judge。</td></tr>
+              <tr data-kind="eval"><td><code>harness/metrics.py</code></td><td><code>PRFScore</code>、<code>precision_recall_f1/tool_f1/recall_at_k/mrr/ndcg_at_k</code>、内部 <code>dcg</code></td><td>可手算、可复现的评测指标。</td></tr>
+              <tr data-kind="eval"><td><code>harness/reporting.py</code></td><td><code>render_json</code>、<code>render_markdown</code></td><td>机器事实报告与人类展示。</td></tr>
+              <tr data-kind="eval"><td><code>harness/runner.py</code></td><td><code>HarnessExecutor</code>、<code>FixtureExecutor.execute</code>、<code>HarnessRunner.run/_aggregate</code></td><td>案例/重复循环、评分与聚合。</td></tr>
+              <tr data-kind="eval"><td><code>harness/schemas.py</code></td><td><code>HarnessModel</code>、<code>ReplayMode/EvalWorkflow</code>、<code>GoldEvidence/EvalRubric/EvalCaseDefinition/ScenarioManifest/CaseObservation/CaseGrade/ExperimentConfig/Metadata/CaseRunResult/Report/RegressionDecision</code></td><td>全部评测数据合同与交叉字段校验。</td></tr>
+              <tr data-kind="ops"><td><code>health.py</code></td><td><code>ComponentCheck</code>、<code>HTTPHealthProbe.health</code>、<code>RedisHealthProbe.health</code></td><td>外部依赖健康探测与 SSRF 边界。</td></tr>
+              <tr data-kind="api"><td><code>main.py</code></td><td><code>app = create_app_from_environment()</code></td><td>Uvicorn API 入口。</td></tr>
+              <tr data-kind="data"><td><code>models.py</code></td><td><code>Base</code>、两个 mixin、21 个 ORM Model</td><td>数据库表、列、索引、唯一约束和 PostgreSQL 类型。</td></tr>
+              <tr data-kind="data"><td><code>object_store.py</code></td><td><code>StoredObject</code>、<code>_validate_key</code>、<code>InMemoryObjectStore.put/get/health</code>、<code>MinioObjectStore._ensure_bucket/put/get/health</code></td><td>原始 artifact 内容寻址与对象存储。</td></tr>
+              <tr data-kind="ops"><td><code>operations.py</code></td><td><code>JsonLogFormatter.format</code>、<code>configure_structured_logging</code>、两种 RateLimiter、<code>HttpMetrics.observe/render</code>、<code>install_operations</code>、<code>configure_telemetry</code></td><td>日志、request ID、限流、Prometheus、OTel。</td></tr>
+              <tr data-kind="runtime"><td><code>policy.py</code></td><td><code>ActionDecision</code>、<code>PolicyContext</code>、<code>PolicyDecision</code>、<code>PolicyEngine.decide</code></td><td>fail-closed R0–R3 决策。</td></tr>
+              <tr data-kind="data"><td><code>rag.py</code></td><td><code>KnowledgeDocument/Chunk/SearchHit/Response</code>、Embedding/Index protocols、两种 embedding、<code>DocumentChunker.chunk</code>、<code>InMemoryHybridIndex</code>、<code>HybridKnowledgeService.ingest/search</code>、<code>QdrantHTTPStore</code>、<code>tokenize/sparse_vector/bm25_scores/rank_scores/cosine/injection_suspected/chunk_payload/qdrant_hit</code></td><td>完整混合检索、降级与引用。</td></tr>
+              <tr data-kind="data"><td><code>records.py</code></td><td><code>utc_now</code>；Document/Eval/Feedback/RunStep/ModelCall/ToolCall/Evidence/Artifact/Audit/Skill/Tool/Chunk 共 16 个 Record</td><td>跨层内部数据载体。</td></tr>
+              <tr data-kind="data"><td><code>repositories.py</code></td><td><code>_aware</code>；Run/Event/Approval/Outbox/ActionClaim records；<code>InMemoryRepository</code> 与 <code>SqlAlchemyRepository</code> 的 Run、outbox、cancel、event、lease、approval、action、projection、catalog、eval 全套方法；全部 <code>_xxx_record/_xxx_model</code> 转换；<code>ThreadedRepository</code>；<code>new_run</code></td><td>业务事实与并发正确性核心。详细能力组见第 08 章。</td></tr>
+              <tr data-kind="data"><td><code>serializers.py</code></td><td><code>document_json/eval_case_json/eval_run_json/eval_result_json/eval_score_json/feedback_json</code></td><td>Record 到 API JSON。</td></tr>
+              <tr data-kind="api"><td><code>services.py</code></td><td><code>Dispatcher</code>、<code>InMemoryDispatcher.dispatched/dispatch/dispatch_eval/health</code>、<code>scopes_for_role</code>、<code>RunService.create/rerun/cancel/require</code>、<code>ApprovalService.create_for_run/decide/validate_action</code></td><td>Run 生命周期、幂等创建、取消、审批业务规则。</td></tr>
+              <tr data-kind="runtime"><td><code>skills.py</code></td><td><code>RUNTIME_WORKFLOWS</code>、<code>SkillConfig.from_mapping</code>、<code>DEFAULT_SKILL_CONFIGS</code>、<code>SkillRegistry.default/get/workflows</code></td><td>workflow → specialist + 最小工具集。</td></tr>
+              <tr data-kind="runtime"><td><code>tools.py</code></td><td><code>ToolRisk/InputError/TransientError/Result/AuditRecord</code>、两种 Handler 类型、<code>FixtureDownstreamIdempotencyStore.execute/effect_count/result</code>、<code>ToolDefinition</code>、<code>ToolRegistry.fixture/register/get/names/definitions/specs/validate_arguments/supports_durable_idempotency/audit_records/inflight_idempotency_keys/execute/_execute_and_audit/_check_idempotent_fingerprint/_finish_idempotent</code>、<code>_fixture/_fixture_schema/_argument_error</code></td><td>工具注册、schema、执行、审计与幂等。</td></tr>
+              <tr data-kind="runtime"><td><code>runtime.py</code></td><td><code>RuntimeLimits</code>、<code>CancellationToken</code>、<code>RunCancelled</code>、<code>RuntimeOutcome</code>、<code>_RuntimeState</code> checkpoint 方法；<code>AgentRuntime.run/resume/_validate/_route/_specialist/_verify/_collect_evidence_plan/_tool_proposals/_action_gate/_apply_approval/_finalize/_model_call/_execute_tools/_invoke_tool/_policy_context/_default_tool_arguments/_finalize_result</code>；<code>_await_operation</code></td><td>Agent 的真正控制器：状态、图、预算、模型、工具、验证、审批、取消。</td></tr>
+              <tr data-kind="runtime"><td><code>worker.py</code></td><td><code>RunLeaseBusy</code>、<code>RunWorker.cancel/health/execute/_resume_approval/_project_runtime</code></td><td>lease、Runtime 执行、审批恢复、Trace/artifact 投影。</td></tr>
+            </tbody>
+          </table></div>
+          <details>
+            <summary>展开：大模块中没有在上表逐字列出的全部补充符号</summary>
+            <div>
+              <p>上表按“先找功能”压缩了重复方法。下面把剩余函数、内部函数、类型和状态变量补齐；这些名称也可被页面搜索找到。</p>
+              <div class="table-wrap"><table>
+                <thead><tr><th>位置</th><th>补充符号</th><th>统一解释</th></tr></thead>
+                <tbody>
+                  <tr><td>dispatch.py</td><td><code>CeleryLike.send_task</code>；<code>register_run_task</code> 内的 <code>execute_run</code>；<code>register_outbox_task</code> 内的 <code>relay_outbox</code>；<code>register_eval_task</code> 内的 <code>execute_eval</code>；<code>register_eval_relay_task</code> 内的 <code>relay_eval_queue</code></td><td><code>send_task</code> 是 Celery 最小协议；四个 register 函数把普通 Python worker/relay 包成 Celery task，内部函数是 Celery 真正调用的入口。</td></tr>
+                  <tr><td>errors.py</td><td><code>api_problem_handler</code>、<code>validation_handler</code>、<code>http_handler</code>、<code>integrity_handler</code>、<code>unexpected_handler</code></td><td>分别捕获项目业务错误、Pydantic/FastAPI 校验错、HTTPException、SQLAlchemy 完整性错误和兜底异常，最终都调用统一 error response。</td></tr>
+                  <tr><td>gateways.py / graph.py</td><td><code>_default_transport.send</code>；<code>GraphState.check_cancelled</code>；<code>AsyncPostgresLangGraphAdapter._runtime_call</code></td><td><code>send</code> 是送进线程的同步 urlopen 闭包；<code>check_cancelled</code> 是图状态协议要求；<code>_runtime_call</code> 统一打开 saver、setup、转调 execute/resume 并关闭资源。</td></tr>
+                  <tr><td>harness/executors.py</td><td><code>transient_handler</code>、<code>timeout_handler</code>、<code>malicious_runbook</code></td><td>三者是构造评测工具的内部 handler，分别模拟瞬时失败、永不及时返回和携带 prompt injection 的 Runbook，用来验证重试、超时和安全隔离。</td></tr>
+                  <tr><td>harness/schemas.py</td><td><code>EvalRubric.validate_weight_sum</code>、<code>EvalCaseDefinition.validate_tool_sets</code>、<code>ExperimentMetadata</code></td><td>两个 Pydantic model validator 做跨字段校验：权重和必须合法，expected/forbidden tool 不能矛盾；ExperimentMetadata 记录数据集 hash、模式、时间等实验身份。</td></tr>
+                  <tr><td>operations.py</td><td><code>InMemoryRateLimiter</code>、<code>RedisRateLimiter</code>、<code>prometheus_metrics</code>、<code>operations_middleware</code></td><td>两种 limiter 实现同一窗口语义；metrics handler 返回 Prometheus bytes；middleware 包住每个 HTTP 请求，做 request ID、限流、计时和统一响应头。</td></tr>
+                  <tr><td>rag.py</td><td><code>VectorStoreUnavailable</code>；<code>KnowledgeChunk</code>、<code>SearchResponse</code>；<code>EmbeddingProvider</code>、<code>DeterministicEmbeddingProvider</code>、<code>MultilingualMiniLMEmbeddingProvider</code>；<code>upsert</code>、<code>upsert_documents</code>、<code>search_lexical</code>、<code>_filtered</code>、<code>ensure_collection</code></td><td>异常触发显式降级；Chunk/Response 是检索数据；Provider 协议允许假/真 embedding 互换；upsert 系列写索引，lexical/filter 做内存退路，ensure_collection 幂等创建 Qdrant collection。</td></tr>
+                  <tr><td>models.py</td><td><code>IdentityMixin</code>、<code>TimestampMixin</code>；<code>UserModel</code>、<code>RunModel</code>、<code>RunEventModel</code>、<code>RunStepModel</code>、<code>ModelCallModel</code>、<code>ToolCallModel</code>、<code>EvidenceModel</code>、<code>ArtifactModel</code>、<code>ApprovalModel</code>、<code>AuditLogModel</code>、<code>SkillModel</code>、<code>ToolModel</code>、<code>DocumentModel</code>、<code>ChunkModel</code>、<code>EvalCaseModel</code>、<code>EvalRunModel</code>、<code>EvalResultModel</code>、<code>EvalScoreModel</code>、<code>FeedbackModel</code>、<code>DispatchOutboxModel</code>、<code>ActionClaimModel</code></td><td>两个 mixin 复用主键与时间列；其余每个 Model 一一对应数据库表。名字去掉 Model 后就是业务实体，字段细节以类内 <code>mapped_column</code> 为准。</td></tr>
+                  <tr><td>records.py / repositories.py</td><td><code>EvalCaseRecord</code>、<code>EvalRunRecord</code>、<code>EvalResultRecord</code>、<code>EvalScoreRecord</code>、<code>FeedbackRecord</code>、<code>RunStepRecord</code>、<code>ModelCallRecord</code>、<code>ToolCallRecord</code>、<code>EvidenceRecord</code>、<code>ArtifactRecord</code>、<code>SkillRecord</code>、<code>ToolRecord</code>、<code>ChunkRecord</code>；<code>EventRecord</code>、<code>DispatchOutboxRecord</code>、<code>ActionClaimRecord</code></td><td>Record 是离开 ORM session 后仍可安全使用的普通数据对象；名称与 Model 对应。Event/Outbox/ActionClaim 定义在 repositories.py，因为它们紧贴持久并发语义。</td></tr>
+                  <tr><td>repositories.py：Run/Outbox</td><td><code>list_dispatch_outbox</code>、<code>_queue_dispatch_locked</code>/<code>_queue_dispatch</code>、<code>request_cancel</code>、<code>is_cancel_requested</code>、<code>record_worker_failure</code>、<code>get_run_by_idempotency_key</code>、<code>run_lease_retry_at</code></td><td>列出/排队 outbox；持久取消；失败计数并在上限后终止；按幂等 key 找 winner；告诉 Celery 何时能在 lease 过期后重试。带 <code>locked</code> 的内存版本要求调用者已持有 RLock。</td></tr>
+                  <tr><td>repositories.py：审批/动作</td><td><code>create_approval</code>、<code>approval_for_run</code>、<code>begin_approval_execution</code>、<code>complete_approval_execution</code>、<code>mark_approval_checkpoint_resumed</code>、<code>complete_action</code>、<code>get_action_claim</code></td><td>从创建审批到 claim decision、claim execution、标记 checkpoint 已恢复、写动作 receipt 的状态机。每一步都检查旧状态与 owner，防止重复副作用。</td></tr>
+                  <tr><td>repositories.py：评测/反馈</td><td><code>get_eval_case</code>、<code>get_eval_run</code>、<code>get_eval_result</code>、<code>list_eval_results</code>、<code>list_eval_scores</code>、<code>create_feedback</code>、<code>list_feedback</code></td><td>按主键读评测实体、按父 ID 列子项，保存/读取人工失败标签。</td></tr>
+                  <tr><td>repositories.py：Trace/Catalog</td><td><code>set_health</code>；<code>list_steps</code>、<code>create_model_call/list_model_calls</code>、<code>create_tool_call/list_tool_calls</code>、<code>create_evidence/list_evidence</code>、<code>create_artifact/list_artifacts</code>、<code>create_audit/list_audits</code>、<code>upsert_skill/list_skill_records</code>、<code>upsert_tool/list_tool_records</code>、<code>create_chunk/list_chunks</code></td><td>set_health 只供内存故障测试；其余按“写一条/按父对象读取”形成 Trace、审计、注册表与知识 chunk 投影，并用唯一 projection key 去重。</td></tr>
+                  <tr><td>repositories.py：转换/线程壳</td><td><code>_insert</code>；<code>_step_record</code>、<code>_model_call_record</code>、<code>_tool_call_record</code>、<code>_evidence_record</code>、<code>_artifact_record</code>、<code>_audit_record</code>、<code>_skill_record</code>、<code>_tool_record</code>、<code>_document_record</code>、<code>_chunk_record</code>、<code>_eval_case_record</code>、<code>_eval_run_record</code>、<code>_eval_result_record</code>、<code>_eval_score_record</code>、<code>_feedback_record</code>、<code>_run_model/_run_record</code>、<code>_outbox_record</code>、<code>_event_record</code>、<code>_approval_model/_approval_record</code>、<code>_action_claim_record</code>；<code>ThreadedRepository.__getattr__</code></td><td><code>_insert</code> 统一 session add/commit；<code>_xxx_record</code> 把 ORM 转普通记录，<code>_xxx_model</code> 反向转换；<code>__getattr__</code> 动态把同步仓库方法代理成在线程中运行的异步调用。</td></tr>
+                  <tr><td>runtime.py：状态对象</td><td><code>RuntimeLimits.__post_init__</code>；<code>CancellationToken.cancelled</code>；<code>_RuntimeState.check_cancelled/check_cancelled_async/add_error/to_checkpoint/from_checkpoint</code>；<code>AgentRuntime.restore_checkpoint_state/awaiting_approval_status/finalize_checkpoint_state</code></td><td><code>__post_init__</code> 验证预算/超时为正；cancelled 是只读状态；State 方法负责内存+持久取消、记录 partial error 和可序列化 checkpoint；AgentRuntime 三个桥接方法供 graph.py 在恢复时调用。</td></tr>
+                  <tr><td>tools.py</td><td><code>ToolInputError</code>、<code>TransientToolError</code></td><td>前者表示参数/幂等前置条件错误，不应盲重试；后者明确表示 R0 只读 adapter 的短暂失败，Runtime 才做最多三次有界重试。</td></tr>
+                  <tr><td>adapters/github.py</td><td><code>_CachedResponse</code></td><td>私有数据类，保存响应过期时间与已经脱敏/限长的 ToolResult，避免重复请求。</td></tr>
+                </tbody>
+              </table></div>
+              <p class="small">变量阅读规则：<code>self.x</code> 是对象长期依赖/状态；函数参数是调用方输入；普通局部变量只服务当前步骤；前导下划线表示内部实现；<code>actual_*</code> 表示从“可选注入值或默认值”中最终选中的对象；<code>key/owner/delivery_id/projection_key</code> 都是不同层级的身份，不能互换。</p>
+            </div>
+          </details>
+          <h3>脚本与迁移索引</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>文件</th><th>用途</th><th>什么时候改/运行</th></tr></thead>
+            <tbody>
+              <tr><td><code>scripts/export_openapi.py</code></td><td>从 FastAPI app 导出 OpenAPI JSON。</td><td>API schema 改动后给前端/客户端生成类型。</td></tr>
+              <tr><td><code>scripts/load_test.py</code></td><td>对登录、创建 Run、轮询等关键路径做负载验证。</td><td>性能/容量测试，不替代功能测试。</td></tr>
+              <tr><td><code>alembic/env.py</code></td><td>把 SQLAlchemy metadata 和数据库 URL 接入 Alembic。</td><td>运行 upgrade、生成迁移。</td></tr>
+              <tr><td><code>a3af9...create_task_3_schema.py</code></td><td>首次创建完整业务表。</td><td>历史迁移，不应直接改。</td></tr>
+              <tr><td><code>7ab7...harden_task_3_durability.py</code></td><td>增加 outbox/action claim、约束并清理旧数据。</td><td>历史迁移，不应直接改。</td></tr>
+              <tr><td><code>c91e...add_durable_eval_execution.py</code></td><td>增加 eval lease/owner/恢复字段与唯一性。</td><td>历史迁移，不应直接改。</td></tr>
+            </tbody>
+          </table></div>
+          <h3>31 个 API 路由逐条反查</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th>方法与路径</th><th>处理函数</th><th>进入的服务/行为</th></tr></thead>
+            <tbody>
+              <tr><td><code>POST /api/auth/login</code></td><td><code>login</code></td><td><code>AuthService.login</code>，返回 Bearer JWT。</td></tr>
+              <tr><td><code>GET /api/auth/me</code></td><td><code>me</code></td><td>返回当前依赖注入的 User 身份。</td></tr>
+              <tr><td><code>POST /api/runs</code></td><td><code>create_run</code></td><td><code>RunService.create</code>，幂等持久化并分发。</td></tr>
+              <tr><td><code>GET /api/runs</code></td><td><code>list_runs</code></td><td><code>repository.list_runs</code>。</td></tr>
+              <tr><td><code>GET /api/runs/{run_id}</code></td><td><code>run_detail</code></td><td><code>RunService.require</code>。</td></tr>
+              <tr><td><code>GET /api/runs/{run_id}/trace</code></td><td><code>run_trace</code></td><td>并发读取 events、steps、model/tool calls、evidence、artifacts。</td></tr>
+              <tr><td><code>GET /api/runs/{run_id}/events</code></td><td><code>run_events</code></td><td>按 Last-Event-ID 重放的 SSE generator。</td></tr>
+              <tr><td><code>POST /api/runs/{run_id}/rerun</code></td><td><code>rerun</code></td><td><code>RunService.rerun</code>，保留原始输入并记录 rerun_of。</td></tr>
+              <tr><td><code>POST /api/runs/{run_id}/cancel</code></td><td><code>cancel</code></td><td><code>RunService.cancel</code>，内存+持久取消。</td></tr>
+              <tr><td><code>GET /api/approvals</code></td><td><code>list_approvals</code></td><td><code>repository.list_approvals</code>。</td></tr>
+              <tr><td><code>GET /api/approvals/{approval_id}</code></td><td><code>approval_detail</code></td><td><code>repository.get_approval</code>，不存在转 404。</td></tr>
+              <tr><td><code>POST /api/approvals/{approval_id}/decision</code></td><td><code>decide_approval</code></td><td><code>ApprovalService.decide</code>，只允许 Maintainer/Admin。</td></tr>
+              <tr><td><code>GET /api/skills</code></td><td><code>list_skills</code></td><td><code>RegistryService.list_skills</code>。</td></tr>
+              <tr><td><code>GET /api/tools</code></td><td><code>list_tools</code></td><td><code>RegistryService.list_tools</code>。</td></tr>
+              <tr><td><code>POST /api/tools/{name}/test</code></td><td><code>test_tool</code></td><td><code>RegistryService.test_tool</code>，仍经过 Policy。</td></tr>
+              <tr><td><code>POST /api/knowledge/documents</code></td><td><code>create_document</code></td><td><code>KnowledgeService.create</code>，保存并 ingest。</td></tr>
+              <tr><td><code>GET /api/knowledge/documents</code></td><td><code>list_documents</code></td><td><code>KnowledgeService.list</code>。</td></tr>
+              <tr><td><code>POST /api/knowledge/search</code></td><td><code>search_knowledge</code></td><td><code>KnowledgeService.search</code>，返回 hits/degraded/limitations。</td></tr>
+              <tr><td><code>POST /api/evals/cases</code></td><td><code>create_eval_case</code></td><td><code>EvalService.create_case</code>。</td></tr>
+              <tr><td><code>GET /api/evals/cases</code></td><td><code>list_eval_cases</code></td><td><code>repository.list_eval_cases</code>。</td></tr>
+              <tr><td><code>POST /api/evals/runs</code></td><td><code>create_eval_run</code></td><td><code>EvalService.create_run</code>，持久化后分发。</td></tr>
+              <tr><td><code>GET /api/evals/runs</code></td><td><code>list_eval_runs</code></td><td><code>repository.list_eval_runs</code>。</td></tr>
+              <tr><td><code>GET /api/evals/runs/{eval_run_id}</code></td><td><code>eval_run_detail</code></td><td><code>EvalService.detail</code>，嵌套 results/scores。</td></tr>
+              <tr><td><code>POST /api/evals/runs/{eval_run_id}/results</code></td><td><code>create_eval_result</code></td><td><code>EvalService.create_result</code>。</td></tr>
+              <tr><td><code>POST /api/evals/results/{eval_result_id}/scores</code></td><td><code>create_eval_score</code></td><td><code>EvalService.create_score</code>。</td></tr>
+              <tr><td><code>GET /api/failures</code></td><td><code>list_failures</code></td><td><code>FailureService.list</code>，附人工 labels。</td></tr>
+              <tr><td><code>POST /api/failures/{run_id}/label</code></td><td><code>label_failure</code></td><td><code>FailureService.label</code>。</td></tr>
+              <tr><td><code>GET /api/health/components</code></td><td><code>component_health</code></td><td><code>HealthService.components</code>，需要登录。</td></tr>
+              <tr><td><code>GET /healthz</code></td><td><code>healthz</code></td><td>无依赖的 liveness。</td></tr>
+              <tr><td><code>GET /readyz</code></td><td><code>readyz</code></td><td><code>HealthService.ready</code>，失败返回 503。</td></tr>
+              <tr><td><code>GET /health</code></td><td><code>legacy_health</code></td><td>兼容旧调用方的健康接口。</td></tr>
+            </tbody>
+          </table></div>
+          <div class="callout"><div class="callout-title">你已经有一张可工作的后端地图</div><p>今后先从现象确定领域，再从 API/Worker/Harness 入口进入，用本表找类和方法。不要从文件数量最大的模块开始盲读。</p></div>
+        </section>
+      </div>
+      <footer>DevInfra Agent Backend Tutorial · 基于本地提交 e92d894 · 现有概念教程未修改 · 学习进度只保存在本浏览器</footer>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.5.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-powershell.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-json.min.js"></script>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const body = document.body;
+      const themeButton = document.querySelector('#theme-toggle');
+      const savedTheme = localStorage.getItem('devinfra-tutorial-theme');
+      if (savedTheme) root.dataset.theme = savedTheme;
+      themeButton.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('devinfra-tutorial-theme', root.dataset.theme);
+      });
+
+      document.querySelector('#nav-toggle').addEventListener('click', () => body.classList.toggle('nav-open'));
+      document.querySelectorAll('.chapter-nav a').forEach(link => link.addEventListener('click', () => body.classList.remove('nav-open')));
+
+      const checks = [...document.querySelectorAll('.done-check')];
+      const progressKey = 'devinfra-backend-tutorial-progress';
+      const savedProgress = new Set(JSON.parse(localStorage.getItem(progressKey) || '[]'));
+      checks.forEach(check => {
+        check.checked = savedProgress.has(check.dataset.progress);
+        check.addEventListener('change', () => {
+          check.checked ? savedProgress.add(check.dataset.progress) : savedProgress.delete(check.dataset.progress);
+          localStorage.setItem(progressKey, JSON.stringify([...savedProgress]));
+          renderProgress();
+        });
+      });
+      function renderProgress() {
+        const count = checks.filter(check => check.checked).length;
+        document.querySelector('#progress-text').textContent = `${count} / ${checks.length}`;
+        document.querySelector('#progress-bar').style.width = `${count / checks.length * 100}%`;
+      }
+      renderProgress();
+
+      document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', async () => {
+          const code = button.closest('.code-card').querySelector('code').textContent;
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = '已复制';
+          } catch {
+            button.textContent = '请手动复制';
+          }
+          setTimeout(() => button.textContent = '复制', 1400);
+        });
+      });
+
+      document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const tabs = button.closest('.tabs');
+          tabs.querySelectorAll('.tab-btn').forEach(item => item.classList.remove('active'));
+          button.classList.add('active');
+          tabs.parentElement.querySelectorAll('.tab-panel').forEach(panel => panel.classList.toggle('active', panel.id === button.dataset.tab));
+        });
+      });
+
+      const authFlow = [
+        ['app.py: login', 'FastAPI 把 JSON 解析成 LoginRequest，调用 container.auth.login(request)。'],
+        ['UserStore.by_username', 'AuthService 根据 username 查 User；不存在时也返回统一 invalid_credentials，避免泄露用户名是否存在。'],
+        ['verify_password', '拆分算法、迭代次数、salt、摘要，PBKDF2 重算并做安全比较。'],
+        ['JWTCodec.encode', '创建带 sub、role、iss、aud、iat、exp 的 payload，用 HMAC-SHA256 签名。'],
+        ['auth_dependency.current_user', '后续请求从 Authorization: Bearer ... 取 token，decode 校验后再把 User 注入路由。']
+      ];
+      document.querySelectorAll('[data-flow="auth"] .flow-step').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('[data-flow="auth"] .flow-step').forEach(item => item.classList.remove('active'));
+          button.classList.add('active');
+          const [title, text] = authFlow[Number(button.dataset.flowIndex)];
+          document.querySelector('#auth-flow-panel').innerHTML = `<h4>${title}</h4><p>${text}</p>`;
+        });
+      });
+
+      const chapterLinks = [...document.querySelectorAll('.chapter-nav a')];
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        chapterLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`));
+      }, { rootMargin: '-20% 0px -68% 0px', threshold: [0, .15, .5] });
+      document.querySelectorAll('[data-chapter]').forEach(section => observer.observe(section));
+
+      document.querySelectorAll('[data-index-filter]').forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.indexFilter;
+          document.querySelectorAll('#module-index tbody tr').forEach(row => row.classList.toggle('hidden-row', filter !== 'all' && row.dataset.kind !== filter));
+        });
+      });
+
+      const searchInput = document.querySelector('#global-search');
+      const resultsBox = document.querySelector('#search-results');
+      const searchItems = [...document.querySelectorAll('[data-search], #module-index tbody tr')].map((node, index) => ({
+        index,
+        node,
+        title: node.dataset.title || node.querySelector('h2,h3,td')?.textContent.trim() || '教程内容',
+        text: node.textContent.replace(/\s+/g, ' ').trim(),
+        id: node.id || node.closest('[id]')?.id || 'ch16'
+      }));
+      const fuse = window.Fuse ? new Fuse(searchItems, { keys: ['title', 'text'], threshold: .34, ignoreLocation: true, includeScore: true }) : null;
+      function renderSearch(query) {
+        const clean = query.trim();
+        if (!clean) {
+          resultsBox.classList.remove('open');
+          resultsBox.innerHTML = '';
+          return;
+        }
+        const matches = fuse
+          ? fuse.search(clean, { limit: 10 }).map(item => item.item)
+          : searchItems.filter(item => item.text.toLowerCase().includes(clean.toLowerCase())).slice(0, 10);
+        resultsBox.innerHTML = matches.length
+          ? matches.map(item => `<a class="search-result" href="#${item.id}"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(snippet(item.text, clean))}</span></a>`).join('')
+          : '<div class="search-result"><strong>没有找到</strong><span>换一个函数名、文件名或概念试试。</span></div>';
+        resultsBox.classList.add('open');
+        resultsBox.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+          resultsBox.classList.remove('open');
+          searchInput.value = '';
+        }));
+      }
+      function snippet(text, query) {
+        const at = text.toLowerCase().indexOf(query.toLowerCase());
+        const start = Math.max(0, at < 0 ? 0 : at - 45);
+        return `${start ? '…' : ''}${text.slice(start, start + 150)}${text.length > start + 150 ? '…' : ''}`;
+      }
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+      }
+      searchInput.addEventListener('input', event => renderSearch(event.target.value));
+      document.addEventListener('keydown', event => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          searchInput.focus();
+        }
+        if (event.key === 'Escape') {
+          resultsBox.classList.remove('open');
+          searchInput.blur();
+          body.classList.remove('nav-open');
+        }
+      });
+      document.addEventListener('click', event => {
+        if (!event.target.closest('.search-wrap') && !event.target.closest('#search-results')) resultsBox.classList.remove('open');
+      });
+
+      if (window.Prism) Prism.highlightAll();
+    })();
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.esm.min.mjs';
+    try {
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: 'strict',
+        theme: 'base',
+        themeVariables: {
+          primaryColor: '#dff5ec',
+          primaryTextColor: '#17201c',
+          primaryBorderColor: '#0b6b52',
+          lineColor: '#557168',
+          secondaryColor: '#fff1eb',
+          tertiaryColor: '#f8f5ed',
+          fontFamily: 'Noto Sans SC, sans-serif'
+        }
+      });
+    } catch (error) {
+      console.warn('Mermaid enhancement unavailable; textual diagrams remain readable.', error);
+    }
+  </script>
+</body>
+</html>

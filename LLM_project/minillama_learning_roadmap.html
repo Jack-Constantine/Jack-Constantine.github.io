@@ -1,0 +1,1765 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="MiniLlama 从张量、模型、数据、训练到 SFT、DPO、GRPO 的交互式学习与执行路线。">
+  <meta name="generator" content="MiniLlama local learning workspace">
+  <title>MiniLlama · 交互式学习与执行路线</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.1/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-bash.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-yaml.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#06101d; --panel:#0c192a; --panel-2:#102238; --panel-3:#132a45;
+      --line:#213a56; --text:#e8f1fb; --muted:#9eb1c7; --soft:#c6d5e5;
+      --cyan:#59d9ff; --blue:#6f8cff; --green:#55e6a5; --amber:#ffc66d;
+      --red:#ff7b88; --violet:#bd8cff; --shadow:0 22px 65px rgba(0,0,0,.28);
+      --radius:18px; --left:255px; --right:340px; --top:74px;
+    }
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg:#f3f7fb; --panel:#fff; --panel-2:#edf4fa; --panel-3:#e4eff8;
+      --line:#cad9e6; --text:#122033; --muted:#52677d; --soft:#2f465d;
+      --cyan:#007ca3; --blue:#3455d1; --green:#087c50; --amber:#9a5b00;
+      --red:#c02f45; --violet:#7244b8; --shadow:0 18px 45px rgba(33,58,86,.12);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:calc(var(--top) + 20px); }
+    body {
+      margin:0; background:
+        radial-gradient(circle at 70% -10%, rgba(61,101,255,.15), transparent 34rem),
+        radial-gradient(circle at 20% 10%, rgba(43,211,174,.08), transparent 28rem),
+        var(--bg);
+      color:var(--text); font:15.5px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,
+        BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+    }
+    button,input,select,textarea { font:inherit; }
+    button { color:inherit; }
+    a { color:var(--cyan); }
+    :focus-visible { outline:3px solid var(--amber); outline-offset:3px; }
+    .skip {
+      position:fixed; z-index:100; left:14px; top:-60px; padding:10px 14px;
+      color:#07111f; background:var(--amber); border-radius:8px;
+    }
+    .skip:focus { top:10px; }
+    .topbar {
+      position:sticky; z-index:30; top:0; min-height:var(--top); display:flex;
+      align-items:center; gap:18px; padding:10px 22px; border-bottom:1px solid var(--line);
+      background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(16px);
+    }
+    .brand { min-width:220px; }
+    .brand strong { display:block; letter-spacing:.08em; }
+    .brand small { color:var(--muted); }
+    .global-progress { flex:1; max-width:520px; }
+    .progress-row { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:12px; }
+    .progress {
+      height:8px; margin-top:5px; border-radius:99px; overflow:hidden;
+      background:var(--panel-3); border:1px solid var(--line);
+    }
+    .progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green)); transition:width .35s ease; }
+    .top-actions { margin-left:auto; display:flex; gap:8px; }
+    .icon-btn,.btn {
+      border:1px solid var(--line); border-radius:10px; background:var(--panel-2);
+      padding:8px 11px; cursor:pointer; transition:.16s ease;
+    }
+    .icon-btn:hover,.btn:hover { border-color:var(--cyan); transform:translateY(-1px); }
+    .btn.primary { color:#06101d; background:var(--cyan); border-color:var(--cyan); font-weight:750; }
+    .shell { display:grid; grid-template-columns:var(--left) minmax(0,1fr) var(--right); min-height:calc(100vh - var(--top)); }
+    .sidebar,.task-panel {
+      position:sticky; top:var(--top); align-self:start; height:calc(100vh - var(--top));
+      overflow:auto; background:color-mix(in srgb,var(--panel) 94%,transparent);
+    }
+    .sidebar { border-right:1px solid var(--line); padding:17px 13px 36px; }
+    .task-panel { border-left:1px solid var(--line); padding:18px; }
+    .search-wrap { position:relative; margin-bottom:12px; }
+    .search-wrap input {
+      width:100%; border:1px solid var(--line); border-radius:11px; padding:10px 11px;
+      color:var(--text); background:var(--panel-2);
+    }
+    .filter-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:14px; }
+    .filter-grid select {
+      min-width:0; border:1px solid var(--line); border-radius:9px; padding:7px;
+      color:var(--text); background:var(--panel-2); font-size:12px;
+    }
+    .nav-heading { margin:17px 8px 7px; color:var(--muted); font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+    .stage-link {
+      display:grid; grid-template-columns:38px 1fr auto; gap:7px; align-items:center;
+      padding:8px; margin:3px 0; color:var(--soft); text-decoration:none; border-radius:10px;
+    }
+    .stage-link:hover,.stage-link.active { color:var(--text); background:var(--panel-2); }
+    .stage-link b { color:var(--cyan); font-size:12px; }
+    .stage-link small { color:var(--muted); font-size:10px; }
+    .mini-progress { width:36px; height:5px; overflow:hidden; border-radius:9px; background:var(--panel-3); }
+    .mini-progress span { display:block; width:0; height:100%; background:var(--green); }
+    .main { min-width:0; padding:34px clamp(25px,4vw,72px) 100px; }
+    .hero { max-width:1020px; padding:42px 0 34px; }
+    .eyebrow { color:var(--cyan); font-weight:700; letter-spacing:.13em; text-transform:uppercase; font-size:12px; }
+    h1 { margin:.2em 0; max-width:900px; font-size:clamp(38px,5vw,72px); line-height:1.04; letter-spacing:-.045em; }
+    h2 { margin:.2em 0 .55em; font-size:clamp(27px,3vw,42px); line-height:1.15; letter-spacing:-.025em; }
+    h3 { margin:1.2em 0 .45em; font-size:21px; }
+    h4 { margin:1em 0 .35em; }
+    p { margin:.55em 0 1em; }
+    .lead { max-width:880px; color:var(--soft); font-size:18px; }
+    .hero-grid,.card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
+    .stat,.card,.lesson,.demo,.callout,.formula-box {
+      border:1px solid var(--line); border-radius:var(--radius); background:var(--panel);
+      box-shadow:var(--shadow);
+    }
+    .stat { padding:17px; }
+    .stat strong { display:block; font-size:25px; color:var(--cyan); }
+    .stat span { color:var(--muted); font-size:12px; }
+    .stage { max-width:1120px; padding:58px 0 25px; border-top:1px solid var(--line); }
+    .stage-head { display:flex; gap:18px; align-items:flex-start; justify-content:space-between; }
+    .stage-number { color:var(--cyan); font:700 13px/1 ui-monospace,monospace; }
+    .stage-summary { max-width:860px; color:var(--soft); }
+    .prereq { display:flex; flex-wrap:wrap; gap:7px; margin:14px 0 20px; }
+    .pill,.term {
+      display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line);
+      border-radius:999px; padding:3px 9px; color:var(--soft); background:var(--panel-2);
+      font-size:12px; text-decoration:none; cursor:help;
+    }
+    .term { color:var(--cyan); border-style:dotted; }
+    .lesson { padding:22px; margin:15px 0; overflow:hidden; }
+    .lesson.two { display:grid; grid-template-columns:1.15fr .85fr; gap:22px; }
+    .formula-box { margin:14px 0; padding:18px; overflow:auto; color:var(--text); background:var(--panel-2); }
+    .shape-flow { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0; }
+    .shape { padding:7px 10px; border:1px solid color-mix(in srgb,var(--blue) 65%,var(--line)); border-radius:8px; color:#d7e0ff; background:rgba(80,105,255,.13); font-family:ui-monospace,monospace; }
+    html[data-theme="light"] .shape { color:#233a91; }
+    .arrow { color:var(--cyan); font-weight:800; }
+    .callout { padding:15px 17px; margin:14px 0; border-left:4px solid var(--cyan); box-shadow:none; }
+    .callout.warn { border-left-color:var(--amber); }
+    .callout.danger { border-left-color:var(--red); }
+    .callout.good { border-left-color:var(--green); }
+    .diagram { width:100%; min-height:145px; padding:12px; border-radius:14px; background:var(--panel-2); border:1px solid var(--line); overflow:auto; }
+    .nodes { display:flex; gap:8px; align-items:center; justify-content:center; min-width:max-content; min-height:120px; }
+    .node { min-width:80px; padding:12px; border-radius:12px; text-align:center; color:var(--text); background:var(--panel-3); border:1px solid var(--line); }
+    .node.accent { border-color:var(--cyan); box-shadow:0 0 22px rgba(89,217,255,.12); }
+    pre { max-width:100%; overflow:auto; border:1px solid var(--line); border-radius:13px; font-size:12.5px; }
+    code:not([class]) { padding:.12em .35em; border-radius:5px; background:var(--panel-2); color:var(--amber); }
+    .demo { margin:20px 0; padding:20px; }
+    .demo-head { display:flex; justify-content:space-between; gap:14px; align-items:flex-start; }
+    .demo-head p { margin:0; color:var(--muted); }
+    .controls { display:flex; gap:12px; align-items:end; flex-wrap:wrap; margin:15px 0; }
+    .control { min-width:120px; }
+    .control label { display:flex; justify-content:space-between; color:var(--muted); font-size:12px; }
+    .control input[type="range"] { width:100%; accent-color:var(--cyan); }
+    .control input[type="number"],.control input[type="text"],.control select {
+      width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:8px;
+      color:var(--text); background:var(--panel-2);
+    }
+    .matrix-zone { display:flex; gap:14px; align-items:center; flex-wrap:wrap; overflow:auto; padding:10px 0; }
+    .matrix-wrap { text-align:center; }
+    .matrix { display:grid; gap:3px; padding:7px; border-left:2px solid var(--muted); border-right:2px solid var(--muted); }
+    .cell {
+      width:43px; min-height:36px; display:grid; place-items:center; border:1px solid var(--line);
+      border-radius:5px; background:var(--panel-2); font:12px/1 ui-monospace,monospace;
+    }
+    button.cell { cursor:pointer; }
+    .cell.row-hi { border-color:var(--cyan); background:rgba(89,217,255,.17); }
+    .cell.col-hi { border-color:var(--violet); background:rgba(189,140,255,.17); }
+    .cell.result-hi { border-color:var(--green); background:rgba(85,230,165,.17); }
+    .heat { color:white; text-shadow:0 1px 2px #000; }
+    .calc { padding:11px; min-height:46px; border-radius:10px; background:var(--panel-2); font-family:ui-monospace,monospace; }
+    .task-list { display:grid; gap:8px; margin:17px 0; }
+    .task-chip {
+      display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center;
+      width:100%; padding:10px; text-align:left; border:1px solid var(--line); border-radius:11px;
+      color:var(--text); background:var(--panel-2); cursor:pointer;
+    }
+    .task-chip:hover,.task-chip.selected { border-color:var(--cyan); }
+    .task-chip.done { opacity:.72; }
+    .check { width:18px; height:18px; accent-color:var(--green); }
+    .task-open { all:unset; display:block; min-width:0; cursor:pointer; }
+    .task-open:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; border-radius:4px; }
+    .task-id { color:var(--cyan); font:700 11px/1 ui-monospace,monospace; }
+    .task-title { display:block; margin-top:3px; }
+    .badge { padding:3px 7px; border-radius:999px; font-size:10px; background:var(--panel-3); color:var(--muted); }
+    .badge.gpu { color:#f0d8ff; background:rgba(189,140,255,.14); }
+    .panel-empty { color:var(--muted); padding:20px 0; }
+    .task-panel h2 { font-size:20px; }
+    .task-detail dt { margin-top:12px; color:var(--muted); font-size:11px; letter-spacing:.09em; text-transform:uppercase; }
+    .task-detail dd { margin:3px 0; color:var(--soft); }
+    .task-panel .panel-actions { display:flex; gap:7px; flex-wrap:wrap; margin-top:16px; }
+    .library-status { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0; }
+    .lib { border-radius:999px; padding:3px 7px; color:var(--muted); background:var(--panel-2); font-size:10px; }
+    .lib.ok { color:var(--green); }.lib.fail { color:var(--red); }
+    .glossary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .glossary-item { padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+    .glossary-item b { color:var(--cyan); }
+    .glossary-item small { display:block; color:var(--muted); }
+    .dependency-map { min-height:300px; }
+    .bit-layout { display:flex; gap:3px; margin:10px 0; overflow:auto; }
+    .bit { min-width:18px; height:32px; display:grid; place-items:center; border-radius:4px; font-size:9px; }
+    .sign { background:var(--red); }.exp { background:var(--blue); }.mant { background:var(--green); color:#06101d; }
+    .kv-grid { display:grid; gap:3px; grid-template-columns:repeat(12,1fr); min-width:530px; }
+    .kv-cell { height:24px; border-radius:4px; background:var(--panel-3); border:1px solid var(--line); }
+    .kv-cell.active { background:var(--cyan); }.kv-cell.reuse { background:var(--green); }.kv-cell.recompute { background:var(--amber); }
+    .head-map { display:flex; flex-wrap:wrap; gap:7px; margin:10px 0; }
+    .head { padding:7px 9px; border:2px solid var(--line); border-radius:9px; font:11px ui-monospace,monospace; }
+    .chart-wrap { min-height:260px; }
+    .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    .cdn-warning { display:none; margin:0; padding:9px 22px; color:#2b1800; background:#ffd990; }
+    .cdn-warning.show { display:block; }
+    dialog { width:min(620px,calc(100vw - 32px)); color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); }
+    dialog::backdrop { background:rgba(0,0,0,.62); }
+    .hidden { display:none!important; }
+    @media (max-width:1250px) {
+      :root { --right:300px; --left:220px; }
+      .main { padding-left:30px; padding-right:30px; }
+    }
+    @media (max-width:1050px) {
+      .shell { grid-template-columns:220px minmax(0,1fr); }
+      .task-panel { display:none; }
+      .lesson.two { grid-template-columns:1fr; }
+    }
+    @media (max-width:760px) {
+      :root { --top:64px; }
+      .topbar { gap:6px; padding:8px 10px; }
+      .brand { flex:1 1 auto; min-width:0; }
+      .brand strong { font-size:13px; white-space:nowrap; }
+      .brand small,.global-progress { display:none; }
+      .top-actions { flex:0 0 auto; gap:5px; margin-left:0; }
+      .top-actions .icon-btn { padding:7px 8px; font-size:12px; white-space:nowrap; }
+      .shell { display:block; }
+      .sidebar { position:static; width:auto; height:auto; border-right:0; border-bottom:1px solid var(--line); }
+      .stage-nav { display:grid; grid-template-columns:repeat(2,1fr); }
+      .main { padding:20px 16px 70px; }
+      .hero-grid,.card-grid,.glossary-grid { grid-template-columns:1fr; }
+      .hero { padding-top:24px; }
+      h1 { font-size:40px; }
+    }
+    @media print {
+      :root { color-scheme:light; --bg:white; --panel:white; --panel-2:#f4f6f8; --panel-3:#eef2f5; --line:#ccd3da; --text:#111; --muted:#555; --soft:#222; }
+      .topbar,.sidebar,.task-panel,.controls,.top-actions,.cdn-warning { display:none!important; }
+      .shell { display:block; }.main { padding:0; }.stage { break-before:page; }
+      .lesson,.demo,.card,.stat { box-shadow:none; break-inside:avoid; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">跳到正文</a>
+  <p id="cdn-warning" class="cdn-warning" role="status">部分增强库未加载；正文、公式源文本、静态图和原生搜索仍可使用。</p>
+  <header class="topbar">
+    <div class="brand"><strong>MINILLAMA LAB</strong><small>Learning × Building × Evidence</small></div>
+    <div class="global-progress" aria-label="总体进度">
+      <div class="progress-row"><span>本地学习进度</span><strong id="progress-label">0 / 98</strong></div>
+      <div class="progress"><span id="progress-bar"></span></div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="next-task" type="button">下一项</button>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="切换深浅主题">◐</button>
+      <button class="icon-btn" id="progress-menu" type="button">进度</button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="sidebar" aria-label="课程与任务筛选">
+      <div class="search-wrap"><label class="sr-only" for="search">搜索任务和术语</label><input id="search" type="search" placeholder="搜索任务 / 术语 / ID"></div>
+      <div class="filter-grid">
+        <select id="status-filter" aria-label="按状态筛选"><option value="all">全部状态</option><option value="open">未完成</option><option value="done">已完成</option><option value="blocked">项目阻塞</option></select>
+        <select id="hardware-filter" aria-label="按硬件筛选"><option value="all">全部硬件</option><option value="CPU">CPU</option><option value="RTX4090">RTX 4090</option></select>
+      </div>
+      <div class="nav-heading">课程路线</div>
+      <div class="stage-nav" id="stage-nav">
+        <a class="stage-link" href="#M01"><b>M01</b><span>工程基础</span><span class="mini-progress"><span data-progress="M01"></span></span></a>
+        <a class="stage-link" href="#M02"><b>M02</b><span>模型模块</span><span class="mini-progress"><span data-progress="M02"></span></span></a>
+        <a class="stage-link" href="#M03"><b>M03</b><span>数值与缓存</span><span class="mini-progress"><span data-progress="M03"></span></span></a>
+        <a class="stage-link" href="#M04"><b>M04</b><span>数据与分词</span><span class="mini-progress"><span data-progress="M04"></span></span></a>
+        <a class="stage-link" href="#M05"><b>M05</b><span>Sequence Packing</span><span class="mini-progress"><span data-progress="M05"></span></span></a>
+        <a class="stage-link" href="#M06"><b>M06</b><span>训练系统</span><span class="mini-progress"><span data-progress="M06"></span></span></a>
+        <a class="stage-link" href="#M07"><b>M07</b><span>Pilot 与预训练</span><span class="mini-progress"><span data-progress="M07"></span></span></a>
+        <a class="stage-link" href="#M08"><b>M08</b><span>SFT</span><span class="mini-progress"><span data-progress="M08"></span></span></a>
+        <a class="stage-link" href="#M09"><b>M09</b><span>DPO</span><span class="mini-progress"><span data-progress="M09"></span></span></a>
+        <a class="stage-link" href="#M10"><b>M10</b><span>GRPO</span><span class="mini-progress"><span data-progress="M10"></span></span></a>
+        <a class="stage-link" href="#M11"><b>M11</b><span>性能实验</span><span class="mini-progress"><span data-progress="M11"></span></span></a>
+        <a class="stage-link" href="#M12"><b>M12</b><span>可复现交付</span><span class="mini-progress"><span data-progress="M12"></span></span></a>
+      </div>
+      <div class="nav-heading">增强库状态</div>
+      <div class="library-status" id="library-status">
+        <span class="lib" data-lib="katex">KaTeX</span><span class="lib" data-lib="mermaid">Mermaid</span>
+        <span class="lib" data-lib="d3">D3</span><span class="lib" data-lib="chart">Chart.js</span>
+        <span class="lib" data-lib="prism">Prism</span><span class="lib" data-lib="fuse">Fuse.js</span>
+      </div>
+      <a href="#glossary" class="stage-link"><b>AZ</b><span>完整术语表</span></a>
+      <a href="./MiniLlama_TODO.md" class="stage-link"><b>MD</b><span>打开执行清单</span></a>
+    </nav>
+
+    <main class="main" id="content">
+      <section class="hero" id="overview"></section>
+      <section class="stage" id="math-primer"></section>
+      <section class="stage" id="M01"></section>
+      <section class="stage" id="M02"></section>
+      <section class="stage" id="M03"></section>
+      <section class="stage" id="M04"></section>
+      <section class="stage" id="M05"></section>
+      <section class="stage" id="M06"></section>
+      <section class="stage" id="M07"></section>
+      <section class="stage" id="M08"></section>
+      <section class="stage" id="M09"></section>
+      <section class="stage" id="M10"></section>
+      <section class="stage" id="M11"></section>
+      <section class="stage" id="M12"></section>
+      <section class="stage" id="glossary"></section>
+    </main>
+
+    <aside class="task-panel" id="task-panel" aria-live="polite">
+      <span class="eyebrow">Task Inspector</span>
+      <h2>选择一项任务</h2>
+      <p class="panel-empty">点击课程中的任务，就能在这里查看前置知识、依赖、产物、验收与证据。</p>
+    </aside>
+  </div>
+
+  <dialog id="progress-dialog">
+    <form method="dialog">
+      <button class="icon-btn" style="float:right" aria-label="关闭">×</button>
+      <h2>本地进度</h2>
+      <p>进度保存在当前浏览器的 <code>localStorage</code>，不会修改 Markdown，也不会上传。</p>
+      <div class="panel-actions">
+        <button class="btn" id="export-progress" type="button">导出 JSON</button>
+        <label class="btn" for="import-progress">导入 JSON</label>
+        <input class="sr-only" id="import-progress" type="file" accept="application/json">
+        <button class="btn" id="reset-progress" type="button">重置</button>
+      </div>
+      <p id="progress-message" role="status"></p>
+    </form>
+  </dialog>
+
+  <template id="task-source">
+    <button data-task-id="M01-T01" data-status="done" data-hardware="CPU" data-time="1h" data-depends="无" data-knowledge="Python package、module、src layout" data-output="可导入的 minillama 包" data-proof="import 成功、版本测试与本地基线 17eec6e">建立 src-layout 工程骨架</button>
+    <button data-task-id="M01-T02" data-status="in_progress" data-hardware="CPU" data-time="1–2h" data-depends="M01-T01" data-knowledge="依赖解析、wheel、platform marker" data-output="pyproject.toml 与 uv.lock" data-proof="全新环境 uv sync 完成；Windows 不装 CUDA wheel">完成跨平台依赖锁定</button>
+    <button data-task-id="M01-T03" data-status="done" data-hardware="CPU" data-time="2h" data-depends="M01-T01" data-knowledge="CLI、JSON、CUDA runtime、BF16 capability" data-output="环境探测 CLI 与 JSON" data-proof="环境与 CLI 测试通过">实现环境探测 CLI</button>
+    <button data-task-id="M01-T04" data-status="done" data-hardware="CPU" data-time="1h" data-depends="M01-T01" data-knowledge="lint、format、strict typing" data-output="Ruff/Mypy/Pytest 配置" data-proof="三项静态检查返回 0">配置静态质量门禁</button>
+    <button data-task-id="M01-T05" data-status="done" data-hardware="CPU" data-time="1h" data-depends="M01-T03,M01-T04" data-knowledge="unit test、fixture、exit code" data-output="基础 CPU smoke tests" data-proof="4 个基础测试通过">建立 CPU smoke tests</button>
+    <button data-task-id="M01-T06" data-status="done" data-hardware="CPU" data-time="1h" data-depends="M01-T04,M01-T05" data-knowledge="CI job、runner、cache" data-output="CPU CI 工作流" data-proof="工作流定义覆盖格式、lint、类型和测试">定义 CPU CI 工作流</button>
+    <button data-task-id="M01-T07" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M01-T03" data-knowledge="RNG state、determinism、seed" data-output="reproducibility.py" data-proof="同 seed 张量与 sampler 顺序一致">统一随机种子与运行元数据接口</button>
+    <button data-task-id="M01-T08" data-status="blocked" data-hardware="RTX4090" data-time="0.5h" data-depends="M01-T02,M01-T03" data-knowledge="NVIDIA driver、CUDA、Compute Capability、BF16" data-output="rtx4090 环境 JSON" data-proof="cuda_available 与 bf16_supported 为 true">通过 RTX 4090 环境门禁</button>
+
+    <button data-task-id="M02-T01" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M01-T05" data-knowledge="dataclass、head_dim、维度约束" data-output="config.py 与三档 YAML" data-proof="合法配置可序列化、非法配置明确失败">定义并验证模型配置</button>
+    <button data-task-id="M02-T02" data-status="pending" data-hardware="CPU" data-time="2–3h" data-depends="M02-T01" data-knowledge="均方根、rsqrt、广播、精度" data-output="RMSNorm 与测试" data-proof="float32 对齐 float64 参考且梯度有限">实现 RMSNorm</button>
+    <button data-task-id="M02-T03" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T01" data-knowledge="正弦余弦、位置频率、buffer" data-output="RoPE 频率缓存" data-proof="position0 为单位旋转且缓存非参数">构造 RoPE 频率缓存</button>
+    <button data-task-id="M02-T04" data-status="pending" data-hardware="CPU" data-time="2–3h" data-depends="M02-T03" data-knowledge="二维旋转、pair-wise channel、范数" data-output="apply_rotary_emb" data-proof="二维范数保持，只旋转 Q/K">把 RoPE 应用于 Q/K</button>
+    <button data-task-id="M02-T05" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M02-T01,M02-T04" data-knowledge="矩阵乘法、缩放、softmax、causal mask" data-output="手写 Attention eager 路径" data-proof="未来概率为 0，概率行和为 1">实现手写因果 Attention 基线</button>
+    <button data-task-id="M02-T06" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M02-T05" data-knowledge="Query/KV Head、分组共享、repeat" data-output="GQA/MHA 统一 Attention" data-proof="GQA 与显式复制 K/V 对齐">实现 GQA 与 MHA 统一接口</button>
+    <button data-task-id="M02-T07" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M02-T06,M01-T08" data-knowledge="SDPA、kernel dispatch、GQA flag" data-output="eager/SDPA backend 开关" data-proof="同权重输出与梯度对齐">实现 SDPA 加速路径</button>
+    <button data-task-id="M02-T08" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T01" data-knowledge="SiLU、门控、逐元素乘法" data-output="SwiGLU MLP" data-proof="公式对齐且所有 Linear 无 bias">实现 SwiGLU MLP</button>
+    <button data-task-id="M02-T09" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M02-T02,M02-T07,M02-T08" data-knowledge="residual、pre-norm、计算图" data-output="Transformer Block" data-proof="输入输出 shape 相同且 residual 正确">实现 Pre-norm Transformer Block</button>
+    <button data-task-id="M02-T10" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M02-T09" data-knowledge="embedding、stack、final norm、LM head" data-output="MiniLlamaForCausalLM" data-proof="logits B×T×V 且 causal test 通过">组装完整 Causal LM</button>
+    <button data-task-id="M02-T11" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T10" data-knowledge="参数初始化、Parameter、计数" data-output="初始化和参数统计测试" data-proof="三档参数量精确匹配">固定初始化并验证参数量</button>
+    <button data-task-id="M02-T12" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M02-T10,M06-T01" data-knowledge="overfitting、cross entropy、optimizer" data-output="32 样本过拟合集成测试" data-proof="最终 loss 小于 0.05">完成小样本过拟合门禁</button>
+
+    <button data-task-id="M03-T01" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T11" data-knowledge="LlamaConfig、参考实现、seed" data-output="HF 参考模型 factory" data-proof="结构与参数 shape 对应">构造同形状 Hugging Face 参考模型</button>
+    <button data-task-id="M03-T02" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M03-T01" data-knowledge="state_dict、transpose、strict load" data-output="双向权重映射" data-proof="无遗漏 key 且 round-trip 通过">实现双向权重名称映射</button>
+    <button data-task-id="M03-T03" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M03-T02" data-knowledge="max/mean abs diff、rtol、atol" data-output="逐模块对齐测试" data-proof="RMSNorm/RoPE/Attention/MLP/Block 均过阈值">完成逐模块 float32 对齐</button>
+    <button data-task-id="M03-T04" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M03-T03" data-knowledge="误差传播、logits、determinism" data-output="整模对齐报告" data-proof="max≤1e-4 且 mean≤1e-6">完成整模 logits 对齐</button>
+    <button data-task-id="M03-T05" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M02-T06" data-knowledge="K/V shape、预分配、slice view" data-output="KVCache 容器" data-proof="无 token 级 torch.cat，支持 chunk append">实现预分配 KVCache 容器</button>
+    <button data-task-id="M03-T06" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M03-T05,M02-T10" data-knowledge="position offset、prefill、decode" data-output="模型 cache forward" data-proof="float32 cached/full max≤1e-4">接入 Prefill 与增量 Decode</button>
+    <button data-task-id="M03-T07" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M03-T05" data-knowledge="overflow、batch/device/dtype invariant" data-output="Cache 失败路径" data-proof="非法输入写前失败且无部分修改">覆盖 Cache 失败路径</button>
+    <button data-task-id="M03-T08" data-status="blocked" data-hardware="RTX4090" data-time="2h" data-depends="M01-T08,M03-T06" data-knowledge="BF16 舍入、容差、greedy argmax" data-output="BF16 缓存对齐报告" data-proof="max≤2e-2 且 token 序列相同">完成 BF16 缓存一致性门禁</button>
+
+    <button data-task-id="M04-T01" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M01-T02" data-knowledge="dataset card、license、revision" data-output="数据源 manifest 与 DATA_CARD 初稿" data-proof="每个来源有不可变 revision">登记数据来源、许可与 revision</button>
+    <button data-task-id="M04-T02" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T01" data-knowledge="UTF-8、NFC、控制字符、空白" data-output="文本规范化器" data-proof="Unicode/emoji 不损坏且输出稳定">实现 Unicode 与空白规范化</button>
+    <button data-task-id="M04-T03" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T02" data-knowledge="长度、重复比例、reason code" data-output="质量过滤器与统计" data-proof="丢弃计数守恒且日志无原文">实现文档质量过滤</button>
+    <button data-task-id="M04-T04" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T02" data-knowledge="SHA256、canonical text、精确去重" data-output="文档 hash 与去重索引" data-proof="规范化相同文本只留一次">实现 SHA256 精确去重</button>
+    <button data-task-id="M04-T05" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M04-T04" data-knowledge="hash bucket、数据泄漏、determinism" data-output="文档级 split" data-proof="train/validation hash 交集为空">完成稳定文档级切分</button>
+    <button data-task-id="M04-T06" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T05" data-knowledge="分层抽样、语言比例、bytes" data-output="2GB tokenizer 样本 manifest" data-proof="只来自 train 且可重放">抽取 2GB 双语 tokenizer 样本</button>
+    <button data-task-id="M04-T07" data-status="pending" data-hardware="CPU" data-time="4–8h" data-depends="M04-T06" data-knowledge="byte alphabet、pair merge、vocabulary" data-output="32K tokenizer.json" data-proof="vocab 与特殊 token 唯一且不拆分">训练 32K Byte-level BPE</button>
+    <button data-task-id="M04-T08" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T07" data-knowledge="round trip、unknown、allowed special" data-output="Tokenizer 边界测试" data-proof="Unicode 可逆且 unknown rate=0">验证 Tokenizer 可逆性与边界</button>
+    <button data-task-id="M04-T09" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M04-T08" data-knowledge="chars/token、bytes/token、percentile" data-output="Tokenizer 质量报告" data-proof="报告含输入与 tokenizer hash">生成 Tokenizer 质量报告</button>
+
+    <button data-task-id="M05-T01" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T08" data-knowledge="token ID、EOT、文档边界" data-output="文档 token stream" data-proof="每文档一个 EOT 且 token 合法">实现文档分词与 EOT 边界</button>
+    <button data-task-id="M05-T02" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M05-T01" data-knowledge="token mixture、budget、文档原子性" data-output="双语 token 调度器" data-proof="最终 packed token 比例符合 70/30">按最终 token 控制 70/30 语言比例</button>
+    <button data-task-id="M05-T03" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M05-T02" data-knowledge="next-token shift、packing、record" data-output="2,049-token packer" data-proof="无 pad、不丢不重、尾部可计数">实现 2,049-token Record Packing</button>
+    <button data-task-id="M05-T04" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M05-T03" data-knowledge="uint16、endianness、SHA256、原子写" data-output="shards、索引、manifest" data-proof="随机 1000 record 合法且 hash 匹配">写入 uint16 Shard 与 Manifest</button>
+    <button data-task-id="M05-T05" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M05-T04" data-knowledge="mmap、zero-copy、offset、worker" data-output="Mmap Dataset" data-proof="跨 shard 读取与二进制参考一致">实现 Mmap Dataset</button>
+    <button data-task-id="M05-T06" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M05-T05,M01-T07" data-knowledge="permutation、seed、cursor、state dict" data-output="可恢复 Sampler" data-proof="恢复后 100 batch 与连续迭代一致">实现可恢复的确定性 Sampler</button>
+    <button data-task-id="M05-T07" data-status="pending" data-hardware="CPU" data-time="2–4h" data-depends="M05-T04,M05-T06" data-knowledge="packing efficiency、token budget、lineage" data-output="pilot 与主数据 manifests" data-proof="token/record/bytes 相互可推导">生成 Pilot 与主数据质量报告</button>
+
+    <button data-task-id="M06-T01" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T10" data-knowledge="log-softmax、NLL、ignore index" data-output="交叉熵 loss" data-proof="手算对齐且全 mask 明确失败">实现带 Ignore Index 的交叉熵</button>
+    <button data-task-id="M06-T02" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M02-T11" data-knowledge="AdamW、momentum、decoupled decay" data-output="优化器参数分组" data-proof="参数恰好出现一次">建立 AdamW 参数分组</button>
+    <button data-task-id="M06-T03" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M06-T02" data-knowledge="warmup、cosine、global step" data-output="学习率调度器" data-proof="关键 step 与解析公式一致">实现 Warmup + Cosine 调度器</button>
+    <button data-task-id="M06-T04" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M06-T01,M06-T02" data-knowledge="micro/global batch、loss scaling" data-output="梯度累积循环" data-proof="16 micro-batch 与大 batch 更新对齐">实现正确的梯度累积</button>
+    <button data-task-id="M06-T05" data-status="blocked" data-hardware="RTX4090" data-time="2h" data-depends="M01-T08,M06-T04" data-knowledge="BF16、autocast、master weights" data-output="precision context" data-proof="20 step 前后向与状态有限">接入 BF16 Autocast</button>
+    <button data-task-id="M06-T06" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M02-T09,M06-T04" data-knowledge="activation memory、recompute、non-reentrant" data-output="Block 级梯度检查点" data-proof="开关前后 loss/梯度一致">实现 Block 级梯度检查点</button>
+    <button data-task-id="M06-T07" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M06-T04" data-knowledge="JSONL、step、tokens/s、grad norm" data-output="结构化训练指标" data-proof="每行可解析且 step 单调">实现 JSONL 与 TensorBoard 指标</button>
+    <button data-task-id="M06-T08" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M06-T03,M06-T04,M05-T06,M01-T07" data-knowledge="state dict、RNG、atomic rename" data-output="原子 checkpoint" data-proof="不完整文件不成为 latest">实现原子 Checkpoint</button>
+    <button data-task-id="M06-T09" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M06-T08" data-knowledge="deterministic resume、optimizer/RNG state" data-output="N+M 恢复对照测试" data-proof="模型、优化器、batch、RNG 逐元素一致">完成逐元素一致的断点续训</button>
+    <button data-task-id="M06-T10" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M06-T07,M06-T08" data-knowledge="finite check、OOM、retention" data-output="失败诊断与保留器" data-proof="故障注入不会污染 optimizer">处理 NaN、OOM 与保留策略</button>
+
+    <button data-task-id="M07-T01" data-status="pending" data-hardware="CPU" data-time="2–4h" data-depends="M02-T12,M05-T06,M06-T09" data-knowledge="smoke run、learning curve、generation" data-output="500-step smoke run" data-proof="loss 下降、恢复与生成成功">完成 smoke-500k Correctness Run</button>
+    <button data-task-id="M07-T02" data-status="blocked" data-hardware="RTX4090" data-time="0.5h" data-depends="M01-T08,M05-T07,M06-T09,M07-T01" data-knowledge="镜像、磁盘、driver、预算" data-output="租卡 preflight checklist" data-proof="所有门禁均有证据路径">执行 RTX 4090 租卡前检查</button>
+    <button data-task-id="M07-T03" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M05-T07,M06-T10" data-knowledge="pilot、global token batch、step count" data-output="56M pilot config" data-proof="配置 token 与 manifest 一致">准备 56M × 100M-token Pilot</button>
+    <button data-task-id="M07-T04" data-status="blocked" data-hardware="RTX4090" data-time="4–8h" data-depends="M07-T02,M07-T03" data-knowledge="warmup 排除、median、P95、peak memory" data-output="763-step pilot run" data-proof="无持续发散且 token 计数一致">运行 56M Pilot 并测量吞吐</button>
+    <button data-task-id="M07-T05" data-status="blocked" data-hardware="CPU" data-time="1h" data-depends="M07-T04" data-knowledge="吞吐外推、wall clock、成本区间" data-output="主训练时间费用预测" data-proof="公式、吞吐、单价与假设可见">生成主训练时间与费用预测</button>
+    <button data-task-id="M07-T06" data-status="blocked" data-hardware="RTX4090" data-time="1h" data-depends="M07-T05" data-knowledge="resolved config、hash、run ID" data-output="125M preflight run" data-proof="20 step、显存、PPL、恢复均通过">完成 125M 主训练 Preflight</button>
+    <button data-task-id="M07-T07" data-status="blocked" data-hardware="RTX4090" data-time="由 Pilot 预测" data-depends="M07-T06" data-knowledge="long-running job、preemption、monitoring" data-output="19,074-step 主训练" data-proof="2,500,067,328 tokens 且恢复记录完整">运行 125M × 25 亿 token 正式预训练</button>
+    <button data-task-id="M07-T08" data-status="blocked" data-hardware="CPU/RTX4090" data-time="2h" data-depends="M07-T07" data-knowledge="validation selection、PPL、checkpoint hash" data-output="最佳 Base checkpoint" data-proof="最低 validation PPL 可重算">选择最佳 Base Checkpoint 并生成对比</button>
+
+    <button data-task-id="M08-T01" data-status="blocked" data-hardware="CPU" data-time="4h" data-depends="M04-T05,M07-T08" data-knowledge="conversation hash、split、revision" data-output="SFT 数据 manifests" data-proof="split 无交集且数量正确">准备并稳定切分 SFT 数据</button>
+    <button data-task-id="M08-T02" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T08" data-knowledge="BOS/EOT、header、role、round trip" data-output="统一 Chat Template" data-proof="单轮/多轮/非法 role 测试通过">实现统一 Chat Template</button>
+    <button data-task-id="M08-T03" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M08-T02" data-knowledge="label shift、span、-100、padding" data-output="assistant-only labels" data-proof="非 assistant token 100% 为 -100">实现 Assistant-only Labels</button>
+    <button data-task-id="M08-T04" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M08-T03" data-knowledge="token decode、role span、truncation" data-output="20 条 mask 可视化" data-proof="人工审计 20/20 通过">完成 Mask 可视化人工审计</button>
+    <button data-task-id="M08-T05" data-status="blocked" data-hardware="RTX4090" data-time="4h" data-depends="M06-T10,M08-T01,M08-T04" data-knowledge="epoch、assistant loss、early stopping" data-output="SFT run 与 checkpoint" data-proof="按 assistant validation loss 选最佳">实现 SFT 训练配置与循环</button>
+    <button data-task-id="M08-T06" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M08-T02" data-knowledge="baseline、语言一致、模板泄漏" data-output="200 条固定指令评测" data-proof="保留逐样本输出且指标可重算">建立固定双语指令评测</button>
+    <button data-task-id="M08-T07" data-status="blocked" data-hardware="CPU" data-time="2h" data-depends="M08-T05,M08-T06" data-knowledge="paired comparison、claim boundary" data-output="SFT 报告" data-proof="所有数字链接原始 JSON 与 run ID">生成 SFT 阶段报告</button>
+
+    <button data-task-id="M09-T01" data-status="blocked" data-hardware="CPU" data-time="3h" data-depends="M08-T07" data-knowledge="prompt hash、preference pair、split" data-output="UltraFeedback 20K manifest" data-proof="prompt split 无交集">准备并切分偏好数据</button>
+    <button data-task-id="M09-T02" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M08-T03,M06-T01" data-knowledge="log-prob、gather、response mask" data-output="sequence_log_probs" data-proof="手工 log-softmax 求和一致">实现 Response-only Sequence Log-prob</button>
+    <button data-task-id="M09-T03" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M09-T02" data-knowledge="logsigmoid、relative ratio、beta" data-output="DPO loss" data-proof="policy=reference 时 loss=log2">实现并手算验证 DPO Loss</button>
+    <button data-task-id="M09-T04" data-status="pending" data-hardware="CPU/RTX4090" data-time="2h" data-depends="M09-T03" data-knowledge="eval、requires_grad、storage alias" data-output="隔离的 reference policy" data-proof="更新后 reference hash 不变">冻结并隔离 Reference Policy</button>
+    <button data-task-id="M09-T05" data-status="blocked" data-hardware="RTX4090" data-time="4h" data-depends="M09-T01,M09-T04,M06-T10" data-knowledge="pair batch、beta、KL、clip" data-output="DPO run 与 checkpoint" data-proof="记录 loss、margin、accuracy、KL">实现 DPO 训练循环</button>
+    <button data-task-id="M09-T06" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M09-T02,M08-T06" data-knowledge="held-out accuracy、margin、paired baseline" data-output="SFT/DPO test 对比" data-proof="逐 pair 分数可重算聚合指标">评测 Preference Accuracy 与 Margin</button>
+    <button data-task-id="M09-T07" data-status="blocked" data-hardware="CPU" data-time="2h" data-depends="M09-T05,M09-T06" data-knowledge="trade-off、regression、selection bias" data-output="DPO 报告" data-proof="结论只覆盖实测 preference 指标">生成 DPO 报告并限定结论</button>
+
+    <button data-task-id="M10-T01" data-status="blocked" data-hardware="CPU" data-time="2h" data-depends="M08-T01" data-knowledge="prompt hash、held-out test、protocol" data-output="GSM8K 固定切分" data-proof="四集合无交集且 test 训练不可见">固定 GSM8K 切分与输出协议</button>
+    <button data-task-id="M10-T02" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M10-T01" data-knowledge="parser、Decimal、Fraction、adversarial input" data-output="规则奖励解析器" data-proof="边界与恶意输入表驱动测试通过">实现安全的规则奖励解析器</button>
+    <button data-task-id="M10-T03" data-status="blocked" data-hardware="RTX4090" data-time="4h" data-depends="M03-T06,M08-T02,M10-T02" data-knowledge="sampling、temperature、top-p、snapshot" data-output="group rollout" data-proof="同 seed 可重放且 snapshot 不变">实现分组 Rollout</button>
+    <button data-task-id="M10-T04" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M10-T02" data-knowledge="mean、std、z-score、zero variance" data-output="group_advantages" data-proof="mean≈0，std=0 时全 0">实现组内 Advantage 标准化</button>
+    <button data-task-id="M10-T05" data-status="pending" data-hardware="CPU" data-time="4h" data-depends="M10-T04,M09-T02" data-knowledge="importance ratio、clip、KL estimator" data-output="GRPO objective" data-proof="正负 advantage 的手算与梯度正确">实现 GRPO Clipped Objective 与 KL</button>
+    <button data-task-id="M10-T06" data-status="blocked" data-hardware="RTX4090" data-time="5h" data-depends="M10-T03,M10-T05,M06-T10" data-knowledge="on-policy snapshot、one update、clip fraction" data-output="GRPO run 与 checkpoint" data-proof="完整记录 reward、KL、clip、length">实现 Rollout→Update 训练流水线</button>
+    <button data-task-id="M10-T07" data-status="pending" data-hardware="CPU/RTX4090" data-time="3h" data-depends="M10-T02,M08-T06" data-knowledge="format compliance、numeric exact match" data-output="SFT/GRPO 对比" data-proof="格式率与答案率分别可重算">评测格式率与 Exact Match</button>
+    <button data-task-id="M10-T08" data-status="blocked" data-hardware="CPU" data-time="2h" data-depends="M10-T06,M10-T07" data-knowledge="reward hacking、Goodhart、claim boundary" data-output="GRPO 报告" data-proof="格式提升不冒充推理提升">生成 GRPO 报告并审查 Reward Hacking</button>
+
+    <button data-task-id="M11-T01" data-status="blocked" data-hardware="RTX4090" data-time="4h" data-depends="M01-T08,M03-T06" data-knowledge="warmup、CUDA event、synchronize、percentile" data-output="benchmark harness 与 schema" data-proof="5 warmup、30 重复且元数据完整">建立可复现 Benchmark Harness</button>
+    <button data-task-id="M11-T02" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M02-T11" data-knowledge="controlled comparison、parameter count" data-output="MHA/GQA 对照配置" data-proof="config diff 只有允许字段">建立 MHA/GQA 对照配置</button>
+    <button data-task-id="M11-T03" data-status="pending" data-hardware="CPU" data-time="2h" data-depends="M03-T05,M11-T02" data-knowledge="tensor bytes、layers、K/V factor" data-output="理论 KV 计算器" data-proof="主配置得到 24/72MiB 与 66.67%">计算理论 KV Cache 字节数</button>
+    <button data-task-id="M11-T04" data-status="blocked" data-hardware="RTX4090" data-time="3h" data-depends="M11-T01,M11-T02,M11-T03" data-knowledge="prefill/decode、tokens/s、peak memory" data-output="MHA/GQA CSV" data-proof="报告 median/P10/P90 且理论/实测分离">运行 MHA vs GQA 基准</button>
+    <button data-task-id="M11-T05" data-status="blocked" data-hardware="RTX4090" data-time="3h" data-depends="M03-T08,M11-T01" data-knowledge="complexity、prefix recompute、greedy equality" data-output="cache on/off CSV" data-proof="生成 token 一致后再比较吞吐">运行 KV Cache On/Off 基准</button>
+    <button data-task-id="M11-T06" data-status="blocked" data-hardware="RTX4090" data-time="4–6h" data-depends="M06-T06,M11-T01" data-knowledge="eager、SDPA、compile、checkpoint" data-output="A–E 训练优化矩阵" data-proof="每次只改一个变量且 global tokens 一致">运行训练优化隔离矩阵</button>
+    <button data-task-id="M11-T07" data-status="blocked" data-hardware="CPU" data-time="3h" data-depends="M11-T04,M11-T05,M11-T06" data-knowledge="effect size、percent change、uncertainty" data-output="性能报告" data-proof="每个结论带 case、环境、区间和 run ID">生成性能报告与结论边界</button>
+
+    <button data-task-id="M12-T01" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M06-T07,M06-T08" data-knowledge="schema、JSONL、provenance、derived metric" data-output="run 与指标 schema" data-proof="任一表格行可定位 run">统一 Run 与指标 Schema</button>
+    <button data-task-id="M12-T02" data-status="blocked" data-hardware="CPU" data-time="3h" data-depends="M07-T08,M12-T01" data-knowledge="loss/PPL curve、best checkpoint" data-output="预训练报告" data-proof="PPL 可重算且图点数匹配">生成预训练报告</button>
+    <button data-task-id="M12-T03" data-status="blocked" data-hardware="CPU" data-time="3h" data-depends="M08-T07,M09-T07,M10-T08,M12-T01" data-knowledge="paired baseline、preference、format、EM" data-output="对齐报告" data-proof="指标来源和 split 清楚">生成对齐报告</button>
+    <button data-task-id="M12-T04" data-status="blocked" data-hardware="CPU" data-time="2h" data-depends="M11-T07,M12-T01" data-knowledge="CSV 聚合、percentile、reproducible plot" data-output="性能报告与图" data-proof="图可从 CSV 重建">固化性能报告生成</button>
+    <button data-task-id="M12-T05" data-status="pending" data-hardware="CPU" data-time="3h" data-depends="M04-T09,M05-T07,M08-T01,M09-T01,M10-T01" data-knowledge="lineage、license、privacy、bias" data-output="DATA_CARD.md" data-proof="每个数据源定位 manifest 且无原文泄漏">完成 DATA_CARD</button>
+    <button data-task-id="M12-T06" data-status="blocked" data-hardware="CPU" data-time="3h" data-depends="M07-T08,M08-T07,M09-T07,M10-T08" data-knowledge="intended use、limitation、safety boundary" data-output="MODEL_CARD.md" data-proof="模型数字可追溯且用途不过度承诺">完成 MODEL_CARD</button>
+    <button data-task-id="M12-T07" data-status="blocked" data-hardware="CPU/RTX4090" data-time="4h" data-depends="M12-T02,M12-T03,M12-T04,M12-T05,M12-T06" data-knowledge="fail-closed、artifact lookup、clean-room" data-output="简历摘要与复现记录" data-proof="无空值且每个数字带 run ID">生成简历摘要并执行全新环境复现</button>
+  </template>
+
+  <template id="course-source">
+    <article data-course-page="overview">
+      <div class="eyebrow">From tensors to aligned language models</div>
+      <h1>不只“跑通”模型，<br>还要知道每个数为什么这样变。</h1>
+      <p class="lead">这是一张把学习和实现绑在一起的路线图。每一阶段都回答五个问题：
+        <strong>它是什么、为什么需要、数学上怎么算、代码里张量怎样流动、用什么证据证明正确。</strong>
+        右侧任务面板与 Markdown 中的 98 项清单使用同一 ID。</p>
+      <div class="hero-grid">
+        <div class="stat"><strong>98</strong><span>可验证任务</span></div>
+        <div class="stat"><strong>12</strong><span>从工程到交付的阶段</span></div>
+        <div class="stat"><strong>1×4090</strong><span>正式训练硬件</span></div>
+      </div>
+      <div class="lesson two">
+        <div>
+          <h3>全链路依赖</h3>
+          <p>模型正确性先于训练；训练恢复先于租卡；SFT 是 DPO/GRPO 的共同起点；
+            性能结论必须在生成结果一致后才有意义。</p>
+          <div class="mermaid dependency-map">
+flowchart LR
+  A["M01 工程"] --> B["M02 模型"]
+  B --> C["M03 数值 / KV"]
+  A --> D["M04 数据 / BPE"]
+  D --> E["M05 Packing"]
+  C --> F["M06 训练引擎"]
+  E --> F
+  F --> G["M07 预训练"]
+  G --> H["M08 SFT"]
+  H --> I["M09 DPO"]
+  H --> J["M10 GRPO"]
+  C --> K["M11 性能"]
+  G --> L["M12 交付"]
+  I --> L
+  J --> L
+  K --> L
+          </div>
+        </div>
+        <div>
+          <h3>阅读方式</h3>
+          <ol>
+            <li>先看“前置知识”并点术语。</li>
+            <li>用小矩阵和滑块理解运算。</li>
+            <li>把公式映射到 PyTorch shape。</li>
+            <li>打开任务，按验收证据完成。</li>
+          </ol>
+          <div class="callout good"><strong>事实状态 ≠ 个人进度。</strong><br>
+            任务的 done/blocked 来自项目证据；你的勾选只保存在浏览器。</div>
+        </div>
+      </div>
+    </article>
+
+    <article data-course-page="math-primer">
+      <span class="stage-number">PRIMER · 开工前的数学工具箱</span>
+      <h2>先把张量、维度和矩阵乘法看懂</h2>
+      <p class="stage-summary">深度学习代码最常见的错误不是“公式不会”，而是把 shape、广播或
+        收缩维度弄错。先掌握下面四件事，后续 Attention、RoPE、DPO 都会清晰很多。</p>
+      <div class="card-grid">
+        <div class="card" style="padding:17px"><h3>标量</h3><p>一个数，shape 为 <code>[]</code>。例如 loss。</p></div>
+        <div class="card" style="padding:17px"><h3>向量</h3><p>一列特征，shape 为 <code>[D]</code>。例如一个 token embedding。</p></div>
+        <div class="card" style="padding:17px"><h3>矩阵</h3><p>二维数表，shape 为 <code>[T,D]</code>。例如一段序列的表示。</p></div>
+      </div>
+      <div class="lesson">
+        <h3>矩阵乘法不是逐元素乘法</h3>
+        <p>若 \(A\in\mathbb{R}^{m\times k}\)、\(B\in\mathbb{R}^{k\times n}\)，
+          共享的 \(k\) 是<strong>收缩维度</strong>，输出 \(C=AB\in\mathbb{R}^{m\times n}\)：</p>
+        <div class="formula-box">\[C_{ij}=\sum_{r=1}^{k}A_{ir}B_{rj}\]</div>
+        <div class="shape-flow"><span class="shape">A [m,k]</span><span class="arrow">@</span>
+          <span class="shape">B [k,n]</span><span class="arrow">→</span><span class="shape">C [m,n]</span></div>
+        <p>逐元素乘法要求两个张量 shape 相同或可广播，输出不会消去维度；
+          矩阵乘法则把左矩阵一行与右矩阵一列做点积。</p>
+      </div>
+      <div class="demo" id="demo-matmul">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 01</span><h3>矩阵乘法逐元素演算器</h3></div>
+          <p>点击输出单元，观察参与求和的行与列。</p></div>
+        <div class="controls">
+          <div class="control"><label for="mat-m">m <output id="mat-m-out">2</output></label><input id="mat-m" type="range" min="1" max="4" value="2"></div>
+          <div class="control"><label for="mat-k">k <output id="mat-k-out">3</output></label><input id="mat-k" type="range" min="1" max="4" value="3"></div>
+          <div class="control"><label for="mat-n">n <output id="mat-n-out">2</output></label><input id="mat-n" type="range" min="1" max="4" value="2"></div>
+          <button class="btn" id="mat-reset" type="button">重置</button>
+        </div>
+        <div class="matrix-zone" id="mat-zone"></div><div class="calc" id="mat-calc" aria-live="polite"></div>
+      </div>
+      <div class="lesson two">
+        <div><h3>广播 Broadcasting</h3><p>广播是在不真实复制数据的情况下，把长度为 1
+          或缺失的维度视作可扩展。例如 <code>[B,T,D] * [D]</code> 会让同一个特征权重
+          作用于每个 batch 和 token。广播方便，但也可能把写错的 shape 悄悄变成“能运行”。</p></div>
+        <div><h3>梯度 Gradient</h3><p>梯度 \(\partial L/\partial\theta\) 表示参数微小变化对
+          loss 的一阶影响。反向传播用链式法则从 loss 沿计算图反向累积这些导数。</p></div>
+      </div>
+    </article>
+
+    <article data-course-stage="M01">
+      <span class="stage-number">M01 · FOUNDATION</span><h2>工程、环境与可复现性</h2>
+      <p class="stage-summary">同一份代码若依赖、CUDA、随机种子或数据版本不同，结果就可能不同。
+        “可复现”不是记住一个 seed，而是保存能重建整个运行条件的证据链。</p>
+      <div class="prereq"><span class="pill">Python module</span><span class="pill">JSON</span><span class="pill">命令行</span><span class="pill">GPU 基础</span></div>
+      <div class="lesson two">
+        <div>
+          <h3>Package、wheel 与依赖锁</h3>
+          <p><span class="term" data-term="Package">Package</span> 是可导入的代码单元；
+            <span class="term" data-term="Wheel">wheel</span> 是预构建安装包；
+            lock 文件记录解析后的精确版本。平台 marker 让 Windows 选择 CPU wheel，
+            Linux 训练机选择 CUDA 12.8 wheel。</p>
+          <div class="callout warn">只写 <code>torch&gt;=2</code> 不可复现：半年后可能解析到不同算子、
+            不同 kernel，甚至不同数值行为。</div>
+        </div>
+        <div>
+          <h3>CUDA 软件栈</h3>
+          <div class="nodes">
+            <div class="node">Python / PyTorch</div><span class="arrow">→</span>
+            <div class="node accent">CUDA Runtime</div><span class="arrow">→</span>
+            <div class="node">NVIDIA Driver</div><span class="arrow">→</span>
+            <div class="node">RTX 4090</div>
+          </div>
+          <p><span class="term" data-term="cuDNN">cuDNN</span> 提供深度学习 kernel；
+            Compute Capability 描述 GPU 支持的指令特性；BF16 是否可用要运行时探测。</p>
+        </div>
+      </div>
+      <div class="demo" id="demo-bfloat">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 02</span><h3>FP32、FP16 与 BF16 位布局</h3></div><p>指数位决定范围，尾数位决定精度。</p></div>
+        <div id="bit-layouts"></div>
+      </div>
+      <div class="lesson">
+        <h3>可复现性的四层</h3>
+        <ol><li><strong>代码：</strong>源码状态与配置 hash。</li><li><strong>环境：</strong>Python、PyTorch、CUDA、driver、GPU。</li>
+          <li><strong>随机性：</strong>Python/NumPy/CPU/CUDA RNG state。</li><li><strong>数据：</strong>revision、manifest、shard hash、sampler cursor。</li></ol>
+      </div>
+      <div class="stage-tasks" data-stage="M01"></div>
+      <p class="references">参考：<a href="https://pytorch.org/get-started/locally/">PyTorch 安装</a> ·
+        <a href="https://docs.pytorch.org/docs/stable/notes/randomness.html">PyTorch 可复现性说明</a></p>
+    </article>
+
+    <article data-course-stage="M02">
+      <span class="stage-number">M02 · MODEL</span><h2>Decoder-only Transformer 的数学骨架</h2>
+      <p class="stage-summary">语言模型把序列概率分解为“在已有前缀下预测下一个 token”。
+        每一层只做三件事：归一化、让 token 交换信息、对每个 token 做非线性变换。</p>
+      <div class="formula-box">\[p(x_1,\ldots,x_T)=\prod_{t=1}^{T}p(x_t\mid x_{&lt;t})\]</div>
+      <div class="lesson two">
+        <div>
+          <h3>Embedding 与 Logits</h3>
+          <p>Embedding 矩阵 \(E\in\mathbb{R}^{V\times D}\) 把离散 token ID 查成 D 维向量。
+            最后的 LM Head 把隐藏状态乘 \(W\in\mathbb{R}^{D\times V}\) 得到 logits；
+            logits 是未归一化分数，不是概率。</p>
+          <div class="shape-flow"><span class="shape">IDs [B,T]</span><span class="arrow">lookup</span>
+            <span class="shape">X [B,T,D]</span><span class="arrow">@ W</span><span class="shape">logits [B,T,V]</span></div>
+        </div>
+        <div>
+          <h3>RMSNorm</h3>
+          <div class="formula-box">\[\operatorname{RMSNorm}(x)=g\odot\frac{x}{\sqrt{\frac1D\sum_i x_i^2+\epsilon}}\]</div>
+          <p>它不减均值，只按均方根缩放。平方和与 <code>rsqrt</code> 用 float32 计算，
+            可降低 BF16 尾数较短带来的累计误差；\(g\) 是可训练逐特征缩放。</p>
+        </div>
+      </div>
+      <div class="lesson">
+        <h3>RoPE：用旋转写入位置</h3>
+        <p>把每两个通道当成二维向量，位置 \(m\) 对应角度 \(m\theta_i\)：
+          \(\begin{bmatrix}x'_{2i}\\x'_{2i+1}\end{bmatrix}=
+          \begin{bmatrix}\cos\phi&-\sin\phi\\\sin\phi&\cos\phi\end{bmatrix}
+          \begin{bmatrix}x_{2i}\\x_{2i+1}\end{bmatrix}\)。
+          旋转保持范数，且 Q/K 的点积自然包含相对位置 \(m-n\)。</p>
+      </div>
+      <div class="demo" id="demo-rope">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 03</span><h3>RoPE 二维旋转</h3></div><p>拖动 position，观察旋转矩阵和范数。</p></div>
+        <div class="controls">
+          <div class="control"><label for="rope-pos">position <output id="rope-pos-out">0</output></label><input id="rope-pos" type="range" min="0" max="24" value="0"></div>
+          <div class="control"><label for="rope-freq">frequency <output id="rope-freq-out">0.20</output></label><input id="rope-freq" type="range" min="5" max="100" value="20"></div>
+        </div>
+        <div class="lesson two"><svg id="rope-svg" class="diagram" viewBox="-120 -120 240 240" aria-label="RoPE 旋转向量"></svg><div id="rope-math" class="calc"></div></div>
+      </div>
+      <div class="lesson">
+        <h3>Attention：从相似度到上下文</h3>
+        <div class="formula-box">\[\operatorname{Attention}(Q,K,V)=\operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d_h}}+M\right)V\]</div>
+        <p>\(QK^\top\) 的第 \(i,j\) 项衡量 token i 对 token j 的匹配；
+          除以 \(\sqrt{d_h}\) 防止维度增大时点积方差过大；因果 mask \(M\) 把未来位置设为
+          \(-\infty\)，softmax 后其概率为 0。</p>
+      </div>
+      <div class="demo" id="demo-attention">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 04</span><h3>Attention 矩阵流水线</h3></div><p>查看 score、mask 和逐行 softmax。</p></div>
+        <div class="controls">
+          <div class="control"><label for="attn-t">tokens T <output id="attn-t-out">4</output></label><input id="attn-t" type="range" min="2" max="6" value="4"></div>
+          <div class="control"><label for="attn-d">head_dim dₕ <output id="attn-d-out">4</output></label><input id="attn-d" type="range" min="1" max="8" value="4"></div>
+          <label><input id="attn-mask" type="checkbox" checked> Causal mask</label>
+          <label><input id="attn-scale" type="checkbox" checked> ÷√dₕ</label>
+        </div>
+        <div id="attention-zone" class="matrix-zone"></div><div id="attention-note" class="calc"></div>
+      </div>
+      <div class="lesson two">
+        <div><h3>GQA：让多个 Q Head 共享 K/V</h3><p>MHA 中每个 Query Head 都有自己的 K/V；
+          GQA 将 Query Head 分组，共享较少的 KV Head，降低参数量和解码缓存。
+          `n_heads % n_kv_heads == 0` 保证每组大小为整数。</p></div>
+        <div><h3>SwiGLU 与 Pre-norm</h3><p>\(\mathrm{down}(\mathrm{SiLU}(\mathrm{gate}(x))\odot
+          \mathrm{up}(x))\)。门控是逐元素乘法；Block 使用
+          \(x+\mathrm{Attn}(\mathrm{Norm}(x))\) 和 \(h+\mathrm{MLP}(\mathrm{Norm}(h))\)。</p></div>
+      </div>
+      <div class="demo" id="demo-gqa"><div class="demo-head"><div><span class="eyebrow">Interactive 05</span><h3>Head 分组与理论 KV 显存</h3></div><p>每种颜色代表一个共享 KV Head。</p></div>
+        <div class="controls"><div class="control"><label for="gqa-q">Q heads</label><select id="gqa-q"><option>4</option><option>8</option><option selected>12</option></select></div>
+          <div class="control"><label for="gqa-kv">KV heads</label><select id="gqa-kv"></select></div></div>
+        <div id="gqa-map" class="head-map"></div><div id="gqa-note" class="calc"></div></div>
+      <div class="stage-tasks" data-stage="M02"></div>
+      <p class="references">参考：<a href="https://github.com/meta-llama/llama3/blob/main/llama/model.py">Meta Llama 3 最小实现</a> ·
+        <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> ·
+        <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html">PyTorch SDPA</a></p>
+    </article>
+
+    <article data-course-stage="M03">
+      <span class="stage-number">M03 · NUMERICS & CACHE</span><h2>数值对齐与 KV Cache</h2>
+      <p class="stage-summary">“看起来能生成”不能证明实现正确。先把同权重、同输入的每层输出
+        与参考实现比较，再证明缓存解码和全量解码得到同一 logits 与 token。</p>
+      <div class="lesson two">
+        <div><h3>绝对误差与相对误差</h3><p>绝对误差 \(|\hat y-y|\) 适合接近 0 的值；
+          相对误差 \(|\hat y-y|/(|y|+\epsilon)\) 衡量相对尺度。float32 与 BF16 不能使用
+          同一阈值，因为 BF16 只有 7 位显式尾数。</p>
+          <div class="callout">逐模块对齐的价值：如果整模 logits 超阈值，可以定位第一层、
+            第一个算子，而不是在 12 层以后猜原因。</div></div>
+        <div><h3>Prefill 与 Decode</h3><p>Prefill 一次处理整个 prompt，产生每层 K/V；
+          Decode 每次只输入新 token。若每步重新计算完整前缀，生成第 t 个 token 要重做
+          1…t 的工作；Cache 用显存换掉这些重复投影。</p></div>
+      </div>
+      <div class="formula-box">\[\mathrm{KVBytes}=2\cdot L\cdot B\cdot H_{kv}\cdot T\cdot D_h\cdot \mathrm{bytes(dtype)}\]</div>
+      <div class="demo" id="demo-kv">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 06</span><h3>Cache On / Off 计算区域</h3></div><p>黄色是重算，绿色是复用，蓝色是新 token。</p></div>
+        <div class="controls"><div class="control"><label for="kv-step">decode step <output id="kv-step-out">4</output></label><input id="kv-step" type="range" min="1" max="12" value="4"></div>
+          <label><input id="kv-enabled" type="checkbox" checked> 使用 KV Cache</label></div>
+        <div style="overflow:auto"><div id="kv-grid" class="kv-grid"></div></div><div id="kv-note" class="calc"></div>
+      </div>
+      <div class="lesson"><h3>为什么 Cache 必须预分配</h3><p>每个 token 都
+        <code>torch.cat</code> 会反复分配和复制旧 K/V；预分配 `[B,Hkv,Tmax,Dh]`
+        后用 slice 写入，只返回有效 prefix 的 view。overflow、start position、batch、
+        dtype 和 device 都属于必须在写入前验证的 invariant。</p></div>
+      <div class="stage-tasks" data-stage="M03"></div>
+    </article>
+
+    <article data-course-stage="M04">
+      <span class="stage-number">M04 · DATA & TOKENIZER</span><h2>文本不是“字符串那么简单”</h2>
+      <p class="stage-summary">同一个人眼字符可能有不同 Unicode 编码；同一文档如果在 train 和
+        validation 同时出现，PPL 会虚假变好。清洗、去重和切分顺序决定评测是否可信。</p>
+      <div class="lesson two">
+        <div><h3>UTF-8、Unicode 与 NFC</h3><p>Unicode 给字符分配 code point，UTF-8 把
+          code point 编成 bytes。NFC 把“e + 组合重音”规范成等价预组合形式；NFKC 还会做
+          兼容性折叠，可能改写全角字符，因此本项目只用 NFC。</p></div>
+        <div><h3>Hash 切分避免泄漏</h3><p>先对 normalized text 求 SHA256，再用 hash 分桶。
+          相同文本永远得到同一 hash，因此去重和 train/validation 切分都稳定。
+          从 packed block 随机切分会让同一文档片段泄漏到两边。</p></div>
+      </div>
+      <div class="lesson">
+        <h3>Byte-level BPE</h3>
+        <p>从 byte alphabet 开始，反复统计相邻 token pair，合并频率最高的 pair，直到达到
+          32K vocabulary。因为任意 UTF-8 文本都能退化为 bytes，所以 unknown rate 可以为 0。</p>
+        <div class="nodes"><div class="node">t h e</div><span class="arrow">频率最高: t+h</span>
+          <div class="node">th e</div><span class="arrow">继续 merge</span><div class="node accent">the</div></div>
+        <p><strong>chars/token</strong> 适合人类字符视角；<strong>bytes/token</strong>
+          更适合跨语言比较。中文一个字符通常占 3 个 UTF-8 bytes，不能只比较字符数。</p>
+      </div>
+      <div class="callout danger"><strong>隐私边界：</strong>被丢弃文档只记录 reason code 和计数，
+        不把可能含敏感信息的原文写进日志。</div>
+      <div class="stage-tasks" data-stage="M04"></div>
+      <p class="references">参考：<a href="https://unicode.org/reports/tr15/">Unicode Normalization</a> ·
+        <a href="https://huggingface.co/docs/tokenizers/components">Hugging Face Tokenizers</a></p>
+    </article>
+
+    <article data-course-stage="M05">
+      <span class="stage-number">M05 · PACKING</span><h2>把文档变成连续、可恢复的训练记录</h2>
+      <p class="stage-summary">GPU 希望每个 batch shape 固定，但文档长度不同。Sequence Packing
+        把多个文档用 EOT 连接成 token stream，再切成固定记录，避免 padding 浪费。</p>
+      <div class="lesson">
+        <div class="nodes"><div class="node">文档 A</div><div class="node">EOT</div><div class="node">文档 B</div>
+          <div class="node">EOT</div><span class="arrow">→</span><div class="node accent">2,049 tokens</div></div>
+        <div class="shape-flow"><span class="shape">record[:-1] [2048]</span><span class="arrow">预测</span>
+          <span class="shape">record[1:] [2048]</span></div>
+        <p>32K vocab 小于 65,536，因此磁盘可用 `uint16` 每 token 2 bytes；送入 Embedding 前再转
+          `torch.long`。2.5B token 裸文件约 5GB。</p>
+      </div>
+      <div class="lesson two">
+        <div><h3>Shard 与 Manifest</h3><p>Shard 是分块二进制文件；manifest 保存来源、
+          revision、SHA256、文档数、token 数、丢弃量和 tokenizer hash。没有 manifest，
+          5GB 文件只是无法解释的 bytes。</p></div>
+        <div><h3>Memory Mapping</h3><p>mmap 让操作系统按需把文件页映射到内存，不必把整个
+          shard 一次读进 RAM。Dataset 用 global record index 定位 shard 与 byte offset。</p></div>
+      </div>
+      <div class="formula-box">\[\mathrm{PackingEfficiency}=\frac{\mathrm{used\ tokens}}{\mathrm{used\ tokens}+\mathrm{pad\ tokens}}\]</div>
+      <div class="stage-tasks" data-stage="M05"></div>
+    </article>
+
+    <article data-course-stage="M06">
+      <span class="stage-number">M06 · TRAINING ENGINE</span><h2>Loss、优化器、显存与恢复</h2>
+      <p class="stage-summary">训练循环要让每次更新的数学含义稳定：global batch 不因显存改变，
+        学习率按 optimizer step 推进，checkpoint 恢复后下一 batch 和 RNG 也不能漂移。</p>
+      <div class="lesson two">
+        <div><h3>Cross Entropy 与 PPL</h3>
+          <div class="formula-box">\[L=-\frac1N\sum_{t=1}^{N}\log p_\theta(y_t\mid x_{\le t}),\qquad \mathrm{PPL}=e^L\]</div>
+          <p>若平均 NLL 为 2，PPL≈7.39，可直觉理解为模型平均在约 7.39 个等可能选择间犹豫。
+            `-100` token 不进入 N 和求和；全 mask 必须报错，不能产生 NaN。</p></div>
+        <div><h3>AdamW</h3><p>Adam 用一阶矩 \(m_t\) 和二阶矩 \(v_t\) 自适应缩放梯度；
+          AdamW 把 weight decay 从梯度更新中解耦：
+          \(\theta\leftarrow\theta-\eta\hat m/(\sqrt{\hat v}+\epsilon)-\eta\lambda\theta\)。
+          Norm 与 Embedding 不做 decay。</p></div>
+      </div>
+      <div class="demo" id="demo-loss">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 07</span><h3>Logits → Softmax → Cross Entropy</h3></div><p>调节三个 logits 和目标类别。</p></div>
+        <div class="controls">
+          <div class="control"><label>logit A <output id="logit-a-out">1.0</output></label><input id="logit-a" type="range" min="-30" max="30" value="10"></div>
+          <div class="control"><label>logit B <output id="logit-b-out">0.0</output></label><input id="logit-b" type="range" min="-30" max="30" value="0"></div>
+          <div class="control"><label>logit C <output id="logit-c-out">-1.0</output></label><input id="logit-c" type="range" min="-30" max="30" value="-10"></div>
+          <div class="control"><label for="loss-target">target</label><select id="loss-target"><option value="0">A</option><option value="1">B</option><option value="2">C</option></select></div>
+        </div><div id="loss-note" class="calc"></div>
+      </div>
+      <div class="lesson two">
+        <div><h3>梯度累积</h3><p>16 个 micro-batch 的 loss 各除以 16，再累加梯度，
+          只在边界 optimizer.step。若忘记除以 16，梯度近似放大 16 倍；若 scheduler
+          每 micro-step 前进，学习率日程也快 16 倍。</p></div>
+        <div><h3>梯度检查点</h3><p>普通反向保存 activation；checkpoint 丢弃部分 activation，
+          反向时重算 forward，以计算换显存。它不是训练 checkpoint，两者名称相似但目的完全不同。</p></div>
+      </div>
+      <div class="demo" id="demo-schedule"><div class="demo-head"><div><span class="eyebrow">Interactive 08</span><h3>Warmup + Cosine 学习率</h3></div><p>横轴 optimizer step，不是 micro-step。</p></div><div class="chart-wrap"><canvas id="schedule-chart"></canvas></div></div>
+      <div class="lesson"><h3>断点续训为什么要保存 RNG 与 Sampler</h3><p>只保存模型和优化器，
+        恢复后 dropout、采样顺序或数据 cursor 会变化，轨迹不再等于连续训练。
+        正确 checkpoint 还要保存 scheduler、global step、consumed tokens、Python/NumPy/CPU/CUDA
+        RNG、sampler cursor、配置和环境证据，并用临时目录+原子重命名发布。</p></div>
+      <div class="stage-tasks" data-stage="M06"></div>
+      <p class="references">参考：<a href="https://arxiv.org/abs/1711.05101">AdamW</a> ·
+        <a href="https://docs.pytorch.org/docs/stable/checkpoint.html">PyTorch Activation Checkpointing</a></p>
+    </article>
+
+    <article data-course-stage="M07">
+      <span class="stage-number">M07 · PRETRAIN</span><h2>先用 Pilot 购买信息，再购买算力</h2>
+      <p class="stage-summary">Pilot 的目的不是得到“较差的小模型”，而是验证数据、吞吐、显存、
+        日志和恢复，并用真实速度估算 125M 主训练时长与费用。</p>
+      <div class="lesson two">
+        <div><h3>Step、Micro-batch 与 Token Budget</h3><p>主训练每 optimizer step：
+          \(4\text{ sequences}\times16\text{ accumulation}\times2048=131,072\) tokens。
+          19,074 step 共 2,500,067,328 tokens。这里“25亿”是 packed tokens，不是原始文档 token。</p></div>
+        <div><h3>Median 与 P95</h3><p>平均值容易被偶发慢 step 拉动。Median 表示典型速度；
+          P95 step time 表示 95% step 不超过该时长，更能暴露抖动。前 50 step 含编译和缓存 warmup，
+          不进入稳定吞吐统计。</p></div>
+      </div>
+      <div class="formula-box">\[\mathrm{EstimatedHours}=\frac{\mathrm{remaining\ tokens}}{\mathrm{median\ tokens/s}}\div3600\]</div>
+      <div class="callout warn">只有 56M pilot、125M 前 200 step 和恢复演练通过后，才启动完整租卡。
+        最佳 checkpoint 按 validation PPL 选择，不默认最后一步。</div>
+      <div class="stage-tasks" data-stage="M07"></div>
+    </article>
+
+    <article data-course-stage="M08">
+      <span class="stage-number">M08 · SFT</span><h2>让模型学习“如何回答”，而不是重复用户</h2>
+      <p class="stage-summary">SFT 仍是 next-token prediction；区别在于输入采用 chat template，
+        loss 只覆盖 assistant span。Teacher forcing 在训练时把真实历史 token 提供给模型。</p>
+      <div class="lesson">
+        <div class="nodes"><div class="node">System<br><small>mask=-100</small></div>
+          <div class="node">User<br><small>mask=-100</small></div>
+          <div class="node accent">Assistant<br><small>参与 loss</small></div>
+          <div class="node accent">EOT<br><small>参与 loss</small></div></div>
+        <p>`-100` 是 PyTorch CrossEntropyLoss 的 ignore index 约定；它不是 token ID。
+          多轮对话中每一个 assistant span 都参与，header、user、system 和 padding 全忽略。</p>
+      </div>
+      <div class="lesson two">
+        <div><h3>Chat Template 是协议</h3><p>训练与生成必须调用同一模板函数。若训练使用
+          header token，而推理只拼 “User:”，模型看到的是分布外输入，容易泄漏模板或不回答。</p></div>
+        <div><h3>截断的危险</h3><p>最大长度 2048。若从错误一端截断，可能只留下 assistant 答案却丢掉问题，
+          或切断 special token。截断后要重新验证 span 与 EOT 完整性。</p></div>
+      </div>
+      <div class="callout good">同时记录 all-token loss 和 assistant-only loss 可以诊断 mask，
+        但 early stopping 只依据 assistant-only validation loss。</div>
+      <div class="stage-tasks" data-stage="M08"></div>
+    </article>
+
+    <article data-course-stage="M09">
+      <span class="stage-number">M09 · DPO</span><h2>用偏好对直接推动 Chosen 胜过 Rejected</h2>
+      <p class="stage-summary">DPO 不单独训练 reward model。它比较 policy 相对 reference
+        对 chosen/rejected 的偏好变化；reference 固定为 SFT checkpoint，提供“不要偏离太远”的锚。</p>
+      <div class="formula-box">\[
+        L_{\mathrm{DPO}}=-\log\sigma\left(\beta\left[
+        (\log\pi_c-\log\pi_{\mathrm{ref},c})-(\log\pi_r-\log\pi_{\mathrm{ref},r})
+        \right]\right)
+      \]</div>
+      <div class="lesson two">
+        <div><h3>Sequence Log-prob</h3><p>对 response 的每个真实 token，从 logits 的 log-softmax
+          中 gather 对应项再求和。Prompt 只是条件，不进入 chosen/rejected 得分；不同长度会影响
+          总 log-prob，所以报告同时记录 token 数。</p></div>
+        <div><h3>β 与 Margin</h3><p>括号中的值是相对 preference margin。β 控制 loss 对 margin 的敏感度。
+          policy=reference 时 margin=0，\(-\log\sigma(0)=\log2\)。</p></div>
+      </div>
+      <div class="demo" id="demo-dpo">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 09</span><h3>DPO 四个 Log-prob</h3></div><p>提高 policy chosen，观察 loss 下降。</p></div>
+        <div class="controls">
+          <div class="control"><label>π chosen <output id="dpo-pc-out">-4</output></label><input id="dpo-pc" type="range" min="-100" max="0" value="-40"></div>
+          <div class="control"><label>ref chosen <output id="dpo-rc-out">-4</output></label><input id="dpo-rc" type="range" min="-100" max="0" value="-40"></div>
+          <div class="control"><label>π rejected <output id="dpo-pr-out">-5</output></label><input id="dpo-pr" type="range" min="-100" max="0" value="-50"></div>
+          <div class="control"><label>ref rejected <output id="dpo-rr-out">-5</output></label><input id="dpo-rr" type="range" min="-100" max="0" value="-50"></div>
+          <div class="control"><label>β <output id="dpo-beta-out">0.1</output></label><input id="dpo-beta" type="range" min="1" max="20" value="10"></div>
+        </div><div id="dpo-note" class="calc"></div>
+      </div>
+      <div class="stage-tasks" data-stage="M09"></div>
+      <p class="references">原论文：<a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization</a></p>
+    </article>
+
+    <article data-course-stage="M10">
+      <span class="stage-number">M10 · GRPO</span><h2>在同一问题的多次 Rollout 中比较相对好坏</h2>
+      <p class="stage-summary">每个 prompt 采样一组回答，用组内奖励标准化得到 advantage。
+        本项目只使用可验证格式和数值答案奖励，避免把外部 LLM judge 的偏差引入实验。</p>
+      <div class="formula-box">\[A_i=\begin{cases}\frac{r_i-\bar r}{s_r},&s_r&gt;0\\0,&s_r=0\end{cases}\]</div>
+      <div class="lesson two">
+        <div><h3>Advantage</h3><p>reward 衡量绝对结果；advantage 衡量某条回答相对同组平均好多少。
+          全组 reward 相同时没有学习信号，必须设 0 而不是除以 0。</p></div>
+        <div><h3>Clipped Ratio</h3><p>\(\rho=\exp(\log\pi_{\mathrm{new}}-\log\pi_{\mathrm{old}})\)。
+          PPO 风格目标比较 \(\rho A\) 与裁剪后的 \(\mathrm{clip}(\rho,1-\epsilon,1+\epsilon)A\)，
+          防止一次更新移动过大；另加 KL penalty 约束对 reference 的偏离。</p></div>
+      </div>
+      <div class="demo" id="demo-grpo">
+        <div class="demo-head"><div><span class="eyebrow">Interactive 10</span><h3>Reward → Advantage → Clipped Objective</h3></div><p>逗号输入一组奖励；尝试全部相同。</p></div>
+        <div class="controls">
+          <div class="control" style="min-width:260px"><label for="grpo-rewards">rewards</label><input id="grpo-rewards" type="text" value="1.25,0.25,0,1.25,0,0.25,1.25,0"></div>
+          <div class="control"><label>ratio <output id="grpo-ratio-out">1.20</output></label><input id="grpo-ratio" type="range" min="50" max="150" value="120"></div>
+          <div class="control"><label>ε <output id="grpo-eps-out">0.20</output></label><input id="grpo-eps" type="range" min="5" max="40" value="20"></div>
+        </div><div id="grpo-note" class="calc"></div>
+      </div>
+      <div class="lesson"><h3>规则奖励与 Reward Hacking</h3><p>格式完全匹配 +0.25，数值正确 +1。
+        空回复、多个 answer tag、解析失败总分 0。若模型只学会 tag 而答案率下降，这是 reward hacking
+        或目标错配；报告必须分开写 format compliance 与 exact match。</p></div>
+      <div class="stage-tasks" data-stage="M10"></div>
+      <p class="references">原论文：<a href="https://arxiv.org/abs/2402.03300">DeepSeekMath / GRPO</a></p>
+    </article>
+
+    <article data-course-stage="M11">
+      <span class="stage-number">M11 · BENCHMARK</span><h2>只有隔离变量，才知道优化来自哪里</h2>
+      <p class="stage-summary">性能测试不是截一张 nvidia-smi。固定权重、输入、batch、dtype、
+        生成长度与计时协议；每次只改一个变量，并先证明输出一致。</p>
+      <div class="lesson two">
+        <div><h3>正确的 CUDA 计时</h3><p>GPU kernel 异步提交，CPU 计时器可能在 kernel 完成前停止。
+          测量边界要用 CUDA event 或 synchronize。先 warmup 5 次，再重复 30 次，
+          报 median、P10、P90，而不是挑最好一次。</p></div>
+        <div><h3>理论显存 vs 峰值显存</h3><p>KV 公式只计算 K/V 张量；CUDA 峰值还包含参数、
+          activation、临时 workspace 和 allocator 碎片。可以说 GQA 理论 KV 减少 66.67%，
+          实际峰值只能写实测值。</p></div>
+      </div>
+      <div class="lesson">
+        <h3>Ablation Matrix</h3>
+        <table style="width:100%;border-collapse:collapse"><thead><tr><th>Case</th><th>Attention</th><th>Precision</th><th>Compile</th><th>Checkpoint</th></tr></thead>
+          <tbody><tr><td>A</td><td>eager</td><td>FP32</td><td>off</td><td>off</td></tr>
+            <tr><td>B</td><td>eager</td><td>BF16</td><td>off</td><td>off</td></tr>
+            <tr><td>C</td><td>SDPA</td><td>BF16</td><td>off</td><td>off</td></tr>
+            <tr><td>D</td><td>SDPA</td><td>BF16</td><td>on</td><td>off</td></tr>
+            <tr><td>E</td><td>SDPA</td><td>BF16</td><td>on</td><td>on</td></tr></tbody></table>
+        <p>A→D 衡量综合吞吐，D→E 衡量 checkpoint 的显存收益和速度代价。</p>
+      </div>
+      <div class="stage-tasks" data-stage="M11"></div>
+    </article>
+
+    <article data-course-stage="M12">
+      <span class="stage-number">M12 · DELIVERY</span><h2>让每一个简历数字都能反查</h2>
+      <p class="stage-summary">报告不是手工把数字粘进 Markdown；它应从原始 JSONL/CSV 自动生成。
+        Run ID、配置、环境、数据 hash、checkpoint hash 和生成脚本共同组成 provenance。</p>
+      <div class="lesson">
+        <div class="nodes"><div class="node">metrics.jsonl</div><div class="node">eval.json</div>
+          <div class="node">benchmark.csv</div><span class="arrow">→</span><div class="node accent">build_report.py</div>
+          <span class="arrow">→</span><div class="node">报告 / 简历摘要</div></div>
+      </div>
+      <div class="lesson two">
+        <div><h3>Data Card</h3><p>说明来源、revision、许可、过滤、去重、语言比例、切分、隐私与偏差。
+          它回答“模型看过什么、哪些没看过、数据有哪些风险”。</p></div>
+        <div><h3>Model Card</h3><p>说明架构、用途、限制、训练数据、评测、安全边界和 checkpoint hash。
+          125M 研究模型不能描述为生产级通用助手。</p></div>
+      </div>
+      <div class="callout good"><strong>Fail closed：</strong>resume_summary 缺任何指标就失败，
+        而不是输出“XX GB”“提升 XX%”或猜测值。</div>
+      <div class="stage-tasks" data-stage="M12"></div>
+    </article>
+  </template>
+
+  <template id="glossary-source">
+    <article data-glossary-term="Tensor"><b>Tensor · 张量</b><small>M02/M06</small><p>带 shape、dtype 和 device 的多维数值数组，是 PyTorch 计算的基本载体。</p></article>
+    <article data-glossary-term="Shape"><b>Shape · 形状</b><small>全阶段</small><p>张量各维长度；例如 [B,T,D] 分别表示 batch、序列和隐藏维。</p></article>
+    <article data-glossary-term="Dtype"><b>Dtype · 数据类型</b><small>M01/M06</small><p>每个元素的编码与精度，如 float32、bfloat16、int64。</p></article>
+    <article data-glossary-term="Device"><b>Device · 设备</b><small>M01</small><p>张量所在 CPU 或 CUDA GPU；参与同一运算的张量通常必须同设备。</p></article>
+    <article data-glossary-term="Scalar"><b>Scalar · 标量</b><small>数学基础</small><p>只有一个数的 0 维张量，例如总 loss。</p></article>
+    <article data-glossary-term="Vector"><b>Vector · 向量</b><small>数学基础</small><p>一维有序数列，例如一个 token 的 D 维表示。</p></article>
+    <article data-glossary-term="Matrix"><b>Matrix · 矩阵</b><small>数学基础</small><p>二维数表；矩阵乘法用行与列点积组合线性变换。</p></article>
+    <article data-glossary-term="Broadcast"><b>Broadcast · 广播</b><small>数学基础</small><p>按长度为 1 的维度逻辑扩展张量，不必真实复制数据。</p></article>
+    <article data-glossary-term="Gradient"><b>Gradient · 梯度</b><small>M06</small><p>loss 对参数的一阶偏导，方向表示参数变化对 loss 的局部影响。</p></article>
+    <article data-glossary-term="Autograd"><b>Autograd · 自动微分</b><small>M02/M06</small><p>PyTorch 记录计算图并用链式法则自动求梯度的系统。</p></article>
+    <article data-glossary-term="Package"><b>Package · Python 包</b><small>M01</small><p>可通过 import 使用、具有模块命名空间的代码集合。</p></article>
+    <article data-glossary-term="Module"><b>Module · 模块</b><small>M01/M02</small><p>Python 文件或 PyTorch nn.Module；后者封装参数和 forward。</p></article>
+    <article data-glossary-term="Wheel"><b>Wheel</b><small>M01</small><p>Python 的预构建安装包格式；PyTorch 的 CPU/CUDA wheel 内容不同。</p></article>
+    <article data-glossary-term="Virtual Environment"><b>Virtual Environment · 虚拟环境</b><small>M01</small><p>隔离项目 Python 解释器与依赖，避免全局包互相污染。</p></article>
+    <article data-glossary-term="Lockfile"><b>Lockfile · 锁文件</b><small>M01</small><p>记录依赖解析后的精确版本和来源，以便重建环境。</p></article>
+    <article data-glossary-term="CI"><b>CI · 持续集成</b><small>M01</small><p>每次变更自动运行格式、类型和测试门禁。</p></article>
+    <article data-glossary-term="CUDA"><b>CUDA</b><small>M01/M11</small><p>NVIDIA 的 GPU 并行计算平台与运行时接口。</p></article>
+    <article data-glossary-term="cuDNN"><b>cuDNN</b><small>M01</small><p>NVIDIA 面向深度神经网络的高性能算子库。</p></article>
+    <article data-glossary-term="Compute Capability"><b>Compute Capability</b><small>M01</small><p>NVIDIA GPU 架构能力编号，决定支持的指令和数据类型。</p></article>
+    <article data-glossary-term="BF16"><b>BF16 · bfloat16</b><small>M01/M06</small><p>8 位指数、7 位尾数的 16 位浮点，范围接近 FP32、精度更低。</p></article>
+    <article data-glossary-term="FP16"><b>FP16</b><small>M01/M06</small><p>5 位指数、10 位尾数的半精度浮点，范围小于 BF16。</p></article>
+    <article data-glossary-term="FP32"><b>FP32</b><small>M01/M06</small><p>8 位指数、23 位尾数的单精度浮点，是数值基线常用类型。</p></article>
+    <article data-glossary-term="SDPA"><b>SDPA</b><small>M02/M11</small><p>Scaled Dot Product Attention 的 PyTorch 统一接口，可分派到优化 kernel。</p></article>
+    <article data-glossary-term="Kernel"><b>Kernel · GPU 核函数</b><small>M01/M11</small><p>在 GPU 大量线程上并行执行的底层计算程序。</p></article>
+    <article data-glossary-term="Seed"><b>Seed · 随机种子</b><small>M01</small><p>伪随机序列起点；相同 seed 只是可复现性的一个条件。</p></article>
+    <article data-glossary-term="RNG State"><b>RNG State</b><small>M01/M06</small><p>随机数生成器当前内部状态，续训时决定后续随机序列。</p></article>
+    <article data-glossary-term="Determinism"><b>Determinism · 确定性</b><small>M01/M06</small><p>相同输入与状态产生相同输出；某些 GPU 算子默认并不完全确定。</p></article>
+    <article data-glossary-term="Decoder-only"><b>Decoder-only</b><small>M02</small><p>只使用因果自注意力、逐 token 预测后续内容的 Transformer 架构。</p></article>
+    <article data-glossary-term="Autoregressive"><b>Autoregressive · 自回归</b><small>M02</small><p>把联合概率分解为每个位置在已有前缀条件下的概率。</p></article>
+    <article data-glossary-term="Token"><b>Token</b><small>M02/M04</small><p>模型处理的离散符号单位，可对应 byte、字符片段或特殊标记。</p></article>
+    <article data-glossary-term="Vocabulary"><b>Vocabulary · 词表</b><small>M02/M04</small><p>token 与整数 ID 的有限映射集合。</p></article>
+    <article data-glossary-term="Embedding"><b>Embedding · 嵌入</b><small>M02</small><p>通过查表把 token ID 映射为连续 D 维向量。</p></article>
+    <article data-glossary-term="Hidden State"><b>Hidden State · 隐藏状态</b><small>M02</small><p>每层对每个 token 的连续表示，shape 通常为 [B,T,D]。</p></article>
+    <article data-glossary-term="Logits"><b>Logits</b><small>M02/M06</small><p>softmax 前的未归一化类别分数，可为任意实数。</p></article>
+    <article data-glossary-term="Softmax"><b>Softmax</b><small>M02/M06</small><p>用指数归一化把一组 logits 变为和为 1 的概率。</p></article>
+    <article data-glossary-term="RMSNorm"><b>RMSNorm</b><small>M02</small><p>按均方根缩放特征、不减均值的归一化层。</p></article>
+    <article data-glossary-term="RoPE"><b>RoPE</b><small>M02</small><p>Rotary Position Embedding，用二维旋转把位置写入 Q/K。</p></article>
+    <article data-glossary-term="Attention"><b>Attention · 注意力</b><small>M02</small><p>根据 Q/K 相似度对 V 做加权求和，让 token 汇集上下文。</p></article>
+    <article data-glossary-term="Query"><b>Query · Q</b><small>M02</small><p>表示当前位置想检索什么的向量。</p></article>
+    <article data-glossary-term="Key"><b>Key · K</b><small>M02/M03</small><p>表示每个历史位置可被匹配内容的向量。</p></article>
+    <article data-glossary-term="Value"><b>Value · V</b><small>M02/M03</small><p>Attention 概率最终加权汇总的内容向量。</p></article>
+    <article data-glossary-term="Causal Mask"><b>Causal Mask · 因果遮罩</b><small>M02</small><p>禁止位置 i 看到未来 j&gt;i 的上三角遮罩。</p></article>
+    <article data-glossary-term="Head"><b>Attention Head</b><small>M02</small><p>在较小 head_dim 子空间中独立计算注意力的一条分支。</p></article>
+    <article data-glossary-term="MHA"><b>MHA · Multi-head Attention</b><small>M02/M11</small><p>每个 Query Head 都有独立 K/V Head 的多头注意力。</p></article>
+    <article data-glossary-term="GQA"><b>GQA · Grouped-query Attention</b><small>M02/M11</small><p>多个 Query Head 分组共享较少 KV Head 的注意力。</p></article>
+    <article data-glossary-term="MQA"><b>MQA · Multi-query Attention</b><small>M02</small><p>所有 Query Head 共享单个 K/V Head，是 GQA 的极端情形。</p></article>
+    <article data-glossary-term="SwiGLU"><b>SwiGLU</b><small>M02</small><p>使用 SiLU 门控的前馈层：down(silu(gate(x))⊙up(x))。</p></article>
+    <article data-glossary-term="SiLU"><b>SiLU</b><small>M02</small><p>x·sigmoid(x) 的平滑非线性激活函数。</p></article>
+    <article data-glossary-term="Residual"><b>Residual · 残差连接</b><small>M02</small><p>把子层输出加回输入，为信息与梯度提供直接路径。</p></article>
+    <article data-glossary-term="Pre-norm"><b>Pre-norm</b><small>M02</small><p>在 Attention/MLP 子层之前归一化，再做残差相加。</p></article>
+    <article data-glossary-term="LM Head"><b>LM Head</b><small>M02</small><p>把隐藏维 D 投影到词表维 V 的输出线性层。</p></article>
+    <article data-glossary-term="Parameter"><b>Parameter · 参数</b><small>M02</small><p>通过梯度更新的可训练张量，如线性层权重。</p></article>
+    <article data-glossary-term="Initialization"><b>Initialization · 初始化</b><small>M02</small><p>训练前给参数设置初值的分布与规则。</p></article>
+    <article data-glossary-term="Overfitting"><b>Overfitting · 过拟合</b><small>M02/M07</small><p>模型记住训练样本但泛化较差；小样本过拟合可作为实现门禁。</p></article>
+    <article data-glossary-term="Reference Implementation"><b>Reference Implementation</b><small>M03</small><p>用于数值比较的可信实现，不代表本项目依赖其训练模型。</p></article>
+    <article data-glossary-term="State Dict"><b>State Dict</b><small>M03/M06</small><p>PyTorch 模块参数/缓冲区名称到张量的映射。</p></article>
+    <article data-glossary-term="Tolerance"><b>Tolerance · 数值容差</b><small>M03</small><p>浮点比较允许的绝对和相对误差范围。</p></article>
+    <article data-glossary-term="KV Cache"><b>KV Cache</b><small>M03/M11</small><p>保存历史 token 每层 K/V，避免自回归解码重复投影。</p></article>
+    <article data-glossary-term="Prefill"><b>Prefill</b><small>M03/M11</small><p>生成开始时并行处理完整 prompt 并填充 KV Cache。</p></article>
+    <article data-glossary-term="Decode"><b>Decode</b><small>M03/M11</small><p>自回归阶段每次根据已有前缀生成一个新 token。</p></article>
+    <article data-glossary-term="Greedy Decoding"><b>Greedy Decoding</b><small>M03</small><p>每步选择概率最大 token，不进行随机采样。</p></article>
+    <article data-glossary-term="Unicode"><b>Unicode</b><small>M04</small><p>为世界文字定义 code point 的字符标准。</p></article>
+    <article data-glossary-term="UTF-8"><b>UTF-8</b><small>M04</small><p>把 Unicode code point 编码为 1–4 个 byte 的可变长编码。</p></article>
+    <article data-glossary-term="NFC"><b>NFC</b><small>M04</small><p>Unicode 规范组合形式，把等价字符序列统一表示。</p></article>
+    <article data-glossary-term="SHA256"><b>SHA256</b><small>M04/M12</small><p>输出 256 位摘要的密码学 hash，用于标识内容和校验完整性。</p></article>
+    <article data-glossary-term="Deduplication"><b>Deduplication · 去重</b><small>M04</small><p>移除相同规范化文档，降低重复和评测泄漏。</p></article>
+    <article data-glossary-term="Data Leakage"><b>Data Leakage · 数据泄漏</b><small>M04</small><p>训练数据包含评测内容或其重复，使评测结果虚高。</p></article>
+    <article data-glossary-term="BPE"><b>BPE · Byte Pair Encoding</b><small>M04</small><p>迭代合并高频相邻符号对的子词分词算法。</p></article>
+    <article data-glossary-term="Special Token"><b>Special Token</b><small>M04/M08</small><p>具有协议语义的保留 token，如 BOS、EOT、role header。</p></article>
+    <article data-glossary-term="Round Trip"><b>Round Trip</b><small>M04</small><p>encode 后 decode 能恢复原文本的可逆性检查。</p></article>
+    <article data-glossary-term="Sequence Packing"><b>Sequence Packing</b><small>M05</small><p>把不同文档连接并切成固定长度记录，减少 padding。</p></article>
+    <article data-glossary-term="EOT"><b>EOT · End of Text</b><small>M05/M08</small><p>标记文档或对话轮次结束的特殊 token。</p></article>
+    <article data-glossary-term="Shard"><b>Shard · 分片</b><small>M05</small><p>大数据集拆分出的可独立校验与读取文件。</p></article>
+    <article data-glossary-term="Manifest"><b>Manifest</b><small>M04/M05/M12</small><p>记录数据来源、hash、数量、配置和 lineage 的清单。</p></article>
+    <article data-glossary-term="Memory Mapping"><b>Memory Mapping · mmap</b><small>M05</small><p>把文件页映射进虚拟内存，按需读取而不整体加载。</p></article>
+    <article data-glossary-term="Sampler"><b>Sampler</b><small>M05</small><p>决定 Dataset record 访问顺序的组件。</p></article>
+    <article data-glossary-term="Cross Entropy"><b>Cross Entropy · 交叉熵</b><small>M06</small><p>对正确类别负对数概率求平均的分类损失。</p></article>
+    <article data-glossary-term="NLL"><b>NLL · Negative Log-likelihood</b><small>M06</small><p>正确 token 概率的负对数；概率越高，NLL 越低。</p></article>
+    <article data-glossary-term="Perplexity"><b>Perplexity · PPL</b><small>M06/M07</small><p>平均 NLL 的指数，衡量模型对真实 token 的不确定性。</p></article>
+    <article data-glossary-term="AdamW"><b>AdamW</b><small>M06</small><p>带解耦权重衰减的自适应一阶优化器。</p></article>
+    <article data-glossary-term="Weight Decay"><b>Weight Decay</b><small>M06</small><p>按比例收缩参数的正则化；AdamW 将其与梯度更新解耦。</p></article>
+    <article data-glossary-term="Warmup"><b>Warmup</b><small>M06/M11</small><p>训练早期从低学习率逐步升高；基准 warmup 则用于排除启动开销。</p></article>
+    <article data-glossary-term="Cosine Decay"><b>Cosine Decay</b><small>M06</small><p>按余弦曲线从峰值平滑降低学习率的调度策略。</p></article>
+    <article data-glossary-term="Micro-batch"><b>Micro-batch</b><small>M06</small><p>单次前向/反向实际放入显存的样本集合。</p></article>
+    <article data-glossary-term="Global Batch"><b>Global Batch</b><small>M06</small><p>一次 optimizer update 累计使用的全部样本或 token。</p></article>
+    <article data-glossary-term="Gradient Accumulation"><b>Gradient Accumulation</b><small>M06</small><p>多个 micro-batch 反向累加梯度后再更新一次参数。</p></article>
+    <article data-glossary-term="Gradient Clipping"><b>Gradient Clipping</b><small>M06</small><p>当全局梯度范数超过阈值时按比例缩小，抑制爆炸。</p></article>
+    <article data-glossary-term="Autocast"><b>Autocast</b><small>M06</small><p>按算子安全性自动选择低精度或高精度计算的上下文。</p></article>
+    <article data-glossary-term="Activation Checkpoint"><b>Activation Checkpoint</b><small>M06</small><p>反向时重算 forward 以减少保存 activation 的显存。</p></article>
+    <article data-glossary-term="Training Checkpoint"><b>Training Checkpoint</b><small>M06</small><p>保存模型、优化器、调度器、RNG 和数据 cursor 的续训快照。</p></article>
+    <article data-glossary-term="Atomic Write"><b>Atomic Write · 原子写入</b><small>M06</small><p>先完整写临时目标，再一次重命名发布，避免半成品被读取。</p></article>
+    <article data-glossary-term="OOM"><b>OOM · Out of Memory</b><small>M06/M07</small><p>设备无法满足内存分配请求的错误。</p></article>
+    <article data-glossary-term="Pilot Run"><b>Pilot Run</b><small>M07</small><p>在较小模型或 token 预算上验证系统并估算正式成本的实验。</p></article>
+    <article data-glossary-term="Token Budget"><b>Token Budget</b><small>M07</small><p>训练计划要消费的有效 packed tokens 总量。</p></article>
+    <article data-glossary-term="Optimizer Step"><b>Optimizer Step</b><small>M06/M07</small><p>根据已累积梯度实际更新一次参数的时刻。</p></article>
+    <article data-glossary-term="Throughput"><b>Throughput · 吞吐</b><small>M07/M11</small><p>单位时间处理或生成的 token 数。</p></article>
+    <article data-glossary-term="Latency"><b>Latency · 延迟</b><small>M11</small><p>一次请求或一个步骤从开始到完成的时间。</p></article>
+    <article data-glossary-term="Median"><b>Median · 中位数</b><small>M07/M11</small><p>排序后位于中间的观测值，对极端值较稳健。</p></article>
+    <article data-glossary-term="Percentile"><b>Percentile · 百分位数</b><small>M07/M11</small><p>P95 表示 95% 观测值不超过该数。</p></article>
+    <article data-glossary-term="SFT"><b>SFT · Supervised Fine-tuning</b><small>M08</small><p>在示范指令-回答上用监督 next-token loss 微调模型。</p></article>
+    <article data-glossary-term="Chat Template"><b>Chat Template</b><small>M08</small><p>把角色消息序列化为模型 token 协议的唯一规则。</p></article>
+    <article data-glossary-term="Teacher Forcing"><b>Teacher Forcing</b><small>M08</small><p>训练每个位置时提供真实历史 token，而非模型先前生成。</p></article>
+    <article data-glossary-term="Assistant-only Mask"><b>Assistant-only Mask</b><small>M08</small><p>只让 assistant response token 贡献 SFT loss 的标签遮罩。</p></article>
+    <article data-glossary-term="Padding"><b>Padding</b><small>M08</small><p>为对齐 batch 长度补入的无语义 token，必须不贡献 loss。</p></article>
+    <article data-glossary-term="Truncation"><b>Truncation · 截断</b><small>M08</small><p>序列超出最大长度时移除部分 token，需要保护角色和答案边界。</p></article>
+    <article data-glossary-term="Early Stopping"><b>Early Stopping</b><small>M08</small><p>验证指标不再改善时停止训练，降低过拟合和无效计算。</p></article>
+    <article data-glossary-term="DPO"><b>DPO</b><small>M09</small><p>直接用偏好对优化 policy 相对 reference 的 chosen/rejected margin。</p></article>
+    <article data-glossary-term="Chosen"><b>Chosen</b><small>M09</small><p>偏好数据中被标注为更好的 response。</p></article>
+    <article data-glossary-term="Rejected"><b>Rejected</b><small>M09</small><p>同一 prompt 下被标注为较差的 response。</p></article>
+    <article data-glossary-term="Log-prob"><b>Log-prob</b><small>M09/M10</small><p>概率的自然对数；序列 log-prob 是各 token log-prob 之和。</p></article>
+    <article data-glossary-term="LogSigmoid"><b>LogSigmoid</b><small>M09</small><p>数值稳定计算 log(sigmoid(x)) 的函数。</p></article>
+    <article data-glossary-term="Reference Policy"><b>Reference Policy</b><small>M09/M10</small><p>冻结的基线策略，用于约束更新后模型不要偏离过远。</p></article>
+    <article data-glossary-term="Preference Margin"><b>Preference Margin</b><small>M09</small><p>模型对 chosen 相对 rejected 的得分差。</p></article>
+    <article data-glossary-term="KL Divergence"><b>KL Divergence</b><small>M09/M10</small><p>衡量两个概率分布差异的非对称散度。</p></article>
+    <article data-glossary-term="GRPO"><b>GRPO</b><small>M10</small><p>在同 prompt 的一组 rollout 内标准化 reward，并用 clipped objective 更新策略。</p></article>
+    <article data-glossary-term="Rollout"><b>Rollout</b><small>M10</small><p>从当前策略采样得到的完整 response 及其 log-prob、reward。</p></article>
+    <article data-glossary-term="Policy Gradient"><b>Policy Gradient</b><small>M10</small><p>用采样回报加权 log-prob 梯度来优化策略期望奖励。</p></article>
+    <article data-glossary-term="Reward"><b>Reward · 奖励</b><small>M10</small><p>对生成结果质量的标量反馈。</p></article>
+    <article data-glossary-term="Advantage"><b>Advantage · 优势</b><small>M10</small><p>某行动/回答相对基线或组均值好多少的学习信号。</p></article>
+    <article data-glossary-term="Importance Ratio"><b>Importance Ratio</b><small>M10</small><p>新旧策略对同一 token 序列概率之比。</p></article>
+    <article data-glossary-term="Clipping"><b>Clipping · 裁剪</b><small>M10</small><p>限制 importance ratio 的有效范围，避免单次更新过大。</p></article>
+    <article data-glossary-term="Exact Match"><b>Exact Match</b><small>M10</small><p>规范化后的预测答案与标准答案完全相等的指标。</p></article>
+    <article data-glossary-term="Reward Hacking"><b>Reward Hacking</b><small>M10</small><p>模型利用奖励规则漏洞提高分数，却没有改善真正目标。</p></article>
+    <article data-glossary-term="Benchmark"><b>Benchmark</b><small>M11</small><p>在固定输入、环境和协议下可重复的性能测量。</p></article>
+    <article data-glossary-term="CUDA Synchronize"><b>CUDA Synchronize</b><small>M11</small><p>等待已提交 GPU 工作完成，避免异步执行破坏计时。</p></article>
+    <article data-glossary-term="Peak Memory"><b>Peak Memory</b><small>M11</small><p>测量区间内 allocator 记录的最大设备内存使用。</p></article>
+    <article data-glossary-term="Ablation"><b>Ablation · 消融</b><small>M11</small><p>保持其他条件不变，只移除或改变一个组件来测其影响。</p></article>
+    <article data-glossary-term="Control Variable"><b>Control Variable · 控制变量</b><small>M11</small><p>对比实验中必须保持相同的非目标条件。</p></article>
+    <article data-glossary-term="Run ID"><b>Run ID</b><small>M12</small><p>唯一标识一次实验并连接配置、日志、模型和报告的字符串。</p></article>
+    <article data-glossary-term="Provenance"><b>Provenance · 溯源</b><small>M12</small><p>说明某个产物由哪些代码、数据、配置和运行生成的证据链。</p></article>
+    <article data-glossary-term="Data Card"><b>Data Card</b><small>M12</small><p>描述数据来源、许可、处理、组成、风险和限制的文档。</p></article>
+    <article data-glossary-term="Model Card"><b>Model Card</b><small>M12</small><p>描述模型用途、训练、评测、限制和安全边界的文档。</p></article>
+    <article data-glossary-term="Raw Metric"><b>Raw Metric · 原始指标</b><small>M12</small><p>训练或评测直接记录的数值，如每 step loss。</p></article>
+    <article data-glossary-term="Derived Metric"><b>Derived Metric · 派生指标</b><small>M12</small><p>由原始指标计算的数值，如 PPL 或提升百分比。</p></article>
+    <article data-glossary-term="Fail Closed"><b>Fail Closed</b><small>M12</small><p>缺少证据时拒绝输出结果，而不是猜测或填默认值。</p></article>
+  </template>
+
+  <noscript><div class="callout warn" style="margin:20px">JavaScript 已关闭：请打开同目录的 MiniLlama_TODO.md 阅读完整任务；交互式课程需要启用 JavaScript。</div></noscript>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.esm.min.mjs";
+    import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.5.0/dist/fuse.mjs";
+    window.__mermaid = mermaid;
+    window.Fuse = Fuse;
+    window.dispatchEvent(new Event("mermaid-ready"));
+    window.dispatchEvent(new Event("fuse-ready"));
+  </script>
+  <script>
+    "use strict";
+
+    const STORAGE_KEY = "minillama-learning-progress-v1";
+    const DOCUMENT_VERSION = "2026-07-23";
+    const COLORS = ["#59d9ff", "#6f8cff", "#55e6a5", "#ffc66d", "#bd8cff", "#ff7b88"];
+    const state = {
+      tasks: [],
+      completed: new Set(),
+      selectedTaskId: null,
+      theme: "dark",
+      fuse: null,
+      searchIds: null,
+      scheduleChart: null
+    };
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function slug(value) {
+      return String(value).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function mountCourse() {
+      const source = document.getElementById("course-source").content;
+      const overview = source.querySelector('[data-course-page="overview"]');
+      const primer = source.querySelector('[data-course-page="math-primer"]');
+      document.getElementById("overview").innerHTML = overview.innerHTML;
+      document.getElementById("math-primer").innerHTML = primer.innerHTML;
+      source.querySelectorAll("[data-course-stage]").forEach(article => {
+        const target = document.getElementById(article.dataset.courseStage);
+        target.innerHTML = article.innerHTML;
+      });
+
+      const glossary = document.getElementById("glossary");
+      glossary.innerHTML = `
+        <span class="stage-number">GLOSSARY · 术语索引</span>
+        <h2>专业名词不再“默认你懂”</h2>
+        <p class="stage-summary">135 个术语覆盖数学、模型、数据、训练、对齐、性能与复现。
+        搜索框可以同时检索任务和术语。</p>
+        <div class="glossary-grid" id="glossary-grid"></div>`;
+      const grid = document.getElementById("glossary-grid");
+      document.getElementById("glossary-source").content
+        .querySelectorAll("[data-glossary-term]").forEach(item => {
+          const clone = item.cloneNode(true);
+          clone.classList.add("glossary-item");
+          clone.id = `term-${slug(clone.dataset.glossaryTerm)}`;
+          grid.appendChild(clone);
+        });
+
+      const definitions = new Map(
+        [...grid.querySelectorAll("[data-glossary-term]")].map(item => [
+          item.dataset.glossaryTerm,
+          item.querySelector("p").textContent.trim()
+        ])
+      );
+      document.querySelectorAll(".term[data-term]").forEach(term => {
+        const definition = definitions.get(term.dataset.term);
+        if (definition) term.title = definition;
+        term.tabIndex = 0;
+        term.setAttribute("role", "link");
+        term.addEventListener("click", () => {
+          document.getElementById(`term-${slug(term.dataset.term)}`)?.scrollIntoView({behavior:"smooth"});
+        });
+        term.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            term.click();
+          }
+        });
+      });
+    }
+
+    function readTaskSource() {
+      state.tasks = [...document.getElementById("task-source").content.querySelectorAll("[data-task-id]")]
+        .map(button => ({
+          id: button.dataset.taskId,
+          title: button.textContent.trim(),
+          stage: button.dataset.taskId.slice(0, 3),
+          status: button.dataset.status,
+          hardware: button.dataset.hardware,
+          time: button.dataset.time,
+          depends: button.dataset.depends === "无" ? [] : button.dataset.depends.split(","),
+          knowledge: button.dataset.knowledge,
+          output: button.dataset.output,
+          proof: button.dataset.proof
+        }));
+    }
+
+    function renderTaskLists() {
+      document.querySelectorAll(".stage-tasks").forEach(container => {
+        const stage = container.dataset.stage;
+        const tasks = state.tasks.filter(task => task.stage === stage);
+        container.innerHTML = `<h3>本阶段任务 <small style="color:var(--muted)">(${tasks.length})</small></h3><div class="task-list"></div>`;
+        const list = container.querySelector(".task-list");
+        tasks.forEach(task => {
+          const label = document.createElement("div");
+          label.className = "task-chip";
+          label.dataset.taskId = task.id;
+          label.dataset.stage = task.stage;
+          label.dataset.status = task.status;
+          label.dataset.hardware = task.hardware;
+          label.dataset.search = `${task.id} ${task.title} ${task.knowledge} ${task.output}`.toLowerCase();
+          label.innerHTML = `
+            <input class="check" type="checkbox" aria-label="标记 ${escapeHtml(task.id)} 为已学习">
+            <button class="task-open" type="button"><span class="task-id">${escapeHtml(task.id)}</span><span class="task-title">${escapeHtml(task.title)}</span></button>
+            <span class="badge ${task.hardware.includes("RTX4090") ? "gpu" : ""}">${escapeHtml(task.hardware)}</span>`;
+          const checkbox = label.querySelector("input");
+          const openButton = label.querySelector(".task-open");
+          checkbox.checked = state.completed.has(task.id);
+          label.classList.toggle("done", checkbox.checked);
+          checkbox.addEventListener("change", () => toggleTask(task.id, checkbox.checked));
+          openButton.addEventListener("click", () => showTask(task.id));
+          list.appendChild(label);
+        });
+      });
+      applyFilters();
+    }
+
+    function showTask(taskId) {
+      const task = state.tasks.find(item => item.id === taskId);
+      if (!task) return;
+      state.selectedTaskId = task.id;
+      document.querySelectorAll(".task-chip").forEach(chip => chip.classList.toggle("selected", chip.dataset.taskId === task.id));
+      const panel = document.getElementById("task-panel");
+      const statusLabels = {done:"项目证据已完成", in_progress:"项目进行中", pending:"项目待开始", blocked:"项目被前置条件阻塞"};
+      panel.innerHTML = `
+        <span class="eyebrow">${escapeHtml(task.id)} · ${escapeHtml(task.stage)}</span>
+        <h2>${escapeHtml(task.title)}</h2>
+        <p><span class="badge">${escapeHtml(statusLabels[task.status] || task.status)}</span>
+          <span class="badge ${task.hardware.includes("RTX4090") ? "gpu" : ""}">${escapeHtml(task.hardware)}</span>
+          <span class="badge">${escapeHtml(task.time)}</span></p>
+        <dl class="task-detail">
+          <dt>前置任务</dt><dd>${task.depends.length ? task.depends.map(escapeHtml).join("、") : "无"}</dd>
+          <dt>前置知识</dt><dd>${escapeHtml(task.knowledge)}</dd>
+          <dt>产物</dt><dd>${escapeHtml(task.output)}</dd>
+          <dt>验收与证据</dt><dd>${escapeHtml(task.proof)}</dd>
+        </dl>
+        <div class="panel-actions">
+          <button type="button" class="btn primary" id="panel-check">${state.completed.has(task.id) ? "取消个人完成" : "标记个人完成"}</button>
+          <a class="btn" href="#${task.stage}">回到课程</a>
+          <a class="btn" href="./MiniLlama_TODO.md">完整执行字段</a>
+        </div>
+        <div class="callout ${task.status === "blocked" ? "warn" : ""}">
+          <strong>注意：</strong>个人勾选不改变项目事实状态。项目完成必须以测试、日志或 artifact 为证据。
+        </div>`;
+      panel.querySelector("#panel-check").addEventListener("click", () => {
+        toggleTask(task.id, !state.completed.has(task.id));
+        showTask(task.id);
+      });
+      if (window.innerWidth <= 1050) {
+        document.getElementById(task.stage)?.scrollIntoView({behavior:"smooth"});
+      }
+    }
+
+    function toggleTask(taskId, completed) {
+      completed ? state.completed.add(taskId) : state.completed.delete(taskId);
+      persistProgress();
+      document.querySelectorAll(`.task-chip[data-task-id="${taskId}"]`).forEach(chip => {
+        chip.classList.toggle("done", completed);
+        chip.querySelector("input").checked = completed;
+      });
+      updateProgress();
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (data.schema_version !== 1 || !Array.isArray(data.completed_task_ids)) return;
+        const valid = new Set(state.tasks.map(task => task.id));
+        state.completed = new Set(data.completed_task_ids.filter(id => valid.has(id)));
+        if (data.theme === "light" || data.theme === "dark") state.theme = data.theme;
+      } catch {
+        document.getElementById("progress-message").textContent = "无法读取旧进度，已使用空进度。";
+      }
+      document.documentElement.dataset.theme = state.theme;
+    }
+
+    function progressPayload() {
+      return {
+        schema_version: 1,
+        document_version: DOCUMENT_VERSION,
+        updated_at: new Date().toISOString(),
+        completed_task_ids: [...state.completed].sort(),
+        collapsed_sections: [],
+        theme: state.theme
+      };
+    }
+
+    function persistProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progressPayload()));
+      } catch {
+        const warning = document.getElementById("cdn-warning");
+        warning.textContent = "浏览器不允许本地存储；本次勾选不会在刷新后保留。";
+        warning.classList.add("show");
+      }
+    }
+
+    function updateProgress() {
+      const completed = state.completed.size;
+      document.getElementById("progress-label").textContent = `${completed} / ${state.tasks.length}`;
+      document.getElementById("progress-bar").style.width = `${100 * completed / state.tasks.length}%`;
+      for (let stageIndex = 1; stageIndex <= 12; stageIndex += 1) {
+        const stage = `M${String(stageIndex).padStart(2, "0")}`;
+        const tasks = state.tasks.filter(task => task.stage === stage);
+        const done = tasks.filter(task => state.completed.has(task.id)).length;
+        const bar = document.querySelector(`[data-progress="${stage}"]`);
+        if (bar) bar.style.width = `${tasks.length ? 100 * done / tasks.length : 0}%`;
+      }
+    }
+
+    function dependenciesReady(task) {
+      const projectDone = new Set(state.tasks.filter(item => item.status === "done").map(item => item.id));
+      return task.depends.every(id => state.completed.has(id) || projectDone.has(id));
+    }
+
+    function goToNextTask() {
+      const task = state.tasks.find(item => !state.completed.has(item.id) && dependenciesReady(item));
+      if (!task) {
+        document.getElementById("progress-message").textContent = "没有找到依赖已满足的未完成任务。";
+        document.getElementById("progress-dialog").showModal();
+        return;
+      }
+      location.hash = task.stage;
+      showTask(task.id);
+      setTimeout(() => document.querySelector(`.task-chip[data-task-id="${task.id}"]`)?.scrollIntoView({behavior:"smooth", block:"center"}), 100);
+    }
+
+    function buildSearch() {
+      const glossaryItems = [...document.querySelectorAll("[data-glossary-term]")];
+      const index = [
+        ...state.tasks.map(task => ({kind:"task", id:task.id, text:`${task.id} ${task.title} ${task.knowledge} ${task.output}`})),
+        ...glossaryItems.map(item => ({kind:"term", id:item.id, text:`${item.dataset.glossaryTerm} ${item.textContent}`}))
+      ];
+      if (window.Fuse) {
+        state.fuse = new Fuse(index, {keys:["text"], threshold:.32, ignoreLocation:true});
+      }
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("search").value.trim().toLowerCase();
+      const status = document.getElementById("status-filter").value;
+      const hardware = document.getElementById("hardware-filter").value;
+      let taskMatches = null;
+      let termMatches = null;
+      if (query && state.fuse) {
+        const results = state.fuse.search(query);
+        taskMatches = new Set(results.filter(result => result.item.kind === "task").map(result => result.item.id));
+        termMatches = new Set(results.filter(result => result.item.kind === "term").map(result => result.item.id));
+      }
+      document.querySelectorAll(".task-chip").forEach(chip => {
+        const localDone = state.completed.has(chip.dataset.taskId);
+        const queryOk = !query || (taskMatches ? taskMatches.has(chip.dataset.taskId) : chip.dataset.search.includes(query));
+        const statusOk = status === "all" || (status === "done" && localDone) ||
+          (status === "open" && !localDone) || (status === "blocked" && chip.dataset.status === "blocked");
+        const hardwareOk = hardware === "all" || chip.dataset.hardware.includes(hardware);
+        chip.classList.toggle("hidden", !(queryOk && statusOk && hardwareOk));
+      });
+      document.querySelectorAll(".glossary-item").forEach(item => {
+        const queryOk = !query || (termMatches ? termMatches.has(item.id) : item.textContent.toLowerCase().includes(query));
+        item.classList.toggle("hidden", !queryOk);
+      });
+    }
+
+    function initProgressControls() {
+      const dialog = document.getElementById("progress-dialog");
+      document.getElementById("progress-menu").addEventListener("click", () => dialog.showModal());
+      document.getElementById("next-task").addEventListener("click", goToNextTask);
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        state.theme = state.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = state.theme;
+        persistProgress();
+      });
+      document.getElementById("export-progress").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(progressPayload(), null, 2)], {type:"application/json"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "minillama-progress.json";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 0);
+      });
+      document.getElementById("import-progress").addEventListener("change", async event => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const message = document.getElementById("progress-message");
+        try {
+          const data = JSON.parse(await file.text());
+          if (data.schema_version !== 1 || !Array.isArray(data.completed_task_ids)) throw new Error("schema 不兼容");
+          const valid = new Set(state.tasks.map(task => task.id));
+          const accepted = data.completed_task_ids.filter(id => valid.has(id));
+          const ignored = data.completed_task_ids.length - accepted.length;
+          state.completed = new Set(accepted);
+          if (data.theme === "light" || data.theme === "dark") {
+            state.theme = data.theme;
+            document.documentElement.dataset.theme = state.theme;
+          }
+          persistProgress();
+          renderTaskLists();
+          updateProgress();
+          message.textContent = `已导入 ${accepted.length} 项，忽略 ${ignored} 个未知 ID。`;
+        } catch (error) {
+          message.textContent = `导入失败：${error.message}`;
+        }
+        event.target.value = "";
+      });
+      document.getElementById("reset-progress").addEventListener("click", () => {
+        if (!window.confirm("确定清空当前浏览器中的 MiniLlama 学习进度吗？")) return;
+        state.completed.clear();
+        persistProgress();
+        renderTaskLists();
+        updateProgress();
+        document.getElementById("progress-message").textContent = "进度已清空。";
+      });
+      ["search", "status-filter", "hardware-filter"].forEach(id => {
+        document.getElementById(id).addEventListener(id === "search" ? "input" : "change", applyFilters);
+      });
+    }
+
+    function matrixValues(rows, cols, offset) {
+      return Array.from({length:rows}, (_, row) =>
+        Array.from({length:cols}, (_, col) => ((row * cols + col + offset) % 7) - 3));
+    }
+
+    function multiply(a, b) {
+      return a.map(row => b[0].map((_, col) => row.reduce((sum, value, index) => sum + value * b[index][col], 0)));
+    }
+
+    function matrixElement(values, name, clickable = false) {
+      const wrap = document.createElement("div");
+      wrap.className = "matrix-wrap";
+      const label = document.createElement("strong");
+      label.textContent = `${name} [${values.length},${values[0].length}]`;
+      const matrix = document.createElement("div");
+      matrix.className = "matrix";
+      matrix.style.gridTemplateColumns = `repeat(${values[0].length},43px)`;
+      values.forEach((row, rowIndex) => row.forEach((value, colIndex) => {
+        const cell = document.createElement(clickable ? "button" : "span");
+        if (clickable) cell.type = "button";
+        cell.className = "cell";
+        cell.textContent = Number.isFinite(value) ? Number(value.toFixed(3)) : "−∞";
+        cell.dataset.row = rowIndex;
+        cell.dataset.col = colIndex;
+        matrix.appendChild(cell);
+      }));
+      wrap.append(label, matrix);
+      return wrap;
+    }
+
+    function initMatmul() {
+      const controls = ["mat-m", "mat-k", "mat-n"];
+      const render = () => {
+        const [m, k, n] = controls.map(id => Number(document.getElementById(id).value));
+        controls.forEach((id, index) => document.getElementById(`${id}-out`).textContent = [m,k,n][index]);
+        const a = matrixValues(m, k, 1);
+        const b = matrixValues(k, n, 3);
+        const c = multiply(a, b);
+        const zone = document.getElementById("mat-zone");
+        zone.innerHTML = "";
+        const aEl = matrixElement(a, "A");
+        const bEl = matrixElement(b, "B");
+        const cEl = matrixElement(c, "C", true);
+        const at = document.createElement("strong"); at.textContent = "@";
+        const equals = document.createElement("strong"); equals.textContent = "=";
+        zone.append(aEl, at, bEl, equals, cEl);
+        const select = (row, col) => {
+          aEl.querySelectorAll(".cell").forEach(cell => cell.classList.toggle("row-hi", Number(cell.dataset.row) === row));
+          bEl.querySelectorAll(".cell").forEach(cell => cell.classList.toggle("col-hi", Number(cell.dataset.col) === col));
+          cEl.querySelectorAll(".cell").forEach(cell => cell.classList.toggle("result-hi", Number(cell.dataset.row) === row && Number(cell.dataset.col) === col));
+          const terms = a[row].map((value, index) => `${value}×${b[index][col]}`);
+          document.getElementById("mat-calc").textContent = `C[${row},${col}] = ${terms.join(" + ")} = ${c[row][col]}；收缩维度 k=${k}`;
+        };
+        cEl.querySelectorAll("button.cell").forEach(cell => cell.addEventListener("click", () => select(Number(cell.dataset.row), Number(cell.dataset.col))));
+        select(0, 0);
+      };
+      controls.forEach(id => document.getElementById(id).addEventListener("input", render));
+      document.getElementById("mat-reset").addEventListener("click", () => {
+        document.getElementById("mat-m").value = 2; document.getElementById("mat-k").value = 3; document.getElementById("mat-n").value = 2; render();
+      });
+      render();
+    }
+
+    function softmax(row) {
+      const finite = row.filter(Number.isFinite);
+      const max = Math.max(...finite);
+      const exp = row.map(value => Number.isFinite(value) ? Math.exp(value - max) : 0);
+      const total = exp.reduce((sum, value) => sum + value, 0);
+      return exp.map(value => value / total);
+    }
+
+    function heatMatrix(values, name, probability = false) {
+      const el = matrixElement(values, name);
+      const flat = values.flat().filter(Number.isFinite);
+      const min = probability ? 0 : Math.min(...flat);
+      const max = probability ? 1 : Math.max(...flat);
+      el.querySelectorAll(".cell").forEach((cell, index) => {
+        const value = values.flat()[index];
+        if (!Number.isFinite(value)) {
+          cell.style.background = "#273243";
+        } else {
+          const ratio = (value - min) / Math.max(max - min, 1e-9);
+          cell.style.background = `hsl(${220 - ratio * 170} 70% ${28 + ratio * 24}%)`;
+        }
+        cell.classList.add("heat");
+      });
+      return el;
+    }
+
+    function initAttention() {
+      const render = () => {
+        const t = Number(document.getElementById("attn-t").value);
+        const d = Number(document.getElementById("attn-d").value);
+        const mask = document.getElementById("attn-mask").checked;
+        const scale = document.getElementById("attn-scale").checked;
+        document.getElementById("attn-t-out").textContent = t;
+        document.getElementById("attn-d-out").textContent = d;
+        const q = Array.from({length:t}, (_, i) => Array.from({length:d}, (_, r) => Math.sin((i + 1) * (r + 1))));
+        const k = Array.from({length:t}, (_, j) => Array.from({length:d}, (_, r) => Math.cos((j + 1) * (r + 1) * .7)));
+        const kt = Array.from({length:d}, (_, r) => k.map(row => row[r]));
+        const raw = multiply(q, kt).map(row => row.map(value => scale ? value / Math.sqrt(d) : value));
+        const masked = raw.map((row, i) => row.map((value, j) => mask && j > i ? -Infinity : value));
+        const probs = masked.map(softmax);
+        const zone = document.getElementById("attention-zone");
+        zone.innerHTML = "";
+        zone.append(heatMatrix(raw, scale ? "QKᵀ/√dₕ" : "QKᵀ"), document.createTextNode("→"),
+          heatMatrix(masked, mask ? "+ causal mask" : "no mask"), document.createTextNode("→"),
+          heatMatrix(probs, "row softmax", true));
+        const sums = probs.map(row => row.reduce((sum, value) => sum + value, 0).toFixed(6));
+        document.getElementById("attention-note").textContent =
+          `shape: [T,dₕ]@[dₕ,T]→[T,T] = [${t},${d}]@[${d},${t}]→[${t},${t}]；每行概率和：${sums.join(", ")}`;
+      };
+      ["attn-t","attn-d","attn-mask","attn-scale"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      render();
+    }
+
+    function initGqa() {
+      const qSelect = document.getElementById("gqa-q");
+      const kvSelect = document.getElementById("gqa-kv");
+      const render = () => {
+        const q = Number(qSelect.value);
+        const current = Number(kvSelect.value || Math.min(4, q));
+        const divisors = Array.from({length:q}, (_, i) => i + 1).filter(value => q % value === 0);
+        kvSelect.innerHTML = divisors.map(value => `<option value="${value}" ${value === current ? "selected" : ""}>${value}</option>`).join("");
+        if (!divisors.includes(Number(kvSelect.value))) kvSelect.value = divisors.includes(4) ? 4 : divisors[0];
+        const kv = Number(kvSelect.value);
+        const group = q / kv;
+        const map = document.getElementById("gqa-map");
+        map.innerHTML = "";
+        for (let head = 0; head < q; head += 1) {
+          const kvHead = Math.floor(head / group);
+          const el = document.createElement("span");
+          el.className = "head";
+          el.style.borderColor = COLORS[kvHead % COLORS.length];
+          el.textContent = `Q${head} → KV${kvHead}`;
+          map.appendChild(el);
+        }
+        const bytes = heads => 2 * 12 * 1 * heads * 2048 * 64 * 2;
+        const mib = value => value / 1024 / 1024;
+        const gqa = mib(bytes(kv));
+        const mha = mib(bytes(q));
+        document.getElementById("gqa-note").textContent =
+          `group_size=${group}；BF16、12层、B=1、T=2048、Dₕ=64：当前 KV=${gqa.toFixed(2)} MiB，MHA=${mha.toFixed(2)} MiB，理论减少=${(100*(1-kv/q)).toFixed(2)}%。`;
+      };
+      qSelect.addEventListener("change", () => { kvSelect.value = ""; render(); });
+      kvSelect.addEventListener("change", render);
+      render();
+    }
+
+    function svgLine(svg, x1, y1, x2, y2, color, width = 2) {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1); line.setAttribute("y1", y1); line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+      line.setAttribute("stroke", color); line.setAttribute("stroke-width", width); line.setAttribute("stroke-linecap", "round");
+      svg.appendChild(line);
+    }
+
+    function initRope() {
+      const render = () => {
+        const position = Number(document.getElementById("rope-pos").value);
+        const frequency = Number(document.getElementById("rope-freq").value) / 100;
+        const angle = position * frequency;
+        const x = 1, y = .5;
+        const rotatedX = x * Math.cos(angle) - y * Math.sin(angle);
+        const rotatedY = x * Math.sin(angle) + y * Math.cos(angle);
+        document.getElementById("rope-pos-out").textContent = position;
+        document.getElementById("rope-freq-out").textContent = frequency.toFixed(2);
+        const svg = document.getElementById("rope-svg");
+        svg.innerHTML = "";
+        svgLine(svg, -105, 0, 105, 0, "#52677d", 1); svgLine(svg, 0, -105, 0, 105, "#52677d", 1);
+        svgLine(svg, 0, 0, x * 70, -y * 70, "#9eb1c7", 4);
+        svgLine(svg, 0, 0, rotatedX * 70, -rotatedY * 70, "#59d9ff", 5);
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx",0); circle.setAttribute("cy",0); circle.setAttribute("r", Math.hypot(x,y)*70);
+        circle.setAttribute("fill","none"); circle.setAttribute("stroke","#213a56"); circle.setAttribute("stroke-dasharray","4 4");
+        svg.insertBefore(circle, svg.firstChild);
+        document.getElementById("rope-math").textContent =
+          `φ=position×frequency=${position}×${frequency.toFixed(2)}=${angle.toFixed(3)} rad\n` +
+          `R(φ)=[[${Math.cos(angle).toFixed(3)}, ${(-Math.sin(angle)).toFixed(3)}],[${Math.sin(angle).toFixed(3)}, ${Math.cos(angle).toFixed(3)}]]\n` +
+          `[1.000,0.500]→[${rotatedX.toFixed(3)},${rotatedY.toFixed(3)}]；范数 ${Math.hypot(x,y).toFixed(3)}→${Math.hypot(rotatedX,rotatedY).toFixed(3)}`;
+      };
+      ["rope-pos","rope-freq"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      render();
+    }
+
+    function initKv() {
+      const render = () => {
+        const step = Number(document.getElementById("kv-step").value);
+        const enabled = document.getElementById("kv-enabled").checked;
+        document.getElementById("kv-step-out").textContent = step;
+        const grid = document.getElementById("kv-grid");
+        grid.innerHTML = "";
+        for (let index = 1; index <= 12; index += 1) {
+          const cell = document.createElement("span");
+          cell.className = "kv-cell";
+          if (index < step) cell.classList.add(enabled ? "reuse" : "recompute");
+          if (index === step) cell.classList.add("active");
+          cell.title = index < step ? (enabled ? `token ${index}: 复用 K/V` : `token ${index}: 重新投影`) : index === step ? `token ${index}: 新计算` : `token ${index}: 未来`;
+          grid.appendChild(cell);
+        }
+        document.getElementById("kv-note").textContent = enabled
+          ? `本步只为新 token ${step} 计算 K/V，并读取前 ${step-1} 个缓存；投影次数=1。Attention 仍需读取整个 prefix。`
+          : `本步重新为 token 1…${step} 计算 K/V；投影次数=${step}。生成越长，重复工作越多。`;
+      };
+      ["kv-step","kv-enabled"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      render();
+    }
+
+    function initLoss() {
+      const render = () => {
+        const logits = ["a","b","c"].map(key => Number(document.getElementById(`logit-${key}`).value) / 10);
+        const target = Number(document.getElementById("loss-target").value);
+        ["a","b","c"].forEach((key,index) => document.getElementById(`logit-${key}-out`).textContent = logits[index].toFixed(1));
+        const max = Math.max(...logits);
+        const exp = logits.map(value => Math.exp(value-max));
+        const sum = exp.reduce((a,b)=>a+b,0);
+        const probs = exp.map(value=>value/sum);
+        const loss = -Math.log(probs[target]);
+        document.getElementById("loss-note").textContent =
+          `softmax=[${probs.map(value=>value.toFixed(4)).join(", ")}]；target=${["A","B","C"][target]}；loss=−log(${probs[target].toFixed(4)})=${loss.toFixed(4)}；PPL=${Math.exp(loss).toFixed(4)}`;
+      };
+      ["logit-a","logit-b","logit-c","loss-target"].forEach(id => document.getElementById(id).addEventListener("input", render));
+      render();
+    }
+
+    function initDpo() {
+      const render = () => {
+        const value = id => Number(document.getElementById(id).value) / 10;
+        const pc=value("dpo-pc"), rc=value("dpo-rc"), pr=value("dpo-pr"), rr=value("dpo-rr");
+        const beta=Number(document.getElementById("dpo-beta").value)/100;
+        [["dpo-pc-out",pc],["dpo-rc-out",rc],["dpo-pr-out",pr],["dpo-rr-out",rr]].forEach(([id,v])=>document.getElementById(id).textContent=v.toFixed(1));
+        document.getElementById("dpo-beta-out").textContent=beta.toFixed(2);
+        const chosenAdv=pc-rc, rejectedAdv=pr-rr, margin=chosenAdv-rejectedAdv, z=beta*margin;
+        const loss=z>=0 ? Math.log1p(Math.exp(-z)) : -z+Math.log1p(Math.exp(z));
+        document.getElementById("dpo-note").textContent =
+          `chosen相对优势=${pc.toFixed(1)}−(${rc.toFixed(1)})=${chosenAdv.toFixed(2)}；rejected相对优势=${rejectedAdv.toFixed(2)}；margin=${margin.toFixed(2)}；β×margin=${z.toFixed(3)}；loss=${loss.toFixed(4)}`;
+      };
+      ["dpo-pc","dpo-rc","dpo-pr","dpo-rr","dpo-beta"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+      render();
+    }
+
+    function initGrpo() {
+      const render = () => {
+        const rewards = document.getElementById("grpo-rewards").value.split(",").map(value=>Number(value.trim())).filter(Number.isFinite).slice(0,8);
+        const ratio=Number(document.getElementById("grpo-ratio").value)/100;
+        const epsilon=Number(document.getElementById("grpo-eps").value)/100;
+        document.getElementById("grpo-ratio-out").textContent=ratio.toFixed(2);
+        document.getElementById("grpo-eps-out").textContent=epsilon.toFixed(2);
+        const note=document.getElementById("grpo-note");
+        if(rewards.length<2){note.textContent="请输入至少 2 个有限奖励，用逗号分隔。";return;}
+        const mean=rewards.reduce((a,b)=>a+b,0)/rewards.length;
+        const variance=rewards.reduce((sum,value)=>sum+(value-mean)**2,0)/rewards.length;
+        const std=Math.sqrt(variance);
+        const advantages=std===0?rewards.map(()=>0):rewards.map(value=>(value-mean)/std);
+        const clipped=Math.max(1-epsilon,Math.min(1+epsilon,ratio));
+        const objectives=advantages.map(adv=>Math.min(ratio*adv,clipped*adv));
+        const objective=objectives.reduce((a,b)=>a+b,0)/objectives.length;
+        note.textContent=`mean=${mean.toFixed(4)}；std=${std.toFixed(4)}；advantages=[${advantages.map(v=>v.toFixed(3)).join(", ")}]；clip ratio=${clipped.toFixed(2)}；mean clipped objective=${objective.toFixed(4)}${std===0?"；全组奖励相同，没有相对学习信号。":""}`;
+      };
+      ["grpo-rewards","grpo-ratio","grpo-eps"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+      render();
+    }
+
+    function initBits() {
+      const specs=[["FP32",1,8,23],["FP16",1,5,10],["BF16",1,8,7]];
+      const root=document.getElementById("bit-layouts");
+      specs.forEach(([name,sign,exp,mant])=>{
+        const block=document.createElement("div");
+        block.innerHTML=`<strong>${name}</strong><div class="bit-layout"></div><small>sign=${sign} · exponent=${exp} · mantissa=${mant}</small>`;
+        const layout=block.querySelector(".bit-layout");
+        [...Array(sign)].forEach(()=>{const b=document.createElement("span");b.className="bit sign";b.textContent="S";layout.appendChild(b);});
+        [...Array(exp)].forEach(()=>{const b=document.createElement("span");b.className="bit exp";b.textContent="E";layout.appendChild(b);});
+        [...Array(mant)].forEach(()=>{const b=document.createElement("span");b.className="bit mant";b.textContent="M";layout.appendChild(b);});
+        root.appendChild(block);
+      });
+    }
+
+    function initSchedule() {
+      const canvas=document.getElementById("schedule-chart");
+      const lrAt=step=>{
+        const warmup=382,total=19074,peak=6e-4,min=6e-5;
+        if(step<warmup)return peak*step/warmup;
+        const progress=Math.min(1,(step-warmup)/(total-warmup));
+        return min+.5*(peak-min)*(1+Math.cos(Math.PI*progress));
+      };
+      if(!window.Chart){
+        canvas.replaceWith(Object.assign(document.createElement("p"),{className:"callout",textContent:"Chart.js 未加载。关键点：step0=0，step382=6e-4，step19074=6e-5。"}));
+        return;
+      }
+      const points=Array.from({length:161},(_,i)=>{const x=Math.round(i*19074/160);return{x,y:lrAt(x)};});
+      state.scheduleChart=new Chart(canvas,{type:"line",data:{datasets:[{label:"learning rate",data:points,borderColor:"#59d9ff",backgroundColor:"rgba(89,217,255,.12)",fill:true,pointRadius:0,tension:.15}]},options:{responsive:true,maintainAspectRatio:false,parsing:false,scales:{x:{type:"linear",title:{display:true,text:"optimizer step"}},y:{title:{display:true,text:"learning rate"}}},plugins:{legend:{display:false}}}});
+    }
+
+    function enhanceLibraries() {
+      const setStatus=(name,ok)=>{
+        const item=document.querySelector(`[data-lib="${name}"]`);
+        if(item)item.classList.add(ok?"ok":"fail");
+      };
+      setStatus("katex",Boolean(window.katex&&window.renderMathInElement));
+      setStatus("d3",Boolean(window.d3));
+      setStatus("chart",Boolean(window.Chart));
+      setStatus("prism",Boolean(window.Prism));
+      setStatus("fuse",Boolean(window.Fuse));
+      if(window.renderMathInElement){
+        renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}],throwOnError:false});
+      }
+      if(window.Prism) Prism.highlightAll();
+      const renderMermaid=async()=>{
+        if(!window.__mermaid)return false;
+        try{
+          window.__mermaid.initialize({startOnLoad:false,securityLevel:"strict",theme:state.theme==="light"?"neutral":"dark"});
+          await window.__mermaid.run({querySelector:".mermaid"});
+          setStatus("mermaid",true);
+          return true;
+        }catch{setStatus("mermaid",false);return false;}
+      };
+      if(window.__mermaid) {
+        void renderMermaid();
+      } else {
+        window.addEventListener("mermaid-ready",()=>void renderMermaid(),{once:true});
+      }
+      setTimeout(()=>{
+        const failed=[...document.querySelectorAll(".lib")].some(item=>!item.classList.contains("ok"));
+        document.getElementById("cdn-warning").classList.toggle("show",failed);
+      },2500);
+    }
+
+    function initNavigationObserver() {
+      const links=new Map([...document.querySelectorAll(".stage-link[href^='#M']")].map(link=>[link.getAttribute("href").slice(1),link]));
+      const observer=new IntersectionObserver(entries=>{
+        entries.filter(entry=>entry.isIntersecting).forEach(entry=>{
+          links.forEach(link=>link.classList.remove("active"));
+          links.get(entry.target.id)?.classList.add("active");
+        });
+      },{rootMargin:"-20% 0px -65% 0px"});
+      document.querySelectorAll(".stage[id^='M']").forEach(section=>observer.observe(section));
+    }
+
+    function main() {
+      mountCourse();
+      readTaskSource();
+      loadProgress();
+      renderTaskLists();
+      buildSearch();
+      initProgressControls();
+      updateProgress();
+      initMatmul();
+      initAttention();
+      initGqa();
+      initRope();
+      initKv();
+      initLoss();
+      initDpo();
+      initGrpo();
+      initBits();
+      initSchedule();
+      initNavigationObserver();
+      enhanceLibraries();
+      window.addEventListener("fuse-ready",()=>{
+        buildSearch();
+        applyFilters();
+        document.querySelector('[data-lib="fuse"]')?.classList.add("ok");
+      },{once:true});
+      const hash=location.hash.slice(1);
+      if(/^M\d{2}-T\d{2}$/.test(hash))showTask(hash);
+    }
+
+    window.addEventListener("DOMContentLoaded", main);
+  </script>
+</body>
+</html>
