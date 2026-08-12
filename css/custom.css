@@ -1,0 +1,62 @@
+/* Mermaid 图允许横向查看 */
+.mermaid {
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+
+
+/* 不强制缩小 SVG */
+.mermaid svg {
+    max-width:none;
+}
+
+
+/* 鼠标提示 */
+.mermaid {
+    cursor:zoom-in;
+}
+.mermaid-overlay {
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:
+    rgba(0,0,0,0.35);
+
+    z-index:99999;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+/* 真正显示 Mermaid 的窗口 */
+.mermaid-overlay svg {
+
+    width:85vw !important;
+
+    height:75vh !important;
+
+    max-width:none !important;
+
+    max-height:none !important;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:16px;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,0.25);
+
+}
