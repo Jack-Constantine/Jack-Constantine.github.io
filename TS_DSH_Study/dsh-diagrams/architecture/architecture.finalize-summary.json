@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\candidate.json",
+    "sha256": "36607d6e2dbcfa9815b1fc761cad2d6529a4a9167f20956feb0b5f162cfc8f51",
+    "bytes": 9055
+  },
+  "artifact": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\architecture.html",
+    "sha256": "af7eebd3ce0057766fcb49ff4ea8b545d7d19d91020e61d8dad58a804866e34b",
+    "bytes": 849092
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\architecture.finalize.json",
+    "summaryReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\architecture.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\architecture.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 5091,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

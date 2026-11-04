@@ -1,0 +1,246 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Cordis 插件生命周期 · 依赖出现与消失",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "dsh-diagrams/cordis-lifecycle/cordis-lifecycle.html",
+    "repository": {
+      "url": "https://github.com/deepseek-ai/deepseek-harness.git",
+      "revision": "395b6d1f294d906a7773f2601c659fe6e106da12",
+      "link_mode": "local-only"
+    }
+  },
+  "lanes": [
+    {
+      "id": "consumer",
+      "label": "消费插件的 Fiber"
+    },
+    {
+      "id": "provider",
+      "label": "提供服务的插件"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "mount",
+      "type": "backend",
+      "label": "挂载消费插件",
+      "sublabel": "读取 inject",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/registry.ts",
+          "line": 316,
+          "end_line": 335,
+          "label": "创建插件 Fiber"
+        }
+      ],
+      "lane": "consumer",
+      "col": 0
+    },
+    {
+      "id": "pending",
+      "type": "backend",
+      "label": "PENDING",
+      "sublabel": "等待 greeter",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 617,
+          "end_line": 643,
+          "label": "依赖变动驱动状态迁移"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 580,
+          "end_line": 599,
+          "label": "等待、就绪与通知"
+        }
+      ],
+      "lane": "consumer",
+      "col": 1
+    },
+    {
+      "id": "loading",
+      "type": "backend",
+      "label": "LOADING",
+      "sublabel": "执行 apply",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 681,
+          "end_line": 709,
+          "label": "执行插件与处理失败"
+        }
+      ],
+      "lane": "consumer",
+      "col": 2
+    },
+    {
+      "id": "active",
+      "type": "backend",
+      "label": "ACTIVE",
+      "sublabel": "调用服务、注册效果",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 580,
+          "end_line": 599,
+          "label": "等待、就绪与通知"
+        },
+        {
+          "path": "packages/todo/tool-todo/src/index.ts",
+          "line": 118,
+          "end_line": 143,
+          "label": "DSH 插件注册能力"
+        }
+      ],
+      "lane": "consumer",
+      "col": 3
+    },
+    {
+      "id": "unloading",
+      "type": "backend",
+      "label": "UNLOADING",
+      "sublabel": "撤销已登记效果",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 712,
+          "end_line": 744,
+          "label": "卸载效果与重新加载"
+        }
+      ],
+      "lane": "consumer",
+      "col": 4
+    },
+    {
+      "id": "wait-again",
+      "type": "backend",
+      "label": "回到 PENDING",
+      "sublabel": "消费插件仍在树上",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 580,
+          "end_line": 599,
+          "label": "等待、就绪与通知"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 712,
+          "end_line": 744,
+          "label": "卸载效果与重新加载"
+        }
+      ],
+      "lane": "consumer",
+      "col": 5
+    },
+    {
+      "id": "publish",
+      "type": "backend",
+      "label": "发布服务",
+      "sublabel": "登记并通知",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/reflect.ts",
+          "line": 291,
+          "end_line": 325,
+          "label": "登记和撤销服务实现"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 580,
+          "end_line": 599,
+          "label": "等待、就绪与通知"
+        }
+      ],
+      "lane": "provider",
+      "col": 1
+    },
+    {
+      "id": "withdraw",
+      "type": "backend",
+      "label": "撤销服务",
+      "sublabel": "通知依赖方",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/reflect.ts",
+          "line": 291,
+          "end_line": 325,
+          "label": "登记和撤销服务实现"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 712,
+          "end_line": 744,
+          "label": "卸载效果与重新加载"
+        }
+      ],
+      "lane": "provider",
+      "col": 3
+    }
+  ],
+  "mainPath": [
+    "mount",
+    "pending",
+    "loading",
+    "active",
+    "unloading",
+    "wait-again"
+  ],
+  "edges": [
+    {
+      "id": "mount-to-pending",
+      "from": "mount",
+      "to": "pending",
+      "label": "依赖缺失",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pending-to-loading",
+      "from": "pending",
+      "to": "loading",
+      "label": "依赖就绪",
+      "variant": "emphasis"
+    },
+    {
+      "id": "loading-to-active",
+      "from": "loading",
+      "to": "active",
+      "label": "执行成功",
+      "variant": "emphasis"
+    },
+    {
+      "id": "active-to-unloading",
+      "from": "active",
+      "to": "unloading",
+      "label": "依赖消失",
+      "variant": "emphasis"
+    },
+    {
+      "id": "unloading-to-wait-again",
+      "from": "unloading",
+      "to": "wait-again",
+      "label": "清理完成",
+      "variant": "emphasis"
+    },
+    {
+      "id": "publish-to-loading",
+      "from": "publish",
+      "to": "loading",
+      "label": "通知重查",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "withdraw-to-unloading",
+      "from": "withdraw",
+      "to": "unloading",
+      "label": "触发清理",
+      "variant": "dashed",
+      "role": "branch"
+    }
+  ]
+}

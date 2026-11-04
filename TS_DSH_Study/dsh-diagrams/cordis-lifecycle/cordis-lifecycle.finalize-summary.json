@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\candidate.json",
+    "sha256": "64e8498ff2b43129829b704d0e26f088378e82ac0e6eb40f3323c89345506faa",
+    "bytes": 5917
+  },
+  "artifact": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\cordis-lifecycle.html",
+    "sha256": "849e761d171b2b8253314884ef89e616f6b58cac67313e28eabf8819c0f4fb1f",
+    "bytes": 838953
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\cordis-lifecycle.finalize.json",
+    "summaryReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\cordis-lifecycle.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\cordis-lifecycle.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-04T15:42:07.547Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4308,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

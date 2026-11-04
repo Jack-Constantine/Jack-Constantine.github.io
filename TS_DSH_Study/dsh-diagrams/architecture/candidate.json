@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "DeepSeek Harness 分层架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "dsh-diagrams/architecture/architecture.html",
+    "repository": {
+      "url": "https://github.com/deepseek-ai/deepseek-harness.git",
+      "revision": "4e834b6d8c30144b1a3651a43d319fbab1eef679",
+      "link_mode": "local-only"
+    }
+  },
+  "components": [
+    {
+      "id": "cli",
+      "type": "backend",
+      "label": "dsh CLI",
+      "sublabel": "启动层 · apps/cli",
+      "pos": [
+        360,
+        40
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "package.json",
+          "line": 211,
+          "end_line": 216,
+          "label": "根脚本"
+        },
+        {
+          "path": "apps/cli/src/bin.ts",
+          "line": 26,
+          "end_line": 46,
+          "label": "CLI 分派"
+        }
+      ]
+    },
+    {
+      "id": "boot",
+      "type": "backend",
+      "label": "Cordis 装配",
+      "sublabel": "启动层 · Loader / Include",
+      "pos": [
+        360,
+        175
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "apps/cli/src/profile-boot.ts",
+          "line": 313,
+          "end_line": 345,
+          "label": "准备服务与就绪"
+        },
+        {
+          "path": "packages/boot/app-boot/src/profile-context.ts",
+          "line": 74,
+          "end_line": 84,
+          "label": "覆盖顺序"
+        },
+        {
+          "path": "packages/boot/app-boot/src/index.ts",
+          "line": 1220,
+          "end_line": 1236,
+          "label": "Loader 与根 Include"
+        }
+      ]
+    },
+    {
+      "id": "headless",
+      "type": "backend",
+      "label": "Headless Runner",
+      "sublabel": "入口层 · 一次性任务",
+      "pos": [
+        40,
+        310
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/bundle/headless/cordis.patch.yml",
+          "line": 13,
+          "end_line": 23,
+          "label": "启动服务与 Runner"
+        },
+        {
+          "path": "packages/bundle/headless/src/index.ts",
+          "line": 418,
+          "end_line": 443,
+          "label": "提交任务、等待和输出"
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "type": "frontend",
+      "label": "Web 应用",
+      "sublabel": "入口层 · Session API",
+      "pos": [
+        360,
+        310
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/bundle/web-app/cordis.patch.yml",
+          "line": 183,
+          "end_line": 188,
+          "label": "Web 监听配置"
+        },
+        {
+          "path": "packages/api/session-controller/src/commands.ts",
+          "line": 362,
+          "end_line": 375,
+          "label": "Web 提交给 Agent"
+        }
+      ]
+    },
+    {
+      "id": "loop",
+      "type": "backend",
+      "label": "AgentLoop",
+      "sublabel": "核心层 · Inbox / Turn / Step",
+      "pos": [
+        360,
+        460
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 170,
+          "end_line": 189,
+          "label": "入队并唤醒"
+        },
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 574,
+          "end_line": 597,
+          "label": "结算消息并执行工具"
+        },
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 726,
+          "end_line": 743,
+          "label": "构建请求"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "type": "backend",
+      "label": "Tools",
+      "sublabel": "能力层 · 工具注册与分发",
+      "pos": [
+        40,
+        460
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/core/tools/src/index.ts",
+          "line": 128,
+          "end_line": 152,
+          "label": "工具注册"
+        },
+        {
+          "path": "packages/core/tools/src/pipeline.ts",
+          "line": 264,
+          "end_line": 306,
+          "label": "工具分发"
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "type": "backend",
+      "label": "LLM 适配器",
+      "sublabel": "能力层 · DeepSeek provider",
+      "pos": [
+        680,
+        460
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/llm/llm-deepseek/src/host.ts",
+          "line": 79,
+          "end_line": 85,
+          "label": "注册模型适配器"
+        },
+        {
+          "path": "packages/llm/llm-deepseek/src/adapter.ts",
+          "line": 136,
+          "end_line": 155,
+          "label": "调用模型 API"
+        },
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 479,
+          "end_line": 498,
+          "label": "消费模型流"
+        }
+      ]
+    },
+    {
+      "id": "session",
+      "type": "backend",
+      "label": "Session",
+      "sublabel": "核心层 · 事件与历史投影",
+      "pos": [
+        360,
+        615
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/core/session/src/index.ts",
+          "line": 999,
+          "end_line": 1018,
+          "label": "Session 历史派生"
+        },
+        {
+          "path": "packages/core/session/src/index.ts",
+          "line": 1342,
+          "end_line": 1350,
+          "label": "Session 刷新"
+        }
+      ]
+    },
+    {
+      "id": "jsonl",
+      "type": "database",
+      "label": "JSONL 持久化",
+      "sublabel": "存储层 · 写入 Session 批次",
+      "pos": [
+        40,
+        615
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/session/session-persistence-jsonl/src/index.ts",
+          "line": 905,
+          "end_line": 921,
+          "label": "追加持久批次"
+        },
+        {
+          "path": "packages/session/session-persistence-jsonl/src/storage.ts",
+          "line": 549,
+          "end_line": 560,
+          "label": "订阅 Session 事件并刷新"
+        }
+      ]
+    },
+    {
+      "id": "deepseek",
+      "type": "cloud",
+      "label": "DeepSeek API",
+      "sublabel": "外部模型服务",
+      "pos": [
+        680,
+        615
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "packages/llm/llm-deepseek/src/adapter.ts",
+          "line": 136,
+          "end_line": 155,
+          "label": "调用模型 API"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "cli-to-boot",
+      "from": "cli",
+      "to": "boot",
+      "label": "选择 profile",
+      "variant": "emphasis"
+    },
+    {
+      "id": "boot-to-headless",
+      "from": "boot",
+      "to": "headless",
+      "label": "挂载 runner"
+    },
+    {
+      "id": "boot-to-web",
+      "from": "boot",
+      "to": "web",
+      "label": "挂载 Web"
+    },
+    {
+      "id": "headless-to-loop",
+      "from": "headless",
+      "to": "loop",
+      "label": "followup"
+    },
+    {
+      "id": "web-to-loop",
+      "from": "web",
+      "to": "loop",
+      "label": "提交消息",
+      "variant": "emphasis"
+    },
+    {
+      "id": "loop-to-tools",
+      "from": "loop",
+      "to": "tools",
+      "label": "执行工具"
+    },
+    {
+      "id": "loop-to-llm",
+      "from": "loop",
+      "to": "llm",
+      "label": "请求模型"
+    },
+    {
+      "id": "loop-to-session",
+      "from": "loop",
+      "to": "session",
+      "label": "追加事件／派生历史",
+      "variant": "emphasis"
+    },
+    {
+      "id": "session-to-jsonl",
+      "from": "session",
+      "to": "jsonl",
+      "label": "发布事件、请求刷新"
+    },
+    {
+      "id": "llm-to-deepseek",
+      "from": "llm",
+      "to": "deepseek",
+      "label": "HTTP 请求"
+    }
+  ]
+}

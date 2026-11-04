@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Cordis 在 DSH 中的分层架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "dsh-diagrams/cordis-architecture/cordis-architecture.html",
+    "repository": {
+      "url": "https://github.com/deepseek-ai/deepseek-harness.git",
+      "revision": "395b6d1f294d906a7773f2601c659fe6e106da12",
+      "link_mode": "local-only"
+    }
+  },
+  "components": [
+    {
+      "id": "profile",
+      "type": "backend",
+      "label": "DSH Profile",
+      "sublabel": "装配层 · bundle 与 patch",
+      "sources": [
+        {
+          "path": "packages/boot/app-boot/src/profile-context.ts",
+          "line": 74,
+          "end_line": 84,
+          "label": "DSH 配置组合"
+        },
+        {
+          "path": "packages/boot/app-boot/src/index.ts",
+          "line": 1220,
+          "end_line": 1236,
+          "label": "启动时安装 Loader"
+        }
+      ],
+      "pos": [
+        365,
+        40
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "loader",
+      "type": "backend",
+      "label": "Include / Loader",
+      "sublabel": "加载层 · 配置树与模块",
+      "sources": [
+        {
+          "path": "vendor/include/src/index.ts",
+          "line": 447,
+          "end_line": 456,
+          "label": "应用补丁并更新配置树"
+        },
+        {
+          "path": "vendor/loader/src/config/entry.ts",
+          "line": 225,
+          "end_line": 237,
+          "label": "导入模块并挂载"
+        }
+      ],
+      "pos": [
+        365,
+        170
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "context",
+      "type": "backend",
+      "label": "Context / Registry",
+      "sublabel": "核心层 · 插件挂载入口",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/context.ts",
+          "line": 70,
+          "end_line": 84,
+          "label": "建立 Context 和内建服务"
+        },
+        {
+          "path": "vendor/cordis/src/registry.ts",
+          "line": 316,
+          "end_line": 335,
+          "label": "创建插件 Fiber"
+        }
+      ],
+      "pos": [
+        365,
+        300
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "fiber",
+      "type": "backend",
+      "label": "Fiber",
+      "sublabel": "核心层 · 依赖与生命周期",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 617,
+          "end_line": 643,
+          "label": "依赖变动驱动状态迁移"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 681,
+          "end_line": 709,
+          "label": "执行插件与处理失败"
+        },
+        {
+          "path": "vendor/cordis/src/fiber.ts",
+          "line": 712,
+          "end_line": 744,
+          "label": "卸载效果与重新加载"
+        }
+      ],
+      "pos": [
+        365,
+        430
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "services",
+      "type": "backend",
+      "label": "服务表",
+      "sublabel": "运行能力 · provide / inject",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/service.ts",
+          "line": 42,
+          "end_line": 59,
+          "label": "Service 通过名称注册"
+        },
+        {
+          "path": "vendor/cordis/src/reflect.ts",
+          "line": 291,
+          "end_line": 325,
+          "label": "登记和撤销服务实现"
+        }
+      ],
+      "pos": [
+        40,
+        560
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "plugin",
+      "type": "backend",
+      "label": "DSH 业务插件",
+      "sublabel": "业务层 · 例如 todo_write",
+      "sources": [
+        {
+          "path": "packages/todo/tool-todo/src/index.ts",
+          "line": 118,
+          "end_line": 143,
+          "label": "DSH 插件注册能力"
+        },
+        {
+          "path": "packages/core/tools/src/index.ts",
+          "line": 148,
+          "end_line": 153,
+          "label": "注册工具的 effect"
+        }
+      ],
+      "pos": [
+        365,
+        560
+      ],
+      "size": [
+        210,
+        68
+      ]
+    },
+    {
+      "id": "events",
+      "type": "messagebus",
+      "label": "事件表",
+      "sublabel": "运行能力 · on / waterfall",
+      "sources": [
+        {
+          "path": "vendor/cordis/src/events.ts",
+          "line": 246,
+          "end_line": 270,
+          "label": "分发链与监听器清理"
+        }
+      ],
+      "pos": [
+        690,
+        560
+      ],
+      "size": [
+        210,
+        68
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "profile-to-loader",
+      "from": "profile",
+      "to": "loader",
+      "label": "交付组合配置",
+      "variant": "emphasis"
+    },
+    {
+      "id": "loader-to-context",
+      "from": "loader",
+      "to": "context",
+      "label": "注册插件",
+      "variant": "emphasis"
+    },
+    {
+      "id": "context-to-fiber",
+      "from": "context",
+      "to": "fiber",
+      "label": "创建实例",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fiber-to-plugin",
+      "from": "fiber",
+      "to": "plugin",
+      "label": "就绪后执行 apply",
+      "variant": "emphasis"
+    },
+    {
+      "id": "plugin-to-services",
+      "from": "plugin",
+      "to": "services",
+      "label": "查找服务",
+      "variant": "default"
+    },
+    {
+      "id": "plugin-to-events",
+      "from": "plugin",
+      "to": "events",
+      "label": "监听或分发",
+      "variant": "default"
+    }
+  ]
+}

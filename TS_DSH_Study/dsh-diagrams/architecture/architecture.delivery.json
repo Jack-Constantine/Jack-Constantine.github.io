@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "5f78c387-1e64-40e6-b21f-36ebf97450bc",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\candidate.json",
+  "output": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\architecture\\architecture.html",
+  "specification": {
+    "sha256": "eae4501bc433e43c963c5575e153bcc9124bf6d587209eab058ec3b4f2aaf3a3",
+    "bytes": 8479
+  },
+  "artifact": {
+    "sha256": "656d796c33483958fb3e3ff546c57fb924d4e85a66e3af92cd080532e559bf48",
+    "bytes": 848175
+  }
+}

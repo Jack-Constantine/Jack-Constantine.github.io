@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "sequence",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\candidate.json",
+    "sha256": "95a16829c070b145700042eab8d89b31aadc0f23de72e458000a0b5fa3672343",
+    "bytes": 6804
+  },
+  "artifact": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\task.html",
+    "sha256": "21ead9aa97456e1811cc14090bd008f058d9d16545b3e633f4ec5a977316b55b",
+    "bytes": 841129
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\diagram-only\\task.finalize.json",
+    "summaryReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\diagram-only\\task.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\diagram-only\\task.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-04T15:42:07.547Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4839,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

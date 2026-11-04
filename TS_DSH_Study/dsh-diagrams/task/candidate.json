@@ -1,0 +1,281 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "一次 Headless 任务 · todo_write",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "dsh-diagrams/task/task.html",
+    "repository": {
+      "url": "https://github.com/deepseek-ai/deepseek-harness.git",
+      "revision": "4e834b6d8c30144b1a3651a43d319fbab1eef679",
+      "link_mode": "local-only"
+    }
+  },
+  "participants": [
+    {
+      "id": "runner",
+      "type": "backend",
+      "label": "Headless",
+      "sublabel": "一次性 Runner",
+      "sources": [
+        {
+          "path": "packages/bundle/headless/src/index.ts",
+          "line": 418,
+          "end_line": 443,
+          "label": "提交任务、等待和输出"
+        }
+      ]
+    },
+    {
+      "id": "loop",
+      "type": "backend",
+      "label": "AgentLoop",
+      "sublabel": "Turn / Step",
+      "sources": [
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 334,
+          "end_line": 363,
+          "label": "Turn 与 Step 入口"
+        },
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 479,
+          "end_line": 498,
+          "label": "消费模型流"
+        },
+        {
+          "path": "packages/core/agent-loop/src/agent.ts",
+          "line": 574,
+          "end_line": 597,
+          "label": "结算消息并执行工具"
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "type": "backend",
+      "label": "LLM",
+      "sublabel": "绑定 provider",
+      "sources": [
+        {
+          "path": "packages/llm/llm-deepseek/src/host.ts",
+          "line": 79,
+          "end_line": 85,
+          "label": "注册模型适配器"
+        },
+        {
+          "path": "packages/llm/llm-deepseek/src/adapter.ts",
+          "line": 136,
+          "end_line": 155,
+          "label": "调用模型 API"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "type": "backend",
+      "label": "Tools",
+      "sublabel": "工具分发",
+      "sources": [
+        {
+          "path": "packages/core/tools/src/pipeline.ts",
+          "line": 264,
+          "end_line": 306,
+          "label": "工具分发"
+        },
+        {
+          "path": "packages/core/tools/src/batch.ts",
+          "line": 243,
+          "end_line": 265,
+          "label": "记录 tool/call 与 tool/result"
+        }
+      ]
+    },
+    {
+      "id": "todo",
+      "type": "backend",
+      "label": "todo_write",
+      "sublabel": "清单工具",
+      "sources": [
+        {
+          "path": "packages/todo/tool-todo/src/index.ts",
+          "line": 188,
+          "end_line": 211,
+          "label": "结果、事件和模型文本"
+        }
+      ]
+    },
+    {
+      "id": "session",
+      "type": "database",
+      "label": "Session",
+      "sublabel": "逻辑事件日志",
+      "sources": [
+        {
+          "path": "packages/core/session/src/index.ts",
+          "line": 999,
+          "end_line": 1018,
+          "label": "Session 历史派生"
+        },
+        {
+          "path": "packages/core/session/src/index.ts",
+          "line": 1342,
+          "end_line": 1350,
+          "label": "Session 刷新"
+        },
+        {
+          "path": "snapshots/session/todo-write/session.v4.jsonl",
+          "line": 15,
+          "end_line": 23,
+          "label": "录制会话"
+        }
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "id": "submit",
+      "from": "runner",
+      "to": "loop",
+      "y": 170,
+      "label": "followup(task)",
+      "variant": "emphasis",
+      "note": "消息进 inbox 并唤醒 driver。"
+    },
+    {
+      "id": "boundaries",
+      "from": "loop",
+      "to": "session",
+      "y": 224,
+      "label": "turn/start → step/start",
+      "variant": "default",
+      "note": "pre-step 接受输入后才开启 Step。"
+    },
+    {
+      "id": "history",
+      "from": "loop",
+      "to": "session",
+      "y": 278,
+      "label": "deriveMessages()",
+      "variant": "default"
+    },
+    {
+      "id": "request",
+      "from": "loop",
+      "to": "llm",
+      "y": 314,
+      "label": "请求模型",
+      "variant": "emphasis"
+    },
+    {
+      "id": "chunks",
+      "from": "llm",
+      "to": "loop",
+      "y": 350,
+      "label": "流式 chunk",
+      "variant": "return"
+    },
+    {
+      "id": "settle",
+      "from": "loop",
+      "to": "session",
+      "y": 386,
+      "label": "assistant/message",
+      "variant": "default"
+    },
+    {
+      "id": "tool-call",
+      "from": "loop",
+      "to": "tools",
+      "y": 422,
+      "label": "execute(calls)",
+      "variant": "emphasis",
+      "note": "这条路线中模型选择调用 todo_write。"
+    },
+    {
+      "id": "log-call",
+      "from": "tools",
+      "to": "session",
+      "y": 476,
+      "label": "tool/call",
+      "variant": "default"
+    },
+    {
+      "id": "dispatch",
+      "from": "tools",
+      "to": "todo",
+      "y": 512,
+      "label": "执行工具",
+      "variant": "default"
+    },
+    {
+      "id": "todo-event",
+      "from": "todo",
+      "to": "session",
+      "y": 548,
+      "label": "todo/write",
+      "variant": "default"
+    },
+    {
+      "id": "tool-value",
+      "from": "todo",
+      "to": "tools",
+      "y": 584,
+      "label": "清单与计数",
+      "variant": "return"
+    },
+    {
+      "id": "tool-result",
+      "from": "tools",
+      "to": "session",
+      "y": 620,
+      "label": "tool/result",
+      "variant": "default"
+    },
+    {
+      "id": "tool-back",
+      "from": "tools",
+      "to": "loop",
+      "y": 656,
+      "label": "批次结果",
+      "variant": "return"
+    },
+    {
+      "id": "next-step",
+      "from": "loop",
+      "to": "llm",
+      "y": 692,
+      "label": "下一 Step 请求",
+      "variant": "emphasis",
+      "note": "录制用例有第二次模型请求，读取已记录的工具结果。"
+    },
+    {
+      "id": "reply",
+      "from": "llm",
+      "to": "loop",
+      "y": 758,
+      "label": "最终回复流",
+      "variant": "return"
+    },
+    {
+      "id": "turn-end",
+      "from": "loop",
+      "to": "session",
+      "y": 794,
+      "label": "结算回复并结束 Turn",
+      "variant": "default",
+      "note": "追加 assistant/message、step/end、turn/end。"
+    },
+    {
+      "id": "flush",
+      "from": "runner",
+      "to": "session",
+      "y": 860,
+      "label": "flush + 读取摘要",
+      "variant": "emphasis",
+      "note": "Runner 等待空闲并刷新日志。本次录制的最终文本为 DONE。"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\startup\\candidate.json",
+    "sha256": "37884b8f502c69074499118d03a06d1f319ad09c8a23b7746b54e5bd8be7c1b8",
+    "bytes": 6610
+  },
+  "artifact": {
+    "path": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\startup\\startup.html",
+    "sha256": "1b4804117bbbce312322e034f560450e20b4235f76c0cdeae4f12a1849bfa1db",
+    "bytes": 840315
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\startup\\startup.finalize.json",
+    "summaryReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\startup\\startup.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\startup\\startup.browser-check.json"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 5276,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

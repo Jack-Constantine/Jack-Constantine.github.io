@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "91c60b96-246c-4762-84d0-bd9554be900e",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\candidate.json",
+  "output": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\task\\task.html",
+  "specification": {
+    "sha256": "95a16829c070b145700042eab8d89b31aadc0f23de72e458000a0b5fa3672343",
+    "bytes": 6804
+  },
+  "artifact": {
+    "sha256": "21ead9aa97456e1811cc14090bd008f058d9d16545b3e633f4ec5a977316b55b",
+    "bytes": 841129
+  }
+}

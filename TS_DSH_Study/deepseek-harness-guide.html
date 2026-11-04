@@ -1,0 +1,1997 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>读懂 DeepSeek Harness · 本地源码导读</title>
+<style>
+:root{color-scheme:light;--paper:#f0f2f9;--surface:#fcfcff;--ink:#19243a;--muted:#46536b;--line:#d8dfeb;--accent:#254ca0;--soft:#e5edff;--code:#122731;--code-text:#ecf7f6;--warm:#f7ead1;--max:1120px;--mono:"Cascadia Code",Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:4.5rem}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.78 system-ui,"Microsoft YaHei",sans-serif}a{color:var(--accent);text-underline-offset:.2em}button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,pre:focus-visible{outline:3px solid #d38d29;outline-offset:3px}.skip{position:absolute;left:.8rem;top:-10rem;background:var(--surface);padding:.5rem;z-index:9}.skip:focus{top:.8rem}.bar{position:sticky;top:0;z-index:3;background:var(--surface);border-bottom:1px solid var(--line)}.bar-inner{max-width:1450px;margin:auto;padding:.55rem clamp(1rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:.5rem}.brand{display:flex;gap:.65rem;align-items:center;font-weight:750;text-decoration:none;color:var(--ink)}.badge{font:700 .85rem var(--mono);background:var(--accent);color:#fff;padding:.42rem;border-radius:.35rem}.bar-actions{display:flex;align-items:center;gap:.6rem}.bar-actions button,.demo button,.copy,.bar-actions a{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:.4rem;padding:.18rem .58rem;text-decoration:none}.progress{height:3px;background:var(--soft)}.progress span{display:block;height:100%;background:#269b76;width:0}
+.hero{background:#142f32;color:#f5fcf7;border-bottom:5px solid #8ed2b4;padding:clamp(2.5rem,7vw,6rem) clamp(1rem,5vw,4rem)}.hero-inner{max-width:var(--max);margin:auto;display:grid;grid-template-columns:1.35fr 1fr;align-items:center;gap:clamp(1rem,5vw,5rem)}.eyebrow,.num,.unit{font:700 .78rem/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase}.eyebrow{color:#abe9cb}.hero h1{font-size:clamp(2.4rem,6.5vw,5.4rem);line-height:1.04;letter-spacing:-.055em;margin:.5em 0 .35em}.hero h1 span{color:#a1e2bf;display:block}.hero p{color:#d3e4df;margin-bottom:1.55rem;max-width:34em}.hero a{display:inline-block;padding:.42rem 1rem;background:#a1e2bf;color:#142f32;border-radius:.4rem;text-decoration:none;font-weight:700}.hero-card{border:1px solid #507371;border-radius:.8rem;background:#19383b;overflow:hidden}.hero-card header{padding:.65rem 1rem;border-bottom:1px solid #507371;color:#d7e8e3}.hero-card ol{margin:0;padding:1rem 1rem 1.1rem 2.8rem}.hero-card li{padding:.35rem 0}.hero-card code{background:#244a4a;color:#d8f6e8}
+.layout{max-width:1450px;margin:auto;padding:1.5rem clamp(.85rem,4vw,3rem) 4rem;display:grid;grid-template-columns:215px minmax(0,1fr);gap:clamp(1rem,4vw,3rem)}.toc{align-self:start;position:sticky;top:4.4rem;max-height:calc(100vh - 5rem);overflow:auto;padding:0 .4rem .7rem 0}.toc strong{display:block;margin:.4rem .55rem}.toc .unit{display:block;color:var(--muted);margin:1.1rem .55rem .35rem}.toc a{display:block;padding:.22rem .55rem;border-radius:.35rem;font-size:.88rem;color:var(--muted);text-decoration:none}.toc a:hover,.toc a[aria-current]{background:var(--soft);color:var(--accent);font-weight:680}.toc .idx{font: .79rem var(--mono);margin-right:.45rem}.intro,.chapter{background:var(--surface);border:1px solid var(--line);border-radius:.8rem;padding:clamp(1rem,3vw,2.5rem);margin-bottom:1.25rem}.intro{background:var(--soft)}.intro h2{margin-top:0}.num,.unit{color:var(--accent)}h2{font-size:clamp(1.45rem,3.4vw,2.25rem);line-height:1.22;margin:.45rem 0 .75rem;letter-spacing:-.024em}h3{line-height:1.35;font-size:1.18rem;margin:1.75rem 0 .45rem}p{margin:.55rem 0 .85rem}.lede{color:var(--muted);font-size:1.03rem}.chapter>header{border-bottom:1px solid var(--line);padding-bottom:.65rem;margin-bottom:1rem}.pair,.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:.9rem 0}.pair>*{margin:0}.cards>div,.step{border:1px solid var(--line);border-radius:.5rem;padding:.72rem .9rem;background:var(--paper)}.step strong,.cards strong{display:block}.step small{color:var(--muted)}figure{margin:.9rem 0}.sample{border-radius:.5rem;overflow:hidden;background:var(--code);color:var(--code-text);min-width:0;align-self:start}.sample figcaption{background:#203b46;display:flex;justify-content:space-between;gap:.5rem;align-items:center;padding:.35rem .85rem;font:.8rem/1.5 var(--mono);color:#d3e9e6;min-height:2.2rem}.sample .copy{background:#203b46;color:#edf9f7;border-color:#658083;font-size:.76rem;white-space:nowrap}.sample pre{margin:0;overflow:auto;padding:.8rem .95rem;font:.88rem/1.62 var(--mono);tab-size:2}.sample code,.out code{padding:0;background:none;color:inherit}.out{border-top:1px solid #45636a;background:#0e2027;color:#a6e3bd;padding:.5rem .95rem;white-space:pre-wrap;overflow-wrap:anywhere;font:.82rem/1.6 var(--mono)}code{font-family:var(--mono);font-size:.91em;color:var(--accent);background:var(--soft);padding:.1em .26em;border-radius:.24em}kbd{font-family:var(--mono)}.callout{margin:1rem 0;padding:.65rem .9rem;border-left:4px solid #bc852d;background:var(--warm);border-radius:0 .4rem .4rem 0}.callout p,.step p{margin:.25rem 0}.flow{display:flex;gap:.45rem;align-items:stretch;margin:.65rem 0}.flow .step{flex:1;min-width:0}.arrow{display:grid;place-items:center;color:var(--accent);font-weight:800}.diagram>figcaption{font-size:.88rem;color:var(--muted)}.table{overflow:auto;margin:.85rem 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:.93rem}td,th{padding:.56rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--soft)}ul,ol{padding-left:1.5rem}li+li{margin-top:.26rem}details{margin:1rem 0;border:1px solid var(--line);border-radius:.48rem;padding:.58rem .85rem;background:var(--paper)}summary{font-weight:700;cursor:pointer}details p:last-child{margin-bottom:.2rem}.demo{padding:.8rem 1rem;border:1px solid var(--line);border-radius:.55rem;background:var(--soft);margin:1rem 0}.demo p{margin:.35rem 0}.demo output{display:block;white-space:pre-wrap;font: .88rem/1.65 var(--mono);padding:.4rem .5rem;min-height:2rem}.demo button[aria-pressed=true]{color:white;background:var(--accent);border-color:var(--accent)}.token{color:#8eddbb}.literal{color:#ffd391}.comment{color:#a7c1c9}.footer{color:var(--muted);font-size:.9rem;padding:.6rem}.checklist li{margin:.45rem 0}
+@media(max-width:1000px){.layout{grid-template-columns:175px minmax(0,1fr);gap:1rem}.pair{grid-template-columns:1fr}}@media(max-width:720px){.hero-inner,.layout{display:block}.hero-card{margin-top:1.4rem}.toc{position:static;max-height:none;padding:.7rem 0 1.2rem}.toc nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.08rem}.toc .unit{grid-column:1/-1}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.cards{grid-template-columns:1fr}.bar-inner{padding:.5rem .8rem}.sample pre{font-size:.82rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{.bar,.toc,.copy,.demo button,.skip{display:none}.layout{display:block;padding:0}.hero{padding:1rem}.hero a{display:none}.chapter{border:0;padding:.5rem 0}h2,h3{break-after:avoid}.sample,.diagram{break-inside:avoid}.sample pre{white-space:pre-wrap}.sample,.sample figcaption,.out,.hero{background:white;color:black;border:1px solid #ccc}.hero h1 span,.hero p,.eyebrow,.token,.literal,.comment{color:#222}}
+.sample pre{white-space:pre-wrap;overflow-wrap:anywhere;font-variant-ligatures:none}.bar-actions{flex-shrink:0;white-space:nowrap}
+@media(max-width:480px){.bar-inner{gap:.35rem}.bar-actions{gap:.3rem}.bar-actions button,.bar-actions a{font-size:.79rem;padding:.18rem .38rem}.brand{gap:.35rem;font-size:.8rem}.badge{font-size:.72rem;padding:.36rem}.bar .progress{height:2px}}
+
+.hero{background:#182442;border-color:#91b2ff}.hero h1 span{color:#b3c8ff}.hero p{color:#dfe8ff}.hero a{background:#b3c8ff;color:#182442}.hero-card{background:#202f54;border-color:#586f9e}.hero-card header{border-color:#586f9e;color:#e6edff}.eyebrow{color:#b3c8ff}.progress span{background:#496fc2}
+.hero h1{font-size:clamp(2.15rem,5.7vw,4.6rem);letter-spacing:-.04em}.hero h1 span{margin-top:.28em;font-size:.65em;letter-spacing:-.025em}
+.source-path,.source figcaption a{overflow-wrap:anywhere}.source figcaption a{color:#d6e3ff}.step[href]{text-decoration:none;color:var(--ink)}.step[href]:hover{background:var(--soft)}.source pre{line-height:1.65}.source-ref{font-size:.8rem;color:var(--muted);margin:.2rem 0 .85rem}.intro p:last-child{margin-bottom:.15rem}.chapter li+li{margin-top:.5rem}
+.map-search{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:var(--soft);border-radius:.4rem;padding:.6rem .8rem;margin-top:1rem}.map-search[hidden]{display:none}.map-search input{background:var(--surface);color:var(--ink);border:1px solid #8294b0;border-radius:.3rem;padding:.28rem .5rem;font:inherit;width:16rem;max-width:100%}
+@media(max-width:720px){.hero h1{font-size:clamp(2rem,7vw,3.5rem)}}
+@media print{.source figcaption a{color:inherit}.map-search{display:none}}
+
+.archify-panel{margin:1rem 0 1.2rem;border:1px solid var(--line);border-radius:.65rem;background:var(--surface);overflow:hidden}
+.archify-panel iframe{display:block;width:100%;height:clamp(480px,70vw,860px);border:0}
+#boot .archify-panel iframe{height:clamp(410px,62vw,730px)}
+#turn .archify-panel iframe{height:clamp(600px,86vw,1040px)}
+
+#directory-map + p{max-width:58em}
+#repo-directories tbody th,#app-directories tbody th,#package-directories tbody th{background:transparent;font-weight:650}
+#repo-directories td:last-child,#app-directories td:last-child{min-width:7em}
+#repo-directories th:first-child,#app-directories th:first-child{white-space:nowrap}
+#package-directories th:first-child{width:8.5em}
+.dir-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.2rem;row-gap:.24rem;margin:0;padding-left:1.25rem}
+.dir-items li+li{margin-top:0}
+@media(max-width:950px){.dir-items{grid-template-columns:1fr}}
+
+.sample pre[hidden]{display:none}
+.sample figcaption>span:first-child{min-width:0;overflow-wrap:anywhere}
+.sample-controls{display:flex;gap:.35rem;align-items:center;flex-shrink:0}
+.sample .source-toggle{color:#dce8ff}
+.annotated-kind{display:inline-block;margin-left:.4rem;color:#d0dbf8;font-size:.72rem}
+.sample .reading-code .comment{color:#a9c8e5}
+@media(max-width:480px){.sample .copy{padding:.12rem .34rem;font-size:.72rem}.sample figcaption{padding:.4rem .55rem}.sample-controls{gap:.2rem}}
+@media print{.sample .reading-code .comment{color:#222}}
+.cordis-architecture iframe{height:clamp(480px,64vw,790px)}
+.cordis-lifecycle iframe{height:clamp(400px,51vw,660px)}
+</style></head>
+<body id="top"><a class="skip" href="#content">跳到正文</a>
+<div class="bar"><div class="bar-inner"><a class="brand" href="#top"><span class="badge">DSH</span> 源码导读</a><div class="bar-actions"><a href="#toc">目录</a><button id="print" type="button">打印 / PDF</button></div></div><div class="progress" aria-hidden="true"><span id="progress"></span></div></div>
+<header class="hero"><div class="hero-inner"><div><div class="eyebrow">DeepSeek Harness / Local source walkthrough</div><h1>读懂 DeepSeek Harness<span>从启动到自己写插件</span></h1><p>跟着本地源码，看一条输入怎样穿过 CLI、Cordis、Agent、模型和工具，最终写进 Session。读完用同一套注册机制加载你的第一个工具。</p><a href="#primer">先读语法补课 ↓</a></div><div class="hero-card"><header>跟读路线 · 9 章</header><ol><li><strong>先补语法和 Cordis</strong> · 读懂插件、服务和生命周期</li><li><strong>定位入口</strong> · 项目地图、启动与插件配置</li><li><strong>追一次请求</strong> · Agent、工具、Session 与 Web</li><li><strong>自己动手</strong> · overlay、greet、定向检查</li></ol></div></div></header>
+<div class="layout"><aside class="toc" id="toc"><strong>源码地图</strong><nav aria-label="教程目录">
+<a href="#primer"><span class="idx">01</span>语法补课</a>
+<a href="#cordis"><span class="idx">02</span>DSH 的 Cordis 串讲</a>
+<a href="#map"><span class="idx">03</span>架构与项目地图</a>
+<a href="#run"><span class="idx">04</span>本地启动与构建</a>
+<a href="#boot"><span class="idx">05</span>CLI 与插件挂载</a>
+<a href="#turn"><span class="idx">06</span>跟读 Agent 的一轮</a>
+<a href="#tools"><span class="idx">07</span>精读 todo_write</a>
+<a href="#session"><span class="idx">08</span>Session 与 Web</a>
+<a href="#develop"><span class="idx">09</span>自己开发插件</a>
+</nav></aside><main id="content">
+<div class="intro"><h2>从一条可观察的路径认识仓库</h2><p>本页以同目录的 <code>deepseek-harness-master</code> 源码快照为依据。路径链接指向本地文件，源码框标题注明行号。先跟读 Headless 这条短路线，再看 Web 怎样汇合。源码框默认显示中文注释和整理后的缩进。标题的行号对应仓库原文，切换视图后「复制」会复制当前所见版本。Cordis、架构、启动和任务章节都配有 Archify 交互图。图中的 SRC 标注与本页摘录对应到同一份本地源码快照。</p><p>基础语法可以回看第一份教程。<a href="typescript-for-python.html">TypeScript 从第一行开始</a></p></div>
+<section class="chapter" id="primer"><header><div class="num">CHAPTER 01</div><h2>读源码前的语法补课</h2><p class="lede">先掌握后面实际会遇到的写法。每小节先看可运行的小例子，再定位仓库里的用法。</p></header>
+<p>上一份 <a href="typescript-for-python.html">TypeScript 从第一行开始</a> 已经讲过对象解构、交叉类型、字面量联合、<code>keyof</code>、<code>infer</code>、<code>satisfies</code> 和异步迭代。本章在这些基础上继续。下面的「练习」块可以单独运行。「仓库摘录」默认显示带中文注释的阅读版。点击「看原文」可切回同一行号范围的原始代码。摘录可能只包含函数的一部分。JSONC 配置含阅读注释，JSONL 日志会把每条事件展开成多行。复制配置或日志原文时，先切换到原文。</p>
+<h3>1. import.meta 与入口保护</h3>
+<p><code>import.meta</code> 是模块元信息。<code>import.meta.url</code> 给出当前模块的 URL，可用 <code>new URL("./x", import.meta.url)</code> 相对<strong>文件</strong>定位资源。它和随启动目录变化的 <code>process.cwd()</code> 解决不同问题。支持 <code>import.meta.main</code> 的 Node 版本还可以用它区分入口和被导入的模块。顶层 <code>await</code> 让直接入口等待 <code>runCli()</code> 完成。仓库在 <code>bin.ts</code> 末尾正是这样做的。</p>
+<figure class="sample"><figcaption><span>练习 · 保存为 main.mts，用 Node.js 24 运行</span></figcaption><pre class="reading-code" tabindex="0"><code>// 直接运行这个文件时，main 为 true。被另一个模块导入时为 false。
+console.log(import.meta.main);
+// 用当前文件的 URL 作为基准，找同目录下的 settings.json。这里只看路径，不读文件。
+const settings = new URL("./settings.json", import.meta.url);
+console.log(settings.pathname.endsWith("/settings.json"));</code></pre><div class="out"><strong>node main.mts</strong>
+true
+true</div></figure>
+<p>若从另一个 ESM 文件导入 <code>main.mts</code>，第一行变成 <code>false</code>。仓库同时使用 <code>await import("./profile-boot.ts")</code>。这是执行到某个分支时才加载的动态导入，解构出的 <code>runProfile</code> 是那个模块的命名导出。</p>
+<h3>2. 声明合并、模块扩充与空的 type import</h3>
+<p>同一个模块里的同名 <code>interface</code> 可以合并字段。<code>declare module "模块名" { ... }</code> 在已是模块的文件里扩充另一个模块的现有声明。下面先看同名接口的最小版本。</p>
+<figure class="sample"><figcaption><span>练习 · 两份接口声明合为一份类型</span></figcaption><pre class="reading-code" tabindex="0"><code>// 两个同名接口的字段会合并。这里先描述 clock 方法，再补 label 属性。
+interface Services {
+  clock: () =&gt; number;
+}
+interface Services {
+  label: string;
+}
+
+// 对象要同时满足两份声明。clock() 返回数字 7。
+const ctx: Services = {
+  clock: () =&gt; 7,
+  label: "demo",
+};
+console.log(ctx.label, ctx.clock());</code></pre><div class="out"><strong>输出</strong>
+demo 7</div></figure>
+<p>项目用它给 <code>@deepseek-ai/cordis</code> 的 <code>Context</code> 增加 <code>tools</code>、<code>llm</code> 等服务键，也用它给事件接口添加名字和参数。<code>import type {} from "某包"</code> 把该包的类型声明纳入检查，使扩充可见，发射的 JS 会擦除这一行。相反，<code>import "某包"</code> 会在运行时加载模块。某个属性在类型上可见后，运行时仍要靠 profile 装配服务。必需服务写进 <code>inject</code>，可选服务可通过 <code>ctx.get("键")</code> 查询并分支处理。</p>
+<figure class="sample source" data-file="packages/core/tools/src/index.ts" data-start="32" data-end="36"><figcaption><span><a href="../deepseek-harness-master/packages/core/tools/src/index.ts" title="打开本地源文件">仓库摘录 · packages/core/tools/src/index.ts · L32–36</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 扩充 Cordis 已存在的 Context 接口。
+declare module '@deepseek-ai/cordis' {
+  interface Context {
+    // 告诉 TS 这个上下文可以有 tools 服务。实际服务要等插件挂载后才可用。
+    tools: ToolsService
+  }
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>declare module '@deepseek-ai/cordis' {
+  interface Context {
+    tools: ToolsService
+  }
+}</code></pre></figure>
+<h3>3. 类型与值可同名，品牌类型给 ID 分组</h3>
+<p><code>declare const BRAND: unique symbol</code> 声明一个具有唯一类型身份的符号名字，本身不创建运行时变量。<code>[BRAND]</code> 在类型里作为计算属性键，与 <code>string</code> 交叉后便可区分两个原本都是字符串的 ID。该交叉只影响静态检查。仓库中 <code>SessionId</code> 同时可以在类型位置指类型，在 <code>SessionId(raw)</code> 中指函数。相同技巧也出现在 <code>interface Config</code> 和值 <code>Config</code>，一个供类型检查，另一个作为 Cordis 读取的配置 schema。</p>
+<figure class="sample"><figcaption><span>练习 · 品牌只存在于类型层</span></figcaption><pre class="reading-code" tabindex="0"><code>// tag 是只用于类型检查的唯一标记。
+declare const tag: unique symbol;
+// 两个类型在运行时都是字符串，品牌让检查器区分它们。
+type SessionId = string &amp; { readonly [tag]: "SessionId" };
+type JobId = string &amp; { readonly [tag]: "JobId" };
+
+// 这个函数给字符串加上静态类型，运行时仍返回同一个字符串。
+function sessionId(value: string): SessionId {
+  return value as SessionId;
+}
+// show 要求 SessionId，把 JobId 传进来会得到类型错误。
+function show(id: SessionId) {
+  console.log(typeof id, id);
+}
+show(sessionId("demo"));</code></pre><div class="out"><strong>输出</strong>
+string demo</div></figure>
+<p>若传入一个静态类型是 <code>JobId</code> 的变量，检查器会拒绝。品牌转换自身无法验证字符串是否对应一个真实 Session，文件或网络输入仍由所属边界校验。读 <code>SessionEvent&lt;'turn/end'&gt;['data']['reason']</code> 时，从左到右读：挑出某种事件 → 取它的 <code>data</code> 类型 → 再取 <code>reason</code>。</p>
+<figure class="sample source" data-file="packages/core/session/src/types.ts" data-start="20" data-end="30"><figcaption><span><a href="../deepseek-harness-master/packages/core/session/src/types.ts" title="打开本地源文件">仓库摘录 · packages/core/session/src/types.ts · L20–30</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// SessionId 是专门用作会话标识的字符串类型。
+export type SessionId = Branded&lt;'SessionId'&gt;
+
+// 同名函数把普通字符串交给品牌转换函数，返回带品牌的静态类型。
+export function SessionId(id: string): SessionId {
+  return brandString&lt;SessionId&gt;(id)
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>/** Identifies one session in the store (and its persistence artifacts). */
+export type SessionId = Branded&lt;'SessionId'&gt;
+
+/**
+ * Brand a string as a {@link SessionId}.
+ * @param id - the raw session id string.
+ * @returns the same string with the session-id brand.
+ */
+export function SessionId(id: string): SessionId {
+  return brandString&lt;SessionId&gt;(id)
+}</code></pre></figure>
+<h3>4. const 泛型与 NoInfer</h3>
+<p><code>&lt;const T&gt;</code> 是<strong>类型参数</strong>的修饰符，让调用时直接写进去的对象和数组字面量优先保留精确值。它类似在调用处保留字面量信息。<code>NoInfer&lt;T&gt;</code> 仍接受 <code>T</code>，但提示检查器别从这个位置反推 <code>T</code>。先从模式或候选列表确定类型，再用它检查第二个位置。</p>
+<figure class="sample"><figcaption><span>练习 · 类型从候选值推出</span></figcaption><pre class="reading-code" tabindex="0"><code>// T 从 items 推断。NoInfer 让 fallback 只能从已有的候选值里选。
+function choose&lt;const T extends readonly string[]&gt;(
+  items: T,
+  fallback: NoInfer&lt;T[number]&gt;,
+) {
+  // 数组第一项存在时就返回它。缺少第一项时才用 fallback。
+  return items[0] ?? fallback;
+}
+// 候选项有 read 和 write，因此 write 可以作为备用值。
+console.log(choose(["read", "write"], "write"));
+// choose(["read", "write"], "delete"); // 取消注释后得到类型错误</code></pre><div class="out"><strong>输出</strong>
+read</div></figure>
+<p>DSH 的 <code>defineTool</code> 把参数 schema、返回 schema 保留到类型层。<code>InferArgs&lt;S&gt;</code> 从输入 schema 推出字段，<code>InferValue&lt;NoInfer&lt;O&gt;&gt;</code> 让回调按输出 schema 给定的类型工作。运行时另有 JSON Schema 校验。再遇到 <code>asserts value is X</code> 时，把它读成「函数正常返回后，检查器可将参数收窄为 X」，失败路径应抛错。</p>
+<figure class="sample source" data-file="packages/core/tools/src/schema.ts" data-start="555" data-end="557"><figcaption><span><a href="../deepseek-harness-master/packages/core/tools/src/schema.ts" title="打开本地源文件">仓库摘录 · packages/core/tools/src/schema.ts · L555–557</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// S 保留输入参数模式，O 保留返回值模式。const 泛型有利于保留模式里的字面量。
+export function defineTool&lt;const S extends ParameterSchemaSpec, const O extends ValueSchemaSpec&gt;(
+  // 用这两份模式描述整份工具选项，检查器据此检查输入、执行和渲染回调。
+  options: DefineToolOptions&lt;S, O&gt;,
+): ToolDefinition {</code></pre><pre class="raw-code" tabindex="0" hidden><code>export function defineTool&lt;const S extends ParameterSchemaSpec, const O extends ValueSchemaSpec&gt;(
+  options: DefineToolOptions&lt;S, O&gt;,
+): ToolDefinition {</code></pre></figure>
+<h3>5. 同步生成器与可撤销的 effect</h3>
+<p>上一份讲过 <code>async function*</code>。这里的 <code>function*</code> 创建同步迭代器，调用函数先拿到迭代器，<code>.next()</code> 才推进到 <code>yield</code>。在 DSH 的 <code>ctx.effect(function* (...) { ... })</code> 中，Cordis 接手推进并管理产出的清理函数。<code>this: ToolsService</code> 是 TS 的假参数，用来约束函数的接收者，调用者无需在实参中传入它。<code>.bind(this)</code> 则在运行时绑定接收者。</p>
+<figure class="sample"><figcaption><span>练习 · 观察 next 何时执行函数体</span></figcaption><pre class="reading-code" tabindex="0"><code>// 调用生成器函数先拿到迭代器，函数体等 next() 才执行。
+function* setup() {
+  console.log("register");
+  // yield 把清理函数交给调用者，并暂停生成器。
+  yield () =&gt; console.log("unregister");
+}
+const effect = setup();
+console.log("iterator ready");
+// 第一次 next() 打印 register，再给出刚才 yield 的清理函数。
+const first = effect.next();
+// 这个小例子手动执行清理，所以接着打印 unregister。
+if (!first.done) first.value();</code></pre><div class="out"><strong>输出</strong>
+iterator ready
+register
+unregister</div></figure>
+<p>这个练习手动调用清理函数。真实 <code>ctx.effect</code> 会在所属 fiber 释放时处理登记的清理动作。<code>ctx.on</code> 也将监听绑定到生命周期。读代码时查两处：注册发生在哪个插件上下文，清理由谁负责。</p>
+<figure class="sample source" data-file="packages/core/tools/src/index.ts" data-start="331" data-end="352"><figcaption><span><a href="../deepseek-harness-master/packages/core/tools/src/index.ts" title="打开本地源文件">仓库摘录 · packages/core/tools/src/index.ts · L331–352</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>  // 通过 effect 让注册随插件生命周期管理。this 是 TS 的接收者类型标注。
+  return this.ctx.effect(function* (this: ToolsService) {
+    // 为执行器的提示词片段逐项注册。yield 交出对应的清理动作。
+    for (const section of executor.sections ?? []) {
+      yield this.ctx.systemPrompt.section({
+        name: section.name,
+        order: section.order,
+        ...section.interpolate === undefined ? {} : { interpolate: section.interpolate },
+        text: ({ scope, toolSet }) =&gt; {
+          // 当前作用域选中了别的执行器时，这段提示词返回空字符串。
+          if (this.selectExecutor(scope) !== executor) return ''
+          return typeof section.text === 'function' ? section.text(this.definitions(scope, toolSet)) : section.text
+        },
+      })
+    }
+    // 没有 scope 时写全局选择，否则写入该 scope 的记录。
+    if (scope === undefined) this.root = record
+    else this.scoped.set(scope, record)
+    // 释放 effect 时把记录里的执行器清掉，保留该选择位置以防悄悄退回其他执行器。
+    yield () =&gt; {
+      record.executor = undefined
+    }
+  }.bind(this), 'tools.setExecutor()')
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>    return this.ctx.effect(function* (this: ToolsService) {
+      for (const section of executor.sections ?? []) {
+        yield this.ctx.systemPrompt.section({
+          name: section.name,
+          order: section.order,
+          ...section.interpolate === undefined ? {} : { interpolate: section.interpolate },
+          text: ({ scope, toolSet }) =&gt; {
+            if (this.selectExecutor(scope) !== executor) return ''
+            return typeof section.text === 'function' ? section.text(this.definitions(scope, toolSet)) : section.text
+          },
+        })
+      }
+      if (scope === undefined) this.root = record
+      else this.scoped.set(scope, record)
+      yield () =&gt; {
+        // Keep an unavailable selection so a program cannot fall through to a different executor.
+        record.executor = undefined
+      }
+    }.bind(this), 'tools.setExecutor()')
+  }
+
+  /**</code></pre></figure>
+<h3>6. @Remote、类型断言与配置里的表达式</h3>
+<p><code>@Remote('prompt')</code> 是附在方法声明上的装饰器写法。读成「该方法标记为远程调用面的一部分，对外名字是 prompt」。在这个仓库中还要联系 Typert 的 Host 编译和生成步骤，以及 API Gateway 的路由。仅看这一行无法知道请求怎样传输、认证或分发。下面的 Web 旁路会跟到控制器和命令层。</p>
+<p><code>invocation satisfies never</code> 是类型穷尽检查。如果联合新增分支而 <code>switch</code> 忘记处理，默认分支的值就不再是 <code>never</code>。<code>throw</code> 仍负责实际执行时的失败。<code>void run(...).catch(...)</code> 表示刻意不等待该表达式的返回值，<code>catch</code> 负责处理拒绝。</p>
+<p><code>cordis.patch.yml</code> 是 YAML。<code>-</code> 开始列表项，缩进决定层级，<code>id</code> 指向配置中的行，<code>name</code> 指插件模块名或路径。<code>!!js</code> 是仓库 Loader 识别的 YAML 标签。它在允许的位置把值解释为表达式，如 <code>task: !!js ctx.headlessStartup.task</code> 会读取已注入服务的数据。普通 YAML 文本保持字面值。配置也可以改变插件是否挂载。</p>
+<figure class="sample source" data-file="packages/bundle/headless/cordis.patch.yml" data-start="13" data-end="24"><figcaption><span><a href="../deepseek-harness-master/packages/bundle/headless/cordis.patch.yml" title="打开本地源文件">仓库摘录 · packages/bundle/headless/cordis.patch.yml · L13–24</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code># 这份 overlay 向配置树插入两行插件。
+- insert:
+    # 先提供命令行启动数据。
+    - id: headless-startup
+      name: '@deepseek-ai/dsh-headless/startup'
+
+    # Runner 依赖 headlessStartup，由 Loader 在依赖就绪后挂载。
+    - id: headless-runner
+      name: '@deepseek-ai/dsh-headless'
+      inject: [headlessStartup]
+      config:
+        # 带有 !!js 的值会在配置求值时从服务读取。
+        task: !!js ctx.headlessStartup.task
+        sessionId: !!js ctx.headlessStartup.sessionId</code></pre><pre class="raw-code" tabindex="0" hidden><code>
+- insert:
+    - id: headless-startup
+      name: '@deepseek-ai/dsh-headless/startup'
+
+    # Reads its task and run options from the ordinary headlessStartup provider.
+    - id: headless-runner
+      name: '@deepseek-ai/dsh-headless'
+      inject: [headlessStartup]
+      config:
+        task: !!js ctx.headlessStartup.task
+        sessionId: !!js ctx.headlessStartup.sessionId</code></pre></figure>
+<h3>7. using 与 Symbol.dispose</h3>
+<p><code>using</code> 声明一个需要在块结束时释放的资源。它和 <code>const</code> 类似地绑定名称，但作用域退出时会调用该值的 <code>[Symbol.dispose]()</code>，抛错离开时也会执行。<code>[Symbol.dispose]</code> 是用标准符号作为方法名。异步释放另有 <code>await using</code> 与 <code>Symbol.asyncDispose</code>。Web 命令层用 <code>using binding</code> 让附件绑定有明确的收尾位置，<code>binding.commit()</code> 则是业务确认，两个动作各司其职。</p>
+<figure class="sample"><figcaption><span>练习 · 离开块时自动调用释放函数</span></figcaption><pre class="reading-code" tabindex="0"><code>{
+  // using 将释放操作绑定到当前花括号块。
+  using resource = {
+    // 离开块时，运行时调用这个标准符号命名的方法。
+    [Symbol.dispose]() {
+      console.log("release");
+    },
+  };
+  console.log("work");
+}
+// 走到外面的语句时，块内资源已经释放。
+console.log("after");</code></pre><div class="out"><strong>输出</strong>
+work
+release
+after</div></figure>
+</section>
+<section class="chapter" id="cordis"><header><div class="num">CHAPTER 02</div><h2>DSH 的 Cordis 串讲</h2><p class="lede">先搞懂插件如何找到依赖、什么时候执行，以及离开时谁负责清理，再看 DSH 怎样用配置把它们装在一起。</p></header>
+<p>Cordis 是 DSH 仓库里自带的 <strong>TypeScript 插件框架</strong>，实现在 <a href="../deepseek-harness-master/vendor/cordis/src/index.ts">vendor/cordis</a>。它解决的是应用组装问题。例如工具要注册到工具表，工具表可能又依赖系统提示词服务。Cordis 负责把这些组件挂起来、按服务依赖决定就绪时机、在它们之间传递事件，并管理卸载。模型请求、工具权限、对话历史这些业务规则仍由 DSH 各自的插件实现。</p>
+<div class="table"><table><thead><tr><th>名字</th><th>先怎么理解</th><th>DSH 里怎么看</th></tr></thead><tbody>
+<tr><td><strong>Plugin</strong></td><td>一块要挂载的代码。它可以提供服务，也可以贡献工具、监听器或配置。</td><td><code>todo_write</code> 的插件入口导出 <code>apply(ctx, config)</code>。</td></tr>
+<tr><td><strong>Context</strong></td><td>插件访问服务和注册能力的入口。传进 <code>apply</code> 的 <code>ctx</code> 带着当前插件和作用域的信息。</td><td><code>ctx.tools</code>、<code>ctx.llm</code>、<code>ctx.sessions</code>。</td></tr>
+<tr><td><strong>Service</strong></td><td>通过一个名字发布的能力。消费方使用这个名字和接口。</td><td>通过 <code>ctx.tools</code> 获取工具注册表，通过 <code>ctx.agents</code> 请求创建 Agent。</td></tr>
+<tr><td><strong>Fiber</strong></td><td>某个插件<strong>实例</strong>的运行句柄，记录依赖、状态、子插件和清理动作。</td><td><code>ctx.plugin(...)</code> 返回 fiber，<code>await fiber.dispose()</code> 等它卸载完。</td></tr>
+<tr><td><strong>Effect</strong></td><td>一项与插件存续期绑定的注册或资源，同时记录如何撤销。</td><td>注册的工具与事件监听随所属插件卸载。</td></tr>
+<tr><td><strong>Loader / Include</strong></td><td>把配置中的条目变成插件实例。Include 处理配置树和 patch，Loader 处理条目、解析与挂载。</td><td>从选定的 profile 加载 YAML 条目，再交给 Cordis 核心管理生命周期。</td></tr>
+</tbody></table></div>
+<figure class="archify-panel cordis-architecture">
+<iframe src="dsh-diagrams/cordis-architecture/cordis-architecture.html" title="Cordis 在 DSH 中的分层架构" loading="lazy" allowfullscreen></iframe>
+</figure>
+<h3>1. 一个插件怎样提供服务，另一个怎样等它</h3>
+<p>下面直接调用仓库 vendored Cordis 做实验。完成本项目的依赖安装后，把示例存为仓库根目录的 <code>scratch-cordis.mts</code>，执行 <code>pnpm exec tsx scratch-cordis.mts</code>。示例只创建一个隔离的内存 Context，无需模型 API key。这里用代码挂载来观察机制，正式 DSH 的 Web 和 Headless 启动仍走 <code>dsh</code> profile。</p>
+<figure class="sample"><figcaption><span>实跑 · 服务出现前后，消费插件做什么</span></figcaption><pre class="reading-code" tabindex="0"><code>import { Context, Service } from './vendor/cordis/src/index.ts';
+
+// 这段只让检查器认识 ctx.greeter。实际实例由下面的插件提供。
+declare module './vendor/cordis/src/context.ts' {
+  interface Context {
+    greeter: Greeter;
+  }
+}
+
+class Greeter extends Service {
+  constructor(ctx: Context) {
+    // 用 greeter 这个服务名注册当前实例。
+    super(ctx, 'greeter');
+  }
+
+  greet(name: string): string {
+    return `Hello, ${name}!`;
+  }
+}
+
+const app = new Context();
+const consumer = app.plugin({
+  // 故意先挂载消费方。greeter 尚未出现，apply 暂时不会运行。
+  inject: ['greeter'],
+  apply(ctx: Context) {
+    console.log(ctx.greeter.greet('Ada'));
+
+    // 外层函数安装 effect，返回的内层函数用于卸载。
+    ctx.effect(() =&gt; () =&gt; console.log('consumer: 清理'));
+  },
+});
+
+await consumer;
+console.log('consumer: 等待依赖');
+
+// 提供方就绪后，Cordis 自动激活刚才等待的消费方。
+const provider = app.plugin(Greeter);
+await provider;
+await consumer;
+
+// 依赖消失后，消费方也要清理已注册的效果。
+await provider.dispose();
+await consumer;
+console.log('provider: 已卸载');
+await app.fiber.dispose();</code></pre><div class="out"><strong>输出</strong>
+consumer: 等待依赖
+Hello, Ada!
+consumer: 清理
+provider: 已卸载</div></figure>
+<p>读一遍这三个位置就能分清分工。<code>declare module</code> 是静态类型提示，<code>super(ctx, 'greeter')</code> 是运行时注册，<code>inject: ['greeter']</code> 是启动和持续依赖。需要这个服务才能工作的插件声明 <code>inject</code>。服务缺少时仍可正常工作的功能可以查询 <code>ctx.get('服务名')</code>，再处理缺失分支。</p>
+<h3>2. 底层为什么能做到先等待、再运行</h3>
+<figure class="archify-panel cordis-lifecycle">
+<iframe src="dsh-diagrams/cordis-lifecycle/cordis-lifecycle.html" title="Cordis 插件生命周期 · 依赖出现与消失" loading="lazy" allowfullscreen></iframe>
+</figure>
+<p><code>new Context()</code> 会创建一个 <code>Proxy</code>，并安装服务解析、事件、插件注册等内建能力。<strong>Proxy</strong> 可以接管属性读取，所以 <code>ctx.tools</code> 看着像访问字段，实际可能根据当前 fiber 的注入和作用域找到服务实例。服务提供方通过 <code>ctx.provide()</code> 或 <code>Service</code> 基类登记，依赖方看到的是当前作用域可用的实现。</p>
+<figure class="sample source" data-file="vendor/cordis/src/context.ts" data-start="70" data-end="84">
+<figcaption><span><a href="../deepseek-harness-master/vendor/cordis/src/context.ts">仓库摘录 · vendor/cordis/src/context.ts · L70–84</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>/** Create the root context and install the built-in services. */
+constructor() {
+  this[symbols.isolate] = Object.create(null)
+  this[symbols.intercept] = Object.create(null)
+  // 用 Proxy 包装 Context，属性读取交给 Cordis 的反射层处理。
+  const self = new Proxy&lt;this&gt;(this, ReflectService.handler)
+  this.root = self
+  this.baseUrl = undefined
+  // 根 Context 自带运行句柄和服务解析、注册表、事件、日志等基础设施。
+  this.fiber = new Fiber(self, {}, Object.create(null), null, () =&gt; [])
+  this.reflect = new ReflectService(self)
+  this.registry = new RegistryService(self)
+  this.events = new EventsService(self)
+  this.logger = new LoggerService(self)
+  this.fiber._disposables.clear()
+  return self
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>  /** Create the root context and install the built-in services. */
+  constructor() {
+    this[symbols.isolate] = Object.create(null)
+    this[symbols.intercept] = Object.create(null)
+    const self = new Proxy&lt;this&gt;(this, ReflectService.handler)
+    this.root = self
+    this.baseUrl = undefined
+    this.fiber = new Fiber(self, {}, Object.create(null), null, () =&gt; [])
+    this.reflect = new ReflectService(self)
+    this.registry = new RegistryService(self)
+    this.events = new EventsService(self)
+    this.logger = new LoggerService(self)
+    this.fiber._disposables.clear()
+    return self
+  }</code></pre></figure>
+<p>下一段是 Fiber 计算依赖是否可用的核心。它把当前修订和各服务实现的标识拼成 <code>epoch</code>。缺少必需服务时用 <code>INACTIVE</code> 表示当前绑定不能运行。实现被替换时标识会变化，Cordis 由此知道何时需要卸载旧绑定并重新加载。等待期间是 <code>PENDING</code>，执行插件时是 <code>LOADING</code>，成功后才到 <code>ACTIVE</code>。出错和主动卸载有各自的状态。</p>
+<figure class="sample source" data-file="vendor/cordis/src/fiber.ts" data-start="617" data-end="628">
+<figcaption><span><a href="../deepseek-harness-master/vendor/cordis/src/fiber.ts">仓库摘录 · vendor/cordis/src/fiber.ts · L617–628</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>_refresh() {
+  let epoch = `${this._revision}`
+  // 逐个检查 inject 中声明的服务。
+  for (const name of Object.keys(this.inject)) {
+    const impl = this._store[name]
+    // 有任意必需服务缺失，本轮绑定就不可激活。
+    if (!impl) {
+      epoch = INACTIVE
+      break
+    }
+    // 记录具体实现的 ID。替换实现也会改变这一串标识。
+    epoch += ':' + impl.uid
+  }
+  // 交给状态机决定下一步。
+  this._setEpoch(epoch)
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>  _refresh() {
+    let epoch = `${this._revision}`
+    for (const name of Object.keys(this.inject)) {
+      const impl = this._store[name]
+      if (!impl) {
+        epoch = INACTIVE
+        break
+      }
+      epoch += ':' + impl.uid
+    }
+    this._setEpoch(epoch)
+  }</code></pre></figure>
+<div class="callout"><p><strong>两个常见误会</strong>。YAML 行顺序决定配置如何组合，插件能否启动还要看依赖是否就绪。<code>ctx</code> 也有作用域。DSH 可以为一个 Agent 组合不同的服务，在隔离范围内让相同名字的服务指向不同实例。排查依赖时要看消费方自己的 <code>ctx</code>。</p></div>
+<h3>3. 卸载为什么能把工具和监听器也一起撤掉</h3>
+<p><code>ctx.effect(() =&gt; { ...; return dispose; })</code> 把注册和撤销绑定成一件事。插件自己的定时器、连接或 watcher 可以在这里建立，再返回关闭操作。<code>ctx.on</code> 已经内建这种机制，所以插件通常直接注册事件。看底层实现，真正保存在 fiber 上的是一个负责登记监听、并返回取消登记函数的 effect。</p>
+<figure class="sample source" data-file="vendor/cordis/src/events.ts" data-start="263" data-end="270">
+<figcaption><span><a href="../deepseek-harness-master/vendor/cordis/src/events.ts">仓库摘录 · vendor/cordis/src/events.ts · L263–270</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>private register(label: string, name: string | symbol, callback: any, options: EventOptions): () =&gt; void {
+  // prepend 决定监听器插到前面还是尾部。
+  const method = options.prepend ? 'unshift' : 'push'
+  // 这条监听属于当前 fiber。
+  return this.ctx.fiber.effect(() =&gt; {
+    const hooks = this._hooks[name] ??= []
+    hooks[method]({ ctx: this.ctx, callback, ...options })
+    // 卸载时从事件表移除这一条回调。
+    return () =&gt; this.unregister(name, callback)
+  }, label)
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>  private register(label: string, name: string | symbol, callback: any, options: EventOptions): () =&gt; void {
+    const method = options.prepend ? 'unshift' : 'push'
+    return this.ctx.fiber.effect(() =&gt; {
+      const hooks = this._hooks[name] ??= []
+      hooks[method]({ ctx: this.ctx, callback, ...options })
+      return () =&gt; this.unregister(name, callback)
+    }, label)
+  }</code></pre></figure>
+<p>DSH 的工具注册也有类似的所有权。前面的服务实验卸载了 provider，消费插件随之清理。第 07 章的 <code>todo_write</code> 测试则直接验证，释放贡献工具的 fiber 后，<code>ctx.tools.schemas()</code> 中就找不到该工具。需要有序清理多个资源时，可以把它们放进一个 disposer，按顺序等待。</p>
+<h3>4. 服务是直接调用，事件用来通知或拦截</h3>
+<p>想做一件明确的事时，调用服务方法，例如 <code>ctx.tools.execute(...)</code>。想观察已经发生的事，可监听 <code>session/event</code>。想在原动作前后插入策略、审批或包装，先找这个扩展点定义的事件模式。</p>
+<div class="table"><table><thead><tr><th>调用方式</th><th>顺序与返回</th></tr></thead><tbody>
+<tr><td><code>ctx.emit(...)</code></td><td>同步通知监听器，不等待它们返回的 Promise。常用于发送观察事件。</td></tr>
+<tr><td><code>await ctx.parallel(...)</code></td><td>并发调用监听器，并等它们全部结算。</td></tr>
+<tr><td><code>await ctx.serial(...)</code></td><td>逐个调用并等待，遇到符合约定的返回值时停止。</td></tr>
+<tr><td><code>ctx.bail(...)</code></td><td>同步检查监听器，遇到符合约定的返回值时停止。和 serial 一样，<code>undefined</code>、<code>null</code>、<code>false</code> 不会触发停止。</td></tr>
+<tr><td><code>ctx.waterfall(..., fallback)</code></td><td>把监听器套在默认动作外面。监听器调用 <code>next()</code> 才继续，可以包装返回值，也可以提前结束。异步链由调用者等待。</td></tr>
+</tbody></table></div>
+<figure class="sample"><figcaption><span>实跑 · waterfall 的放行与短路</span></figcaption><pre class="reading-code" tabindex="0"><code>import { Context } from './vendor/cordis/src/index.ts';
+
+// 约定这个事件收一个字符串，以及继续执行的 next 函数。
+declare module './vendor/cordis/src/events.ts' {
+  interface Events {
+    'demo/format'(text: string, next: () =&gt; string): string;
+  }
+}
+
+const app = new Context();
+
+app.on('demo/format', (_text, next) =&gt; {
+  // 先执行下游，再加工它的返回值。
+  return '[' + next() + ']';
+});
+
+app.on('demo/format', (text, next) =&gt; {
+  // 拦截时直接返回，最里面的默认动作就不会运行。
+  if (text === 'block') return '已拦截';
+  return next();
+});
+
+for (const text of ['Ada', 'block']) {
+  const result = app.waterfall('demo/format', text, () =&gt; {
+    console.log('执行默认动作：' + text);
+    return 'Hello, ' + text;
+  });
+  console.log(result);
+}
+await app.fiber.dispose();</code></pre><div class="out"><strong>输出</strong>
+执行默认动作：Ada
+[Hello, Ada]
+[已拦截]</div></figure>
+<p>这和 DSH 的 <code>tools/pre-execute</code> 是同一种结构。工具管线提供默认的 <code>allow</code>，插件监听器可以选择委托给下游，或按约定返回 <code>ask</code>、<code>deny</code> 等决定。<code>ask</code> 会走审批服务，最终 guard 和取消检查仍由 DSH 自己处理。只做记录的监听器应继续调用 <code>next()</code>。Cordis 的实现还会拒绝同一监听器重复调用 <code>next()</code>。</p>
+<figure class="sample source" data-file="vendor/cordis/src/events.ts" data-start="246" data-end="261">
+<figcaption><span><a href="../deepseek-harness-master/vendor/cordis/src/events.ts">仓库摘录 · vendor/cordis/src/events.ts · L246–261</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>waterfall(...args: any[]) {
+  const [thisArg, callbacks] = this._resolve('waterfall', args)
+  // 把最后一个参数取出作为最内层的默认动作。
+  const inner = args.pop()
+  const dispatch = () =&gt; {
+    // 每次 dispatch 取出下一个监听器，链结束才运行默认动作。
+    const callback = callbacks.shift()
+    if (!callback) return inner()
+    let called = false
+    // 交给当前监听器的 next 会继续进入 dispatch，并且只能调用一次。
+    const next = () =&gt; {
+      if (called) throw new Error('next() called multiple times')
+      called = true
+      return dispatch()
+    }
+    return Reflect.apply(callback, thisArg, [...args, next])
+  }
+  return dispatch()
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>  waterfall(...args: any[]) {
+    const [thisArg, callbacks] = this._resolve('waterfall', args)
+    const inner = args.pop()
+    const dispatch = () =&gt; {
+      const callback = callbacks.shift()
+      if (!callback) return inner()
+      let called = false
+      const next = () =&gt; {
+        if (called) throw new Error('next() called multiple times')
+        called = true
+        return dispatch()
+      }
+      return Reflect.apply(callback, thisArg, [...args, next])
+    }
+    return dispatch()
+  }</code></pre></figure>
+<figure class="sample source" data-file="packages/core/tools/src/pipeline.ts" data-start="197" data-end="205">
+<figcaption><span><a href="../deepseek-harness-master/packages/core/tools/src/pipeline.ts">仓库摘录 · packages/core/tools/src/pipeline.ts · L197–205</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>try {
+  // 按调用所属 Agent 选择策略作用域。
+  const carrier = scopeTarget(this.tools, exec.agent)
+  // 进入工具执行前的 waterfall，默认返回 allow。
+  const gate = await this.ctx.waterfall(
+    carrier, 'tools/pre-execute', exec,
+    () =&gt; Promise.resolve&lt;PreToolDecision&gt;({ kind: 'allow' }),
+  )
+  // 遇到 ask 决定时，交给审批流程解析。
+  const askResolution = gate.kind === 'ask'
+    ? await this.serviceAsk(exec, gate)
+    : { decision: gate, approvalCancelled: false }</code></pre><pre class="raw-code" tabindex="0" hidden><code>    try {
+      const carrier = scopeTarget(this.tools, exec.agent)
+      const gate = await this.ctx.waterfall(
+        carrier, 'tools/pre-execute', exec,
+        () =&gt; Promise.resolve&lt;PreToolDecision&gt;({ kind: 'allow' }),
+      )
+      const askResolution = gate.kind === 'ask'
+        ? await this.serviceAsk(exec, gate)
+        : { decision: gate, approvalCancelled: false }</code></pre></figure>
+<h3>5. Loader 怎样把 DSH 配置变成插件树</h3>
+<p>把 <strong>profile</strong> 当成某种应用的装配方案。<strong>bundle</strong> 是可组合的一层条目，<strong>patch</strong> 按 <code>id</code> 修改已有条目或插入新条目。组合后的每个条目告诉 Loader 到哪里找插件、给它什么配置、它还要等哪些服务。DSH 的 <code>boot()</code> 创建根 Context、安装 Loader、提供启动环境，最后通过 Include 挂载配置树。下一章的架构图和启动章会再把这条链画出来。</p>
+<p>以 Headless 为例，<code>headless-startup</code> 解析命令行，通过 <code>ctx.provide</code> 发布名为 <code>headlessStartup</code> 的服务。另一个 YAML 条目声明要注入该服务。配置里的 <code>!!js</code> 会等到目标条目的依赖就绪后，在对应上下文里求值。任务字符串由此从命令行到达 Runner。</p>
+<figure class="sample source" data-file="packages/bundle/headless/src/startup.ts" data-start="148" data-end="155">
+<figcaption><span><a href="../deepseek-harness-master/packages/bundle/headless/src/startup.ts">仓库摘录 · packages/bundle/headless/src/startup.ts · L148–155</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>// 发布 headlessStartup 服务，Runner 从中读取已解析的启动数据。
+ctx.provide(HEADLESS_STARTUP_SERVICE, {
+  task,
+  sessionId,
+  json: options.json === true,
+  // 只有明确提供的可选参数才进入服务值。
+  ...options.permissionMode === undefined ? {} : { permissionMode: options.permissionMode.trim() },
+  ...options.approvalPolicy === undefined ? {} : { approvalPolicy: options.approvalPolicy },
+  ...options.addDir === undefined ? {} : { additionalWritableRoots: [...new Set(options.addDir)] },
+} satisfies HeadlessStartupValues)</code></pre><pre class="raw-code" tabindex="0" hidden><code>    ctx.provide(HEADLESS_STARTUP_SERVICE, {
+      task,
+      sessionId,
+      json: options.json === true,
+      ...options.permissionMode === undefined ? {} : { permissionMode: options.permissionMode.trim() },
+      ...options.approvalPolicy === undefined ? {} : { approvalPolicy: options.approvalPolicy },
+      ...options.addDir === undefined ? {} : { additionalWritableRoots: [...new Set(options.addDir)] },
+    } satisfies HeadlessStartupValues)</code></pre></figure>
+<figure class="sample source" data-file="packages/bundle/headless/cordis.patch.yml" data-start="14" data-end="24">
+<figcaption><span><a href="../deepseek-harness-master/packages/bundle/headless/cordis.patch.yml">仓库摘录 · packages/bundle/headless/cordis.patch.yml · L14–24</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>- insert:
+    # 先声明能提供启动数据的插件条目。
+    - id: headless-startup
+      name: '@deepseek-ai/dsh-headless/startup'
+
+    # 这行挂载实际跑任务的 Runner。
+    - id: headless-runner
+      name: '@deepseek-ai/dsh-headless'
+      # Runner 要等 headlessStartup 可用。
+      inject: [headlessStartup]
+      config:
+        # 在目标插件上下文求值，读取任务和 Session ID。
+        task: !!js ctx.headlessStartup.task
+        sessionId: !!js ctx.headlessStartup.sessionId</code></pre><pre class="raw-code" tabindex="0" hidden><code>- insert:
+    - id: headless-startup
+      name: '@deepseek-ai/dsh-headless/startup'
+
+    # Reads its task and run options from the ordinary headlessStartup provider.
+    - id: headless-runner
+      name: '@deepseek-ai/dsh-headless'
+      inject: [headlessStartup]
+      config:
+        task: !!js ctx.headlessStartup.task
+        sessionId: !!js ctx.headlessStartup.sessionId</code></pre></figure>
+<figure class="sample source" data-file="vendor/loader/src/index.ts" data-start="104" data-end="110">
+<figcaption><span><a href="../deepseek-harness-master/vendor/loader/src/index.ts">仓库摘录 · vendor/loader/src/index.ts · L104–110</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption>
+<pre class="reading-code" tabindex="0"><code>// Loader 接到配置处理事件时，先调用下游取得配置。
+ctx.on('internal/config', (fiber, next) =&gt; {
+  const config = next()
+  if (!fiber.entry || fiber.parent.fiber?.entry === fiber.entry) return config
+  if (fiber.runtime?.callback[EntryGroup.key]) return config
+  // 普通条目用自己的 ctx 解析 config 里的表达式。
+  return interpolate(fiber.ctx, config)
+})</code></pre><pre class="raw-code" tabindex="0" hidden><code>    ctx.on('internal/config', (fiber, next) =&gt; {
+      const config = next()
+      if (!fiber.entry || fiber.parent.fiber?.entry === fiber.entry) return config
+      // Tree carriers preserve the expressions owned by their child entries.
+      if (fiber.runtime?.callback[EntryGroup.key]) return config
+      return interpolate(fiber.ctx, config)
+    })</code></pre></figure>
+<h3>6. 下次看到 DSH 插件，按这个顺序读</h3>
+<ol><li>在 bundle 或 overlay 查 <code>id</code> 和 <code>name</code>，确认这个条目由哪种 profile 挂载。</li><li>在模块入口查 <code>inject</code> 与 <code>apply</code>。它是提供一个服务，还是给现有服务注册工具、监听器或其他贡献？</li><li>从消费方的 <code>ctx.服务名</code> 或事件名反查 provider、事件声明和分发位置。类型声明和运行时注册分别看。</li><li>最后查清理。找 <code>ctx.effect</code>、<code>ctx.on</code> 或已封装生命周期的注册方法，再看对应的卸载测试。</li></ol>
+<details><summary>自测 · 为什么我的插件在配置里有一行，apply 却没打印？</summary><p>先用配置输出确认该条目确实存在且启用，再查模块路径和启动诊断。若状态是 <code>PENDING</code>，重点看 <code>inject</code> 里的每个服务是否在该作用域可用。配置里有条目、模块加载完成、服务依赖就绪、<code>apply</code> 成功结束，是四个不同的检查点。</p></details>
+<p>继续读仓库的 <a href="../deepseek-harness-master/docs/cordis-primer.zh.md">Cordis 中文入门</a> 或 <a href="../deepseek-harness-master/docs/cordis-tutorial/index.zh.md">逐章实验</a>。想立刻把这些名字放回 DSH 的结构，去下一章 <a href="#map">架构与项目地图</a>。</p>
+</section>
+<section class="chapter" id="map"><header><div class="num">CHAPTER 03</div><h2>架构与项目地图</h2><p class="lede">从用户入口找到组装层，再找到处理请求、执行工具和保存会话的代码。</p></header>
+<p>DeepSeek Harness（下面简称 DSH）把模型、工具、Agent 循环、会话存储和应用入口装进同一棵 Cordis 插件树。<strong>先找组装配置，再找调用点。</strong> 看到一个包存在，只能确定它提供了实现。它在哪个应用里实际启用，由选中的 profile 及其 patch 决定。</p>
+<figure class="archify-panel">
+<iframe src="dsh-diagrams/architecture/architecture.html" title="交互图 01 · DSH 分层架构" loading="lazy" allowfullscreen></iframe>
+</figure>
+
+<h3 id="directory-map">仓库目录各管什么</h3>
+<p>从仓库根目录看，<code>apps/</code> 负责把能力组装成可以运行的应用，<code>packages/</code> 放这些能力的实现。下面按真实目录列出分工。想读代码，先选一行，再打开右侧的入口。</p>
+<div class="table"><table id="repo-directories"><thead><tr><th scope="col">顶层目录</th><th scope="col">负责什么</th><th scope="col">从哪看起</th></tr></thead><tbody><tr><th scope="row"><code>apps/</code></th><td>产品入口和应用组装。CLI 在这里，Web 有浏览器入口，桌面端另有 Electron 外壳和 Host 启动入口。</td><td><a class="source-path" href="../deepseek-harness-master/apps/cli/src/bin.ts">CLI 入口</a></td></tr><tr><th scope="row"><code>packages/</code></th><td>按能力分组的工作区包，形如 packages/&lt;组&gt;/&lt;包&gt;。Agent 循环、模型适配器、工具和存储实现主要在这里。</td><td><a class="source-path" href="../deepseek-harness-master/packages/README.md">工作区包总表</a></td></tr><tr><th scope="row"><code>vendor/</code></th><td>仓库内维护的第三方源码。Cordis 及其 Loader、Include 等组件在这里，可以顺着查插件注入与挂载。</td><td><a class="source-path" href="../deepseek-harness-master/vendor/README.md">vendored 包说明</a></td></tr><tr><th scope="row"><code>native/</code></th><td>平台相关的原生代码与构建。看 Node 原生扩展、进程约束或平台差异时从这里查。</td><td><a class="source-path" href="../deepseek-harness-master/native/README.md">原生组件说明</a></td></tr><tr><th scope="row"><code>python/</code></th><td>Python SDK 与运行时打包。Python 客户端通过 dsh 的 SDK profile 与 Harness 通信。</td><td><a class="source-path" href="../deepseek-harness-master/python/README.md">Python SDK 说明</a></td></tr><tr><th scope="row"><code>docs/</code></th><td>架构、开发规范、子系统文档和扩展教程。读总体设计先看 architecture，新增工具或包先看 cookbook。</td><td><a class="source-path" href="../deepseek-harness-master/docs/architecture.zh.md">中文架构文档</a></td></tr><tr><th scope="row"><code>website/</code></th><td>把仓库文档构建成 VitePress 站点的工程，负责文档展示和链接投影。</td><td><a class="source-path" href="../deepseek-harness-master/website/build.ts">文档站构建</a></td></tr><tr><th scope="row"><code>scripts/</code></th><td>工程命令的实现，包含构建、类型生成、检查和发布脚本。根 package.json 的 scripts 往往指到这里。</td><td><a class="source-path" href="../deepseek-harness-master/scripts/build.ts">构建脚本</a></td></tr><tr><th scope="row"><code>snapshots/</code></th><td>按 session、sdk、acp 和 web 放录制场景，用于复现输入、模型行为与预期结果。</td><td><a class="source-path" href="../deepseek-harness-master/snapshots/session/todo-write/snapshot.yml">todo_write 场景清单</a></td></tr><tr><th scope="row"><code>benchmarks/</code></th><td>性能用例与门槛，覆盖长会话、浏览器、终端 I/O 等路径。</td><td><a class="source-path" href="../deepseek-harness-master/benchmarks/AGENTS.md">性能验证说明</a></td></tr><tr><th scope="row"><code>patches/</code></th><td>安装时由 pnpm 应用到特定第三方依赖版本的补丁，映射写在 patchedDependencies。</td><td><a class="source-path" href="../deepseek-harness-master/pnpm-workspace.yaml">工作区与依赖补丁</a></td></tr><tr><th scope="row"><code>.github/</code></th><td>GitHub CI workflow、Issue 模板与 PR 模板。想知道远端实际跑哪些检查时看 workflows。</td><td><a class="source-path" href="../deepseek-harness-master/.github/AGENTS.md">CI 目录说明</a></td></tr><tr><th scope="row"><code>.agents/</code></th><td>开发代理使用的仓库技能与决策笔记。要理解某条约束的来由，可以从 notes 查。</td><td><a class="source-path" href="../deepseek-harness-master/.agents/notes/README.md">决策笔记索引</a></td></tr><tr><th scope="row"><code>.claude/</code></th><td>面向 Claude 的仓库技能目录。</td><td><a class="source-path" href="../deepseek-harness-master/CLAUDE.md">仓库指引</a></td></tr></tbody></table></div>
+<h3><code>apps/</code> 里有哪些入口</h3>
+<div class="table"><table id="app-directories"><thead><tr><th scope="col">应用目录</th><th scope="col">负责什么</th><th scope="col">从哪看起</th></tr></thead><tbody><tr><th scope="row"><code>apps/cli/</code></th><td>拥有 dsh 命令，解析参数、选 profile、管理插件，然后把启动交给 boot。</td><td><a class="source-path" href="../deepseek-harness-master/apps/cli/src/bin.ts">bin.ts</a></td></tr><tr><th scope="row"><code>apps/web/</code></th><td>浏览器应用的页面入口、Vite 配置和 Web 测试。聊天界面的许多功能实现分布在 packages/client。</td><td><a class="source-path" href="../deepseek-harness-master/apps/web/index.html">index.html</a></td></tr><tr><th scope="row"><code>apps/desktop/</code></th><td>Electron 桌面外壳与安装打包。负责窗口和与本地 Host 的协作。</td><td><a class="source-path" href="../deepseek-harness-master/apps/desktop/README.md">桌面应用说明</a></td></tr><tr><th scope="row"><code>apps/desktop-host/</code></th><td>桌面应用启动的 Host 进程入口，接上共享的 CLI profile 启动与 Web 应用。</td><td><a class="source-path" href="../deepseek-harness-master/apps/desktop-host/package.json">Host 包入口</a></td></tr><tr><th scope="row"><code>apps/plugin-market-generator/</code></th><td>生成插件市场数据的工程。</td><td><a class="source-path" href="../deepseek-harness-master/apps/plugin-market-generator/README.md">市场生成器说明</a></td></tr></tbody></table></div>
+<details><summary>展开 <code>packages/</code> 的完整分组索引</summary>
+<p>表中目录都在 <code>packages/</code> 下面。点击组名可打开该组的 README，再顺着工作区包往下读。</p>
+<div class="table"><table id="package-directories"><thead><tr><th scope="col">职责</th><th scope="col">目录及作用</th></tr></thead><tbody><tr><th scope="row">启动和组装</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/boot/README.md">boot/</a></code> · 准备 Host、加载 profile 和插件管理</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/bundle/README.md">bundle/</a></code> · 给各 profile 提供 YAML 组合层</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/preset/README.md">preset/</a></code> · 按 Agent 或 Session 装配能力</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/extensions/README.md">extensions/</a></code> · 运行期检查、挂载或卸载插件</li></ul></td></tr><tr><th scope="row">Agent 和模型</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/core/README.md">core/</a></code> · Agent、循环、提示词、工具服务和 Session 逻辑事件</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/llm/README.md">llm/</a></code> · 模型接口和 provider</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/context/README.md">context/</a></code> · 给模型准备工作区说明等上下文</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/compaction/README.md">compaction/</a></code> · 压缩上下文</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/guard/README.md">guard/</a></code> · 执行期限和循环约束</li></ul></td></tr><tr><th scope="row">会话和数据</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/session/README.md">session/</a></code> · 持久化、日志、投影和标题</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/session-query/README.md">session-query/</a></code> · 查找、检索与导出会话</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/attachment/README.md">attachment/</a></code> · 附件标识、验证和存储</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/spill/README.md">spill/</a></code> · 大体积工具结果的外置存储</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/deliverables/README.md">deliverables/</a></code> · 交付文件和工作区变更</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/workspace/README.md">workspace/</a></code> · 工作区实体与状态</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/storage/README.md">storage/</a></code> · 会话以外的存储抽象及实现</li></ul></td></tr><tr><th scope="row">进程和执行环境</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/subprocess/README.md">subprocess/</a></code> · 进程树管理</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/shell/README.md">shell/</a></code> · Shell 命令与工具</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/terminal/README.md">terminal/</a></code> · 持续交互的 PTY 终端</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/sandbox/README.md">sandbox/</a></code> · 进程隔离与后端</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/ssh/README.md">ssh/</a></code> · 远程文件、进程和沙箱实现</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/ptc-runtime/README.md">ptc-runtime/</a></code> · 供模型程序化组合工具的执行环境</li></ul></td></tr><tr><th scope="row">文件与外部能力</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/fs/README.md">fs/</a></code> · 文件系统服务和读写搜索工具</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/lsp/README.md">lsp/</a></code> · 语言服务器接入</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/skill/README.md">skill/</a></code> · 技能发现、读取和加载</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/web/README.md">web/</a></code> · 搜索网页和抓取内容</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/browser-use/README.md">browser-use/</a></code> · 浏览器操控服务</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/computer-use/README.md">computer-use/</a></code> · 桌面操控服务</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/document/README.md">document/</a></code> · Host 侧文档转 PDF</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/mcp/README.md">mcp/</a></code> · 把 MCP 服务接为工具</li></ul></td></tr><tr><th scope="row">任务和协作</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/subagent/README.md">subagent/</a></code> · 子 Agent 的委派和控制</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/team/README.md">team/</a></code> · 多 Agent 任务协调</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/jobs/README.md">jobs/</a></code> · 后台作业与生命周期</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/workflow/README.md">workflow/</a></code> · 工作流定义和执行</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/todo/README.md">todo/</a></code> · todo_write 清单</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/plan/README.md">plan/</a></code> · 计划协作状态与命令</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/goal/README.md">goal/</a></code> · 同一会话目标</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/schedule/README.md">schedule/</a></code> · 计划触发后续任务</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/interaction/README.md">interaction/</a></code> · 命令、权限、批准和询问用户</li></ul></td></tr><tr><th scope="row">产品界面和接口</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/client/README.md">client/</a></code> · 浏览器 UI、客户端服务与插槽</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/host/README.md">host/</a></code> · Web 服务宿主、目录选择和应用集成</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/api/README.md">api/</a></code> · Host 控制器及 RPC 网关</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/typert/README.md">typert/</a></code> · 从 TS 类型生成和加载远程接口信息</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/sdk/README.md">sdk/</a></code> · 进程外 JSON-RPC 协议与 TS SDK</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/acp/README.md">acp/</a></code> · 自动化用 Agent Client Protocol 服务端</li></ul></td></tr><tr><th scope="row">设置与运行支持</th><td><ul class="dir-items"><li><code><a class="source-path" href="../deepseek-harness-master/packages/settings/README.md">settings/</a></code> · 用户设置</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/credentials/README.md">credentials/</a></code> · 凭据与授权</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/identity/README.md">identity/</a></code> · 匿名身份</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/feedback/README.md">feedback/</a></code> · 用户反馈</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/telemetry/README.md">telemetry/</a></code> · 运行遥测</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/test-support/README.md">test-support/</a></code> · 测试夹具、回放和加载验证</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/util/README.md">util/</a></code> · 品牌类型、路径和其他通用工具</li><li><code><a class="source-path" href="../deepseek-harness-master/packages/experimental/README.md">experimental/</a></code> · 仍在评估的能力</li></ul></td></tr></tbody></table></div>
+</details>
+<div class="callout"><p><strong>最容易找错的三个地方</strong></p>
+<ul><li>改聊天页面，先找 <code>apps/web/</code> 和 <code>packages/client/</code>。改模型的搜索、抓取工具，找 <code>packages/web/</code>。改文档站，找 <code>website/</code>。</li><li>理解 Session 事件或模型历史，先看 <code>packages/core/session/</code>。改落盘或恢复，找 <code>packages/session/</code>。改历史搜索和导出，找 <code>packages/session-query/</code>。</li><li>改启动命令，找 <code>apps/cli/</code>。改某个 profile 默认挂哪些插件，找 <code>packages/bundle/</code>。改通用启动过程，找 <code>packages/boot/</code>。</li></ul>
+</div>
+<h3>按你想改的功能找源码</h3>
+<div class="map-search" hidden id="map-search"><label for="map-filter">筛选项目地图</label><input id="map-filter" type="search" placeholder="例如 Agent、模型、工具"><output id="map-count" aria-live="polite"></output></div><div class="table"><table id="project-map"><thead><tr><th>你想找什么</th><th>先打开</th><th>顺着什么找</th></tr></thead><tbody>
+<tr><td>命令、参数、默认 profile</td><td><a class="source-path" href="../deepseek-harness-master/apps/cli/src/bin.ts">apps/cli/src/bin.ts</a>；<a class="source-path" href="../deepseek-harness-master/apps/cli/src/args.ts">apps/cli/src/args.ts</a></td><td><code>parseDshArgs</code> → <code>invocation.mode</code> → <code>runProfile</code>。</td></tr>
+<tr><td>启动时到底挂了什么</td><td><a class="source-path" href="../deepseek-harness-master/packages/bundle/base/cordis.patch.yml">packages/bundle/base/cordis.patch.yml</a>；<a class="source-path" href="../deepseek-harness-master/packages/boot/app-boot/src/profile-context.ts">packages/boot/app-boot/src/profile-context.ts</a></td><td>按 YAML 的 <code>id</code> 找包名，再查该包 <code>package.json</code> 和 <code>src/index.ts</code>。</td></tr>
+<tr><td>发消息、排队、跑 Agent</td><td><a class="source-path" href="../deepseek-harness-master/packages/core/agent/src/index.ts">packages/core/agent/src/index.ts</a>；<a class="source-path" href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts">packages/core/agent-loop/src/agent.ts</a></td><td>前者是接口、注册表和事件，后者是默认循环实现。找 <code>followup</code>、<code>step</code>。</td></tr>
+<tr><td>工具调用和权限拦截</td><td><a class="source-path" href="../deepseek-harness-master/packages/core/tools/src/index.ts">packages/core/tools/src/index.ts</a>；<a class="source-path" href="../deepseek-harness-master/packages/core/tools/src/pipeline.ts">packages/core/tools/src/pipeline.ts</a></td><td>注册在 <code>ctx.tools</code>。工具实现可在 <code>packages/todo</code>、<code>packages/fs</code>、<code>packages/shell</code> 等组。</td></tr>
+<tr><td>请求模型、解析流</td><td><a class="source-path" href="../deepseek-harness-master/packages/llm/llm/src/index.ts">packages/llm/llm/src/index.ts</a>；<a class="source-path" href="../deepseek-harness-master/packages/llm/llm-deepseek/src/adapter.ts">packages/llm/llm-deepseek/src/adapter.ts</a></td><td>先找 <code>prepareCall</code> 和已绑定的流，再看适配器如何访问服务端与产生 chunk。</td></tr>
+<tr><td>聊天记录、回放、落盘</td><td><a class="source-path" href="../deepseek-harness-master/packages/core/session/src/index.ts">packages/core/session/src/index.ts</a>；<a class="source-path" href="../deepseek-harness-master/packages/session/session-persistence-jsonl/README.md">packages/session/session-persistence-jsonl/README.md</a></td><td>核心 Session 提供逻辑事件和历史投影，JSONL provider 负责物理格式。</td></tr>
+<tr><td>浏览器发消息、Host API、流回传</td><td><a class="source-path" href="../deepseek-harness-master/packages/bundle/web-app/cordis.patch.yml">packages/bundle/web-app/cordis.patch.yml</a>；<a class="source-path" href="../deepseek-harness-master/packages/api/session-controller/src/index.ts">packages/api/session-controller/src/index.ts</a></td><td>浏览器侧先查 <code>packages/client</code> 与 API 的 client 入口，Host 查 controller、gateway 与 <code>packages/host</code>。</td></tr>
+<tr><td>其他接入形态、底层与测试</td><td><a class="source-path" href="../deepseek-harness-master/packages/README.md">packages/README.md</a>；<a class="source-path" href="../deepseek-harness-master/pnpm-workspace.yaml">pnpm-workspace.yaml</a></td><td><code>apps/desktop</code> 是 Electron 外壳，<code>python/</code> 是 Python 接入，<code>vendor/</code> 放 Cordis 等 vendored 代码，<code>native/</code> 放原生扩展，<code>snapshots/</code> 放录制会话。</td></tr>
+</tbody></table></div>
+<h3>用包名反查源码</h3>
+<p>这里是 pnpm monorepo。<code>packages/&lt;组&gt;/&lt;包&gt;</code> 是目录，<code>@deepseek-ai/dsh-*</code> 是跨包导入的名字，二者未必同形。例如 <code>@deepseek-ai/dsh-tools</code> 位于 <code>packages/core/tools</code>。同包源码写 <code>./schema.ts</code>。<code>workspace:*</code> 和 <code>workspace:~</code> 是 pnpm 工作区依赖声明。源码检查通过 <code>tsconfig.base.json</code> 的 <code>paths</code> 找到 <code>src</code>。构建产物的入口则看包的 <code>exports</code>，例如 headless 的 <code>.</code> 与 <code>./startup</code> 分别指向两个 <code>lib</code> 文件。</p>
+<figure class="sample source" data-file="packages/bundle/headless/package.json" data-start="13" data-end="27"><figcaption><span><a href="../deepseek-harness-master/packages/bundle/headless/package.json" title="打开本地源文件">仓库摘录 · packages/bundle/headless/package.json · L13–27</a> <span class="annotated-kind">JSONC · 讲解用</span></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 包按 ESM 解释，main 是运行入口，types 指向 TypeScript 声明。
+"type": "module",
+"main": "lib/index.js",
+"types": "lib/types/index.d.ts",
+// exports 列出外部可以访问的入口。
+"exports": {
+  // 只导入包名时走这一项。类型检查与运行时各取对应文件。
+  ".": {
+    "types": "./lib/types/index.d.ts",
+    "default": "./lib/index.js"
+  },
+  // 在包名后加 /startup 时走这个子入口。
+  "./startup": {
+    "types": "./lib/types/startup.d.ts",
+    "default": "./lib/startup.js"
+  },
+  // 还显式暴露配置文件、部分源码和资源。
+  "./cordis.patch.yml": "./cordis.patch.yml",
+  "./src/*": "./src/*",
+  "./locale/*.json": "./locale/*.json",</code></pre><pre class="raw-code" tabindex="0" hidden><code>  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./startup": {
+      "types": "./lib/types/startup.d.ts",
+      "default": "./lib/startup.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./src/*": "./src/*",
+    "./locale/*.json": "./locale/*.json",</code></pre></figure>
+<figure class="sample"><figcaption><span>PowerShell · 在源码根目录查包</span></figcaption><pre class="reading-code" tabindex="0"><code># 只在 packages 下的 package.json 查名字。-n 显示匹配行号。
+rg -n '"name": "@deepseek-ai/dsh-tools"' packages -g package.json</code></pre><div class="out"><strong>匹配位置</strong>
+packages/core/tools/package.json（Windows 上路径分隔符可能显示为反斜杠）</div></figure>
+<h3>分清三类跨模块连接</h3>
+<div class="cards"><div><strong>服务调用 · 要一个能力</strong><code>ctx.tools.register(...)</code> 往工具服务注册定义。<code>ctx.agents.create(...)</code> 从 Agent 注册表请求实例。</div><div><strong>事件 · 观察或干预过程</strong><code>ctx.on("session/event", ...)</code> 观察已提交事实。Waterfall 监听收到 <code>next</code>，调用它才把工作交给后续处理器，直接返回可截断。</div><div><strong>配置 · 决定用哪个实现</strong>同一服务接口可以配不同 provider。插件的 <code>inject</code> 声明所需服务，装配顺序由依赖与 Loader 协调。</div><div><strong>生命周期 · 知道怎么拆</strong>注册和监听属于插件 fiber。效果随卸载撤销，便于重载和正常关停。</div></div>
+</section>
+<section class="chapter" id="run"><header><div class="num">CHAPTER 04</div><h2>在 Windows 上从源码启动</h2><p class="lede">先确认工作目录和构建产物，再选择 Web、Headless 或查看组合。</p></header>
+<p>这份本地目录的 <code>package.json</code> 版本为 <code>0.2.2-rc.1</code>，声明 Node <code>&gt;=24.9.0</code> 和 <code>pnpm@11.28.5</code>。当前目录没有 <code>.git</code>，也没有已安装的 <code>node_modules</code>。阅读这份快照可以直接点链接。要开始正式开发，用带 Git 元数据的项目检出，便于版本溯源和运行工作区 hooks。命令在<strong>包含根 package.json 和 pnpm-workspace.yaml 的目录</strong>运行。</p>
+<figure class="sample source" data-file="package.json" data-start="2" data-end="12"><figcaption><span><a href="../deepseek-harness-master/package.json" title="打开本地源文件">仓库摘录 · package.json · L2–12</a> <span class="annotated-kind">JSONC · 讲解用</span></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>"name": "@deepseek-ai/dsh-root",
+"version": "0.2.2-rc.1",
+"license": "MIT",
+// private 禁止把 monorepo 根包作为产品包发布。
+"private": true,
+"type": "module",
+// 根项目固定使用这个 pnpm 版本。
+"packageManager": "pnpm@11.28.5",
+// 最低 Node 版本写在 engines。
+"engines": {
+  "node": "&gt;=24.9.0"
+},
+"workspaces": [
+  "vendor/*",</code></pre><pre class="raw-code" tabindex="0" hidden><code>  "name": "@deepseek-ai/dsh-root",
+  "version": "0.2.2-rc.1",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.28.5",
+  "engines": {
+    "node": "&gt;=24.9.0"
+  },
+  "workspaces": [
+    "vendor/*",</code></pre></figure>
+<figure class="sample"><figcaption><span>PowerShell · 从源码启动 Web</span></figcaption><pre class="reading-code" tabindex="0"><code># 先检查 Node、pnpm 和 Git 的版本。
+node --version
+pnpm --version
+git --version
+# 在仓库根目录安装工作区依赖。
+pnpm install
+# 生成本地启动需要的构建产物。
+pnpm run build
+# 通过 dsh 选择 web profile。
+pnpm dsh web</code></pre><div class="out"><strong>验收点（按源码说明，实际日志随环境变化）</strong>
+Node 满足 engines，pnpm 与 packageManager 一致。
+安装与构建退出码为 0。
+默认地址 http://127.0.0.1:3080，以启动日志和当前配置为准。</div></figure>
+<p>若 pnpm 由 Corepack 管理，按照仓库开发文档配置后检查 <code>pnpm --version</code>。原生 Windows 和 WSL 2 都是开发选择，各自安装依赖和工具链。构建脚本会加载 <code>tsdown.config.ts</code>，Node 类型擦除需保持开启。路径解析失败先检查是运行环境、安装还是构建阶段出错，再去查应用代码。</p>
+<div class="table"><table><thead><tr><th>想验证什么</th><th>命令</th><th>该观察什么</th></tr></thead><tbody>
+<tr><td>命令行是否可用</td><td><code>pnpm dsh --help</code></td><td>可看到 profile 和管理命令的用法，不会发起模型任务。</td></tr>
+<tr><td>配置叠加结果</td><td><code>pnpm dsh --profile headless --dump-config</code></td><td>打印组合后的 YAML，可搜索 <code>headless-runner</code>。适合区分「没挂载」和「挂载后运行失败」。</td></tr>
+<tr><td>Web 开发</td><td><code>pnpm run dev:web --no-open --port 3081</code></td><td>构建后启动，并重建浏览器 bundle。已有产物时用 <code>pnpm run start:web</code> 启动。</td></tr>
+<tr><td>真实模型跑一次</td><td><code>pnpm dsh --profile headless "只回复 OK"</code></td><td>需要有效的 <code>DEEPSEEK_API_KEY</code>。默认 stdout 是最终文本；模型的具体字样由模型决定。</td></tr>
+<tr><td>用程序读取事件</td><td><code>pnpm dsh --profile headless --json "只回复 OK"</code></td><td>stdout 改为逐行 JSON。普通模式的 reasoning 等进度可走 stderr。</td></tr>
+</tbody></table></div>
+<p>真实模型凭据放在仓库忽略的根 <code>.env</code> 或进程环境。<code>DEEPSEEK_BASE_URL</code> 是可选覆盖。先读脚本与配置，学习调用流程可以用下面的录制日志，之后再选择实际调用。上述命令是本地快照提供的启动路径，本教程验证了源文件与示例，实际 DSH 应用启动和真实模型调用留给有依赖的检出环境。</p>
+<figure class="sample source" data-file="package.json" data-start="211" data-end="216"><figcaption><span><a href="../deepseek-harness-master/package.json" title="打开本地源文件">仓库摘录 · package.json · L211–216</a> <span class="annotated-kind">JSONC · 讲解用</span></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 先预加载 tsx 的 ESM 支持，再执行 CLI 的 TypeScript 源码。
+"dsh": "node --import tsx/esm apps/cli/src/bin.ts",
+"demo:ptc": "node scripts/demo-ptc.mjs",
+"demo:inspector": "node --import tsx/esm apps/cli/src/bin.ts web --patch ./packages/experimental/inspector/cordis.source.patch.yml",
+// 这一项提供单独的测试模型服务入口。
+"mock:llm": "node --import tsx packages/test-support/llm-mock-server/src/bin.ts",
+// start:web 使用已有产物启动。
+"start:web": "node --import tsx/esm apps/cli/src/bin.ts web",
+// dev:web 走开发脚本，负责构建、运行和监听。
+"dev:web": "tsx scripts/dev-web.ts --poll",</code></pre><pre class="raw-code" tabindex="0" hidden><code>    "dsh": "node --import tsx/esm apps/cli/src/bin.ts",
+    "demo:ptc": "node scripts/demo-ptc.mjs",
+    "demo:inspector": "node --import tsx/esm apps/cli/src/bin.ts web --patch ./packages/experimental/inspector/cordis.source.patch.yml",
+    "mock:llm": "node --import tsx packages/test-support/llm-mock-server/src/bin.ts",
+    "start:web": "node --import tsx/esm apps/cli/src/bin.ts web",
+    "dev:web": "tsx scripts/dev-web.ts --poll",</code></pre></figure>
+<p><code>node --import tsx/esm</code> 给 Node 预加载 ESM 的 TS 支持，然后执行源码入口 <code>apps/cli/src/bin.ts</code>。这条运行链与上一份小项目的「先 tsc 生成 dist，再 node dist」不同。它仍然依赖需要预先生成的 workspace 和 Web 产物。分别看三条路线：</p>
+<ul><li><code>pnpm run typecheck</code> 做 Typert 生成、引用项目与聚合检查，跳过原生和浏览器打包。</li><li><code>pnpm run build:artifacts</code> 准备 native、Typert、Host/Client 的 <code>tsc</code> 与 <code>tsdown</code> 产物，以及 Web/桌面构建所需输出。</li><li><code>pnpm run build:check</code> 检查聚合程序，读取已有声明。刚改包源码时，先刷新 artifacts，或直接用 <code>pnpm run build</code>。</li></ul>
+<p>Host 和 Client 各有一个 TypeScript 聚合工程。两边可能给 Cordis 的 <code>Context</code> 合并同名但含义不同的服务键，分开检查才能保留各自的环境。具体脚本、检查和约束见 <a class="source-path" href="../deepseek-harness-master/docs/development.zh.md">docs/development.zh.md</a>。</p>
+</section>
+<section class="chapter" id="boot"><header><div class="num">CHAPTER 05</div><h2>顺着源码追 CLI 和插件挂载</h2><p class="lede">以 pnpm dsh --profile headless 为例，先看到参数如何变成一次可启动的配置组合。</p></header>
+<figure class="archify-panel">
+<iframe src="dsh-diagrams/startup/startup.html" title="交互图 02 · CLI 启动流程" loading="lazy" allowfullscreen></iframe>
+</figure>
+<h3>1. 从命令参数到分支</h3>
+<figure class="sample source" data-file="apps/cli/src/bin.ts" data-start="26" data-end="46"><figcaption><span><a href="../deepseek-harness-master/apps/cli/src/bin.ts" title="打开本地源文件">仓库摘录 · apps/cli/src/bin.ts · L26–46</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// CLI 的主要入口。options 没传时用空对象。
+export async function runCli(options: RunCliOptions = {}): Promise&lt;void&gt; {
+  const version = getDshRuntimeVersion()
+  // 从 options 取出桌面 profile 开关，其余属性交给 profile 启动器。
+  const { manageDesktopProfile, ...profileOptions } = options
+  // 跳过 Node 与入口文件路径，只解析用户输入的参数。
+  const invocation = parseDshArgs(process.argv.slice(2), version, manageDesktopProfile)
+
+  // mode 是分派标签。这个摘录只展示普通 profile 启动分支。
+  switch (invocation.mode) {
+    case 'profile': {
+      // 走到 profile 分支时才加载启动模块。
+      const { runProfile } = await import('./profile-boot.ts')
+      try {
+        // 把环境、profile、补丁文件和剩余参数交给 runProfile。
+        await runProfile({
+          environment: loadLayeredEnv('dsh'),
+          profile: invocation.profile,
+          fromDefaultProfile: invocation.fromDefaultProfile,
+          patchFiles: invocation.patches,
+          args: invocation.args,
+          ...profileOptions,
+        })
+      } catch (error) {
+        // 只在这里接管 StartupError。其他异常继续向外抛。
+        if (!(error instanceof StartupError)) throw error
+        // 先写出启动诊断，再用退出码 1 报告失败。
+        await reportStartupFailure(error, { home: resolveDshHome(), version, profile: invocation.profile })
+        process.exit(1)</code></pre><pre class="raw-code" tabindex="0" hidden><code>export async function runCli(options: RunCliOptions = {}): Promise&lt;void&gt; {
+  const version = getDshRuntimeVersion()
+  const { manageDesktopProfile, ...profileOptions } = options
+  const invocation = parseDshArgs(process.argv.slice(2), version, manageDesktopProfile)
+
+  switch (invocation.mode) {
+    case 'profile': {
+      const { runProfile } = await import('./profile-boot.ts')
+      try {
+        await runProfile({
+          environment: loadLayeredEnv('dsh'),
+          profile: invocation.profile,
+          fromDefaultProfile: invocation.fromDefaultProfile,
+          patchFiles: invocation.patches,
+          args: invocation.args,
+          ...profileOptions,
+        })
+      } catch (error) {
+        if (!(error instanceof StartupError)) throw error
+        await reportStartupFailure(error, { home: resolveDshHome(), version, profile: invocation.profile })
+        process.exit(1)</code></pre></figure>
+<figure class="sample source" data-file="apps/cli/src/bin.ts" data-start="69" data-end="78"><figcaption><span><a href="../deepseek-harness-master/apps/cli/src/bin.ts" title="打开本地源文件">仓库摘录 · apps/cli/src/bin.ts · L69–78</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>    }
+    default:
+      // 编译期检查是否处理完所有 mode。新增分支后漏处理会得到类型错误。
+      invocation satisfies never
+      // 如果运行时真的落入默认分支，就抛出错误。
+      throw new Error(`dsh: unhandled invocation mode ${JSON.stringify(invocation)}`)
+  }
+}
+
+// 只有直接作为入口运行时才执行 CLI。
+if (import.meta.main) {
+  await runCli()
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>    }
+    default:
+      invocation satisfies never
+      throw new Error(`dsh: unhandled invocation mode ${JSON.stringify(invocation)}`)
+  }
+}
+
+if (import.meta.main) {
+  await runCli()
+}</code></pre></figure>
+<p><code>process.argv</code> 的前两项是 Node 和入口路径，<code>slice(2)</code> 得到用户传的部分。<code>parseDshArgs</code> 返回带 <code>mode</code> 的联合。普通启动走 <code>profile</code>，再动态导入 <code>runProfile</code>。<code>--dump-config</code> 切到单独的配置输出分支。第一个摘录里的 <code>StartupError</code> 分支负责输出启动故障，其他异常继续向外抛。</p>
+<h3>2. 先提供进程事实，再挂应用</h3>
+<figure class="sample source" data-file="apps/cli/src/profile-boot.ts" data-start="313" data-end="339"><figcaption><span><a href="../deepseek-harness-master/apps/cli/src/profile-boot.ts" title="打开本地源文件">仓库摘录 · apps/cli/src/profile-boot.ts · L313–339</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 根配置位于选中的 profile 目录。
+const rootConfig = join(composed.profile.dir, PROFILE_ROOT_FILENAME)
+// 把 profile 名称、目录、bundle 列表和覆盖层打包成一份上下文数据。
+const profileContext: ProfileContext = {
+  name: options.profile,
+  // 只在传入 packageManager 时才加这个属性。
+  ...(options.packageManager === undefined ? {} : { packageManager: options.packageManager }),
+  dir: composed.profile.dir, patchPath: composed.profile.patchPath,
+  installAnchor: options.resolvedProfile?.installAnchor ?? INSTALL_ANCHOR,
+  startedBundles: composed.profile.layers.map(layer =&gt; layer.packageName),
+  cwd: process.cwd(), home: resolveDshHome(),
+  overlays: composed.overlays, telemetryDisabledEnv: process.env.DSH_TELEMETRY_DISABLED,
+}
+// 把配置和启动准备函数交给 boot。下面的回调会在插件树挂载前执行。
+const ctx = await boot(
+  NAME,
+  rootConfig,
+  readProfilePatches(NAME, profileContext, composed.profile),
+  async (hostCtx) =&gt; {
+    app.current = hostCtx
+    // 先提供 profile 数据与本次进程的环境，再安装包解析服务。
+    hostCtx.provide('profileContext', profileContext)
+    hostCtx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, options.environment)
+    await hostCtx.plugin(PluginPackages, {
+      resolution: composed.resolution,
+    })
+    // 向应用插件提供参数、退出入口和就绪信号。
+    provideCmdline(hostCtx, {
+      args: options.args,
+      exit: code =&gt; void shutdown.shutdown(code),
+      ready: appReady.service,
+    })
+  },
+)</code></pre><pre class="raw-code" tabindex="0" hidden><code>    const rootConfig = join(composed.profile.dir, PROFILE_ROOT_FILENAME)
+    const profileContext: ProfileContext = {
+      name: options.profile,
+      ...(options.packageManager === undefined ? {} : { packageManager: options.packageManager }),
+      dir: composed.profile.dir, patchPath: composed.profile.patchPath,
+      installAnchor: options.resolvedProfile?.installAnchor ?? INSTALL_ANCHOR,
+      startedBundles: composed.profile.layers.map(layer =&gt; layer.packageName),
+      cwd: process.cwd(), home: resolveDshHome(),
+      overlays: composed.overlays, telemetryDisabledEnv: process.env.DSH_TELEMETRY_DISABLED,
+    }
+    const ctx = await boot(NAME, rootConfig, readProfilePatches(NAME, profileContext, composed.profile), async (hostCtx) =&gt; {
+      app.current = hostCtx
+      hostCtx.provide('profileContext', profileContext)
+      // Before any config-tree entry mounts, so plugins resolve all launch-time
+      // environment values from the same immutable launch snapshot.
+      hostCtx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, options.environment)
+      await hostCtx.plugin(PluginPackages, {
+        resolution: composed.resolution,
+      })
+      // The command line and bounded exit request are launcher facts available
+      // to every app plugin that injects the argument snapshot.
+      provideCmdline(hostCtx, {
+        args: options.args,
+        exit: code =&gt; void shutdown.shutdown(code),
+        ready: appReady.service,
+      })
+    })</code></pre></figure>
+<p>外层 <code>boot(..., async (hostCtx) =&gt; { ... })</code> 最后传入一个准备函数。它把 profile 数据、启动环境和命令行/退出请求交给 Host Context。插件随后从 Context 取这些事实，读取同一份启动配置。<code>app.current</code> 使启动期间的信号也能找到当前树，信号和清理链仍由启动器拥有。</p>
+<figure class="sample source" data-file="packages/boot/app-boot/src/index.ts" data-start="1220" data-end="1236"><figcaption><span><a href="../deepseek-harness-master/packages/boot/app-boot/src/index.ts" title="打开本地源文件">仓库摘录 · packages/boot/app-boot/src/index.ts · L1220–1236</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 先记下当前启动阶段，失败时用它区分准备阶段和挂载阶段。
+let stage = 'host preparation failed'
+try {
+  // 以配置所在目录作为解析基准，并提供 DSH home 路径。
+  ctx.baseUrl = pathToFileURL(dirname(absoluteConfigPath)).href + '/'
+  ctx.provide('dshHomePath', dshHomePath)
+  // 先安装 Loader，再运行调用方可选的 prepare 函数。
+  await ctx.plugin(Loader)
+  await prepare?.(ctx)
+  stage = 'plugin tree failed to load'
+  // 根 Include 负责挂载配置所声明的插件树。
+  await mountRootInclude(ctx, absoluteConfigPath, patches, bareModuleBaseUrl, binName)
+  // 等待加载结算。应用若已自行退出，Loader 可能已经被释放。
+  await ctx.get('loader')?.await()
+  if (ctx.get('loader') === undefined) return ctx
+  // 存活的树还要检查关键启动项。
+  await auditStartupEntries(ctx, binName)
+  return ctx</code></pre><pre class="raw-code" tabindex="0" hidden><code>  let stage = 'host preparation failed'
+  try {
+    ctx.baseUrl = pathToFileURL(dirname(absoluteConfigPath)).href + '/'
+    ctx.provide('dshHomePath', dshHomePath)
+    await ctx.plugin(Loader)
+    await prepare?.(ctx)
+    stage = 'plugin tree failed to load'
+    await mountRootInclude(ctx, absoluteConfigPath, patches, bareModuleBaseUrl, binName)
+    // A surface can finish and dispose the whole tree while startup is still
+    // in flight, before the last entry settles. The Loader service goes with
+    // it, and the activation audit describes a live tree — reading `ctx.loader`
+    // past this point would throw a TypeError over an app that exited exactly
+    // as asked. Re-check after settlement before auditing the tree.
+    await ctx.get('loader')?.await()
+    if (ctx.get('loader') === undefined) return ctx
+    await auditStartupEntries(ctx, binName)
+    return ctx</code></pre></figure>
+<p><code>new Context()</code> 在该函数前面创建根。Loader 挂上后先 <code>prepare</code>，再挂根 Include，等待 Loader 的挂载结算并检查启动项。<code>await prepare?.(ctx)</code> 表示没有传准备函数时跳过调用。</p>
+<h3>3. Profile 叠加决定最终树</h3>
+<figure class="sample source" data-file="packages/boot/app-boot/src/profile-context.ts" data-start="74" data-end="84"><figcaption><span><a href="../deepseek-harness-master/packages/boot/app-boot/src/profile-context.ts" title="打开本地源文件">仓库摘录 · packages/boot/app-boot/src/profile-context.ts · L74–84</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>export function readProfilePatches(binName: string, context: ProfileContext, initialProfile?: Profile): PatchOptions[] {
+  // 按优先级顺序展开所有层，并复制组合数据，避免调用方改到原配置。
+  const patches = structuredClone([
+    // 第一层：profile 选定的 bundle。
+    ...readBundlePatches(binName, context, initialProfile),
+    // 第二层：profile 自己的补丁。缺少时用空数组。
+    ...(initialProfile?.patches ?? loadOptionalPatches(binName, context.patchPath) ?? []),
+    // 第三层：Harness home 下的补丁。
+    ...(loadOptionalPatches(binName, join(context.home, PROFILE_PATCH_FILENAME)) ?? []),
+    // 第四层：这次启动传入的命令行覆盖。
+    ...context.overlays,
+  ])
+  // 根据启动环境和遥测条目判断是否追加一层遥测覆盖。
+  const telemetryPatch = resolveTelemetryPatch(context.telemetryDisabledEnv,
+    composeEntries([patches]).some(row =&gt; row.id === TELEMETRY_ROW_ID))
+  if (telemetryPatch !== undefined) patches.push(telemetryPatch)
+  return patches</code></pre><pre class="raw-code" tabindex="0" hidden><code>export function readProfilePatches(binName: string, context: ProfileContext, initialProfile?: Profile): PatchOptions[] {
+  const patches = structuredClone([
+    ...readBundlePatches(binName, context, initialProfile),
+    ...(initialProfile?.patches ?? loadOptionalPatches(binName, context.patchPath) ?? []),
+    ...(loadOptionalPatches(binName, join(context.home, PROFILE_PATCH_FILENAME)) ?? []),
+    ...context.overlays,
+  ])
+  const telemetryPatch = resolveTelemetryPatch(context.telemetryDisabledEnv,
+    composeEntries([patches]).some(row =&gt; row.id === TELEMETRY_ROW_ID))
+  if (telemetryPatch !== undefined) patches.push(telemetryPatch)
+  return patches</code></pre></figure>
+<p>正常层次从低到高是 <strong>bundle 列表 → profile 自己的 patch → Harness home 的 patch → 命令行 overlay</strong>。这段代码还会按条件在尾部加遥测覆盖。<code>...数组</code> 把各层的行依次展开。同一个 <code>id</code> 上的 <code>config</code> 替换应视为整块配置替换，不能假定会递归合并。修改前先看 <code>--dump-config</code> 的最终行。</p>
+<p>Headless 基于共享 base，再插入 <code>headless-startup</code> 与 <code>headless-runner</code>。回到第一章的 YAML 摘录，前者提供 <code>headlessStartup</code>，后者从它读取任务与选项。Web 选择另一套应用层，其中的 <code>webserver</code> 行决定监听地址。它们继续共享 Agent 和 Session。</p>
+<figure class="sample source" data-file="packages/bundle/web-app/cordis.patch.yml" data-start="183" data-end="188"><figcaption><span><a href="../deepseek-harness-master/packages/bundle/web-app/cordis.patch.yml" title="打开本地源文件">仓库摘录 · packages/bundle/web-app/cordis.patch.yml · L183–188</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code># 这行把 Web 的 HTTP 服务挂进当前 profile。
+- id: webserver
+  name: '@deepseek-ai/dsh-host-webserver'
+  # 先等 webStartup，再根据它提供的配置决定监听地址。
+  inject: [webStartup]
+  config:
+    # 没有显式 host 或 port 时，使用本机地址和 3080 端口。
+    host: !!js ctx.webStartup.host ?? '127.0.0.1'
+    port: !!js ctx.webStartup.port ?? 3080</code></pre><pre class="raw-code" tabindex="0" hidden><code>    - id: webserver
+      name: '@deepseek-ai/dsh-host-webserver'
+      inject: [webStartup]
+      config:
+        host: !!js ctx.webStartup.host ?? '127.0.0.1'
+        port: !!js ctx.webStartup.port ?? 3080</code></pre></figure>
+</section>
+<section class="chapter" id="turn"><header><div class="num">CHAPTER 06</div><h2>从任务字符串追到模型流</h2><p class="lede">读清 Agent、Turn、Step 和 Tool Call 的层次，再看它们如何接起来。</p></header>
+<figure class="archify-panel">
+<iframe src="dsh-diagrams/task/task.html" title="交互图 03 · 跟读一次 Headless 任务" loading="lazy" allowfullscreen></iframe>
+</figure>
+<div class="table"><table><thead><tr><th>名词</th><th>这里是什么意思</th><th>观察点</th></tr></thead><tbody><tr><td>Agent</td><td>当前进程中的运行对象，持有 inbox、状态和执行能力。</td><td><code>ReactLoopAgent</code> 实现 <code>Agent</code>。</td></tr><tr><td>Session</td><td>身份和有序事实，可能在另一次进程启动后恢复。</td><td><code>session.append(...)</code> 写逻辑事件，<code>deriveMessages()</code> 产生模型历史。</td></tr><tr><td>Turn</td><td>从开始接手工作到本轮收束，可包含零个或多个 step。</td><td><code>turn/start</code>、<code>turn/end</code>。</td></tr><tr><td>Step</td><td>一次模型请求及其关联工具执行。被拒绝或初始输入被改写为空时可以没有 step。</td><td><code>step/start</code>、<code>step/end</code>，中间有 assistant 结果和 tool 结果。</td></tr></tbody></table></div>
+<h3>1. Headless 把 prompt 放进 inbox</h3>
+<p><code>run</code> 按 <code>sessionId</code> 选择创建 Agent 或接管确切的既存 Session。<code>AgentLoop</code> 在安装时给 <code>ctx.agents</code> 设置 factory，注册表因此能调用默认的 Agent 实现。最终传给 <code>followup</code> 的是结构化用户消息。</p>
+<figure class="sample source" data-file="packages/core/agent-loop/src/index.ts" data-start="329" data-end="336"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/index.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/index.ts · L329–336</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>const ctx = this.runtime.ctx
+const ownership = this.ownership
+// 给 Loop 注册资源清理，避免卸载时留下未完成的生命周期工作。
+ctx.effect(() =&gt; () =&gt; ownership.dispose(), 'agentLoop.transactions()')
+// 从 Session 日志派生模型选择与收件箱的状态。
+this.modelProjectionHandle = await ctx.sessionProjections.register(modelSelectionProjectionDefinition)
+this.inboxProjectionHandle = await ctx.sessionProjections.register(inboxProjectionDefinition)
+// 把当前 AgentLoop 注册为 Agent 工厂。ctx.agents 后续可通过它创建实例。
+ctx.effect(() =&gt; ctx.agents.setFactory(this), 'agentLoop.setFactory()')
+// 给系统提示词提供当前 provider，优先使用选定模型的数据。
+ctx.systemPrompt.variable('provider', context =&gt; context.modelSelection?.provider ?? context.agent?.options.provider)</code></pre><pre class="raw-code" tabindex="0" hidden><code>    const ctx = this.runtime.ctx
+    const ownership = this.ownership
+    // Agent projections remain readable until teardown finishes.
+    ctx.effect(() =&gt; () =&gt; ownership.dispose(), 'agentLoop.transactions()')
+    this.modelProjectionHandle = await ctx.sessionProjections.register(modelSelectionProjectionDefinition)
+    this.inboxProjectionHandle = await ctx.sessionProjections.register(inboxProjectionDefinition)
+    ctx.effect(() =&gt; ctx.agents.setFactory(this), 'agentLoop.setFactory()')
+    ctx.systemPrompt.variable('provider', context =&gt; context.modelSelection?.provider ?? context.agent?.options.provider)</code></pre></figure>
+<figure class="sample source" data-file="packages/bundle/headless/src/index.ts" data-start="418" data-end="443"><figcaption><span><a href="../deepseek-harness-master/packages/bundle/headless/src/index.ts" title="打开本地源文件">仓库摘录 · packages/bundle/headless/src/index.ts · L418–443</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>try {
+  try {
+    // 把任务字符串包装为用户消息，提交给 Agent 的下一轮。
+    agent.followup(createUserMessage({
+      content: [{ type: 'text', text: task }],
+      source: { kind: 'user' },
+    }))
+    // 等待 Agent 以及相关子 Agent 的工作稳定。
+    const subagents = ctx.get('subagents')
+    while (true) {
+      await agent.whenIdle()
+      // 记录观察到的事件序号。如果等待期间状态或序号变了，就继续等待。
+      const idleSeq = agent.session.seq
+      if (!await subagents?.waitForTreeWork(agent)
+        &amp;&amp; agent.status === 'idle' &amp;&amp; agent.session.seq === idleSeq) break
+    }
+  // 无论成功还是失败，都停止监听推理流。
+  } finally {
+    stopReasoning?.()
+  }
+  // 先要求 Session 刷新，再处理失败并汇总这一轮的结果。
+  await sessions.flush(agent.session)
+  if (failure !== undefined) throw failure.error
+  const outcome = summarize(agent.session, firstSeq)
+  // 普通模式写最终文本，JSON 模式用投影输出结束记录。
+  if (projection === undefined) io.stdout.write(outcome.text + '\n')
+  else projection.finish(outcome.text, outcome.reason)
+  if (outcome.reason?.kind === 'error') {
+    io.stderr.write(`dsh: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
+  }
+  // 只有 completed 以 0 退出，其他结果以 1 退出。
+  io.exit(outcome.reason?.kind === 'completed' ? 0 : 1)</code></pre><pre class="raw-code" tabindex="0" hidden><code>  try {
+    try {
+      agent.followup(createUserMessage({
+        content: [{ type: 'text', text: task }],
+        source: { kind: 'user' },
+      }))
+      const subagents = ctx.get('subagents')
+      while (true) {
+        await agent.whenIdle()
+        const idleSeq = agent.session.seq
+        // Child settlement can wake the parent before the child wait observes it.
+        if (!await subagents?.waitForTreeWork(agent)
+          &amp;&amp; agent.status === 'idle' &amp;&amp; agent.session.seq === idleSeq) break
+      }
+    } finally {
+      stopReasoning?.()
+    }
+    await sessions.flush(agent.session)
+    if (failure !== undefined) throw failure.error
+    const outcome = summarize(agent.session, firstSeq)
+    if (projection === undefined) io.stdout.write(outcome.text + '\n')
+    else projection.finish(outcome.text, outcome.reason)
+    if (outcome.reason?.kind === 'error') {
+      io.stderr.write(`dsh: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
+    }
+    io.exit(outcome.reason?.kind === 'completed' ? 0 : 1)</code></pre></figure>
+<p>顺着 <code>followup</code> 进入 <code>send</code>，消息插入 inbox 后唤醒 driver。<code>steer</code> 以 next-step 为目标并唤醒。<code>inject</code> 也以 next-step 为目标，传 <code>false</code> 所以单独注入上下文不会唤醒 idle Agent。上面的 runner 等待 Agent 和关联子任务稳定，刷新 Session，再从事件摘要写最终文本或结束 JSON 投影，并请求进程按完成原因退出。</p>
+<figure class="sample source" data-file="packages/core/agent-loop/src/agent.ts" data-start="170" data-end="189"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/agent.ts · L170–189</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 这是 followup、steer、inject 共用的入队入口。
+send(message: UserMessage, target: InboxTarget, wakeup: boolean): void {
+  // 如果要唤醒的是已取消的活动，把消息改投到下一轮。
+  const wakingAfterAbort = wakeup &amp;&amp; this.phase.kind !== 'idle' &amp;&amp; this.phase.abort.signal.aborted
+  const resolvedTarget = wakingAfterAbort ? 'next-turn' : target
+  // 把新消息放入目标队列。wakeup 决定要不要启动执行器。
+  this.inbox.splice(resolvedTarget, Infinity, 0, [message])
+  if (wakeup) this.wakeDriver(wakingAfterAbort)
+}
+
+// followup 是新的用户跟进，目标是下一轮，并唤醒执行器。
+followup(input: UserMessage): void {
+  this.send(input, 'next-turn', true)
+}
+
+// steer 让接下来的 Step 处理消息，并唤醒执行器。
+steer(input: UserMessage): void {
+  this.send(input, 'next-step', true)
+}
+
+// inject 将上下文排到下一 Step，单独调用时不会唤醒空闲 Agent。
+inject(input: UserMessage): void {
+  this.send(input, 'next-step', false)
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>  send(message: UserMessage, target: InboxTarget, wakeup: boolean): void {
+    // Waking input cannot join an aborted activity, so it starts the next turn.
+    // Captured before the insertion so a reentrant cancel from a splice observer cannot reclassify it.
+    const wakingAfterAbort = wakeup &amp;&amp; this.phase.kind !== 'idle' &amp;&amp; this.phase.abort.signal.aborted
+    const resolvedTarget = wakingAfterAbort ? 'next-turn' : target
+    this.inbox.splice(resolvedTarget, Infinity, 0, [message])
+    if (wakeup) this.wakeDriver(wakingAfterAbort)
+  }
+
+  followup(input: UserMessage): void {
+    this.send(input, 'next-turn', true)
+  }
+
+  steer(input: UserMessage): void {
+    this.send(input, 'next-step', true)
+  }
+
+  inject(input: UserMessage): void {
+    this.send(input, 'next-step', false)
+  }</code></pre></figure>
+<h3>2. 开启 Turn，审查下一 Step</h3>
+<figure class="sample source" data-file="packages/core/agent-loop/src/agent.ts" data-start="334" data-end="363"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/agent.ts · L334–363</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 记录新的 Turn 边界。Turn 可以包含多次模型 Step。
+const turn = phase.turn + 1
+try {
+  this.session.append('turn/start', { turn })
+} catch (error: unknown) {
+  this.throwError(error)
+}
+phase.turn = turn
+let turnEnds: TurnEndReason | null = null
+let target: InboxTarget = 'next-turn'
+try {
+  while (true) {
+    // 每次循环先检查取消信号，再通过 preStep 让策略审查下一步输入。
+    signal.throwIfAborted()
+    const step = phase.step + 1
+    const decision = await this.preStep(target, { turn, step })
+    // 策略拒绝时结束本轮，状态记为 blocked。
+    if (decision.kind === 'reject') {
+      turnEnds = { kind: 'blocked' }
+      return false
+    }
+    try {
+      if (turnEnds &amp;&amp; decision.messages.length === 0) break
+      // 首次输入变为空时正常结束，尚未发起模型请求。
+      if (phase.step === 0 &amp;&amp; decision.messages.length === 0) {
+        turnEnds = { kind: 'completed' }
+        return false
+      }
+      signal.throwIfAborted()
+      // 通过这些检查后，才记录 step/start。
+      this.session.append('step/start', { turn, step })
+      phase.step = step
+      const toolRecovery = new ToolCallRecovery()</code></pre><pre class="raw-code" tabindex="0" hidden><code>    const turn = phase.turn + 1
+    try {
+      this.session.append('turn/start', { turn })
+    } catch (error: unknown) {
+      this.throwError(error)
+    }
+    phase.turn = turn
+    let turnEnds: TurnEndReason | null = null
+    let target: InboxTarget = 'next-turn'
+    try {
+      while (true) {
+        signal.throwIfAborted()
+        const step = phase.step + 1
+        const decision = await this.preStep(target, { turn, step })
+        if (decision.kind === 'reject') {
+          turnEnds = { kind: 'blocked' }
+          return false
+        }
+        try {
+          if (turnEnds &amp;&amp; decision.messages.length === 0) break
+          // A removed waking message or an enter decision rewritten to empty
+          // still owns the initial turn boundary, but it spends no model call.
+          if (phase.step === 0 &amp;&amp; decision.messages.length === 0) {
+            turnEnds = { kind: 'completed' }
+            return false
+          }
+          signal.throwIfAborted()
+          this.session.append('step/start', { turn, step })
+          phase.step = step
+          const toolRecovery = new ToolCallRecovery()</code></pre></figure>
+<p>先追加 <code>turn/start</code>，再从 inbox 处理下一批输入。<code>preStep</code> 会走 <code>agent/pre-step</code> waterfall，监听器可以接受、重写或拒绝。拒绝时收束为 blocked；第一次接受的输入为空时可以直接结束。这两条分支都先于 <code>step/start</code>。真正进入 step 后，才准备模型调用。</p>
+<h3>3. 绑定适配器，用日志重建请求，消费流</h3>
+<p>默认 base 把 <code>llm-deepseek</code> 行指向 API key 插件。它把 DeepSeek provider 注册到 <code>ctx.llm</code>。Loop 拿到选定 provider/model 后通过 <code>prepareCall</code> 绑定适配器，再构建本次请求。区分三个入口有助于定位故障：</p>
+<ul><li>凭据或 provider 安装。<a class="source-path" href="../deepseek-harness-master/packages/llm/llm-deepseek-api-key/src/index.ts">packages/llm/llm-deepseek-api-key/src/index.ts</a></li><li>适配器登记和通用模型接口。<a class="source-path" href="../deepseek-harness-master/packages/llm/llm-deepseek/src/host.ts">packages/llm/llm-deepseek/src/host.ts</a>；<a class="source-path" href="../deepseek-harness-master/packages/llm/llm/src/index.ts">packages/llm/llm/src/index.ts</a></li><li>DeepSeek 请求与流解析。<a class="source-path" href="../deepseek-harness-master/packages/llm/llm-deepseek/src/adapter.ts">packages/llm/llm-deepseek/src/adapter.ts</a></li></ul>
+<figure class="sample source" data-file="packages/llm/llm-deepseek/src/host.ts" data-start="79" data-end="85"><figcaption><span><a href="../deepseek-harness-master/packages/llm/llm-deepseek/src/host.ts" title="打开本地源文件">仓库摘录 · packages/llm/llm-deepseek/src/host.ts · L79–85</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>    ?? Promise.resolve({ fields: {}, accept: () =&gt; Promise.resolve() }),
+})
+// 把具体 adapter 登记到 provider 名下。之后模型服务可按这个名字查找。
+const registration = ctx.llm.registerAdapter([provider], adapter)
+// 保存注册时的重试策略。配置变化时重新读取。
+let registeredPolicy = dependencies.options().retryPolicy
+ctx.on('loader/volatile-update', () =&gt; {
+  let policy: typeof registeredPolicy
+  try { policy = dependencies.options().retryPolicy }</code></pre><pre class="raw-code" tabindex="0" hidden><code>      ?? Promise.resolve({ fields: {}, accept: () =&gt; Promise.resolve() }),
+  })
+  const registration = ctx.llm.registerAdapter([provider], adapter)
+  let registeredPolicy = dependencies.options().retryPolicy
+  ctx.on('loader/volatile-update', () =&gt; {
+    let policy: typeof registeredPolicy
+    try { policy = dependencies.options().retryPolicy }</code></pre></figure>
+<figure class="sample source" data-file="packages/core/agent-loop/src/agent.ts" data-start="726" data-end="743"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/agent.ts · L726–743</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 冻结本次请求的头部数据。
+deepFreeze(header)
+// 从 Session 的已提交事件派生模型可见历史。
+const boundaryMessages = session.deriveMessages()
+// 逐条冻结消息，已经冻结过的对象直接复用。
+for (const message of boundaryMessages) {
+  if (this.frozenMessages.has(message)) continue
+  deepFreeze(message)
+  this.frozenMessages.add(message)
+}
+Object.freeze(boundaryMessages)
+// 组装并冻结本次请求。这里包含历史、工具、Session ID 和取消信号。
+const request = markAgentLoopRequest(Object.freeze({
+  ...header.config,
+  messages: boundaryMessages,
+  toolHistory: session.toolHistory(),
+  // 有工具声明时才往请求对象里加 tools。
+  ...header.tools !== undefined ? { tools: header.tools } : {},
+  sessionId: this.session.id,
+  signal,
+}))
+return request</code></pre><pre class="raw-code" tabindex="0" hidden><code>    // canonicalHeader is shallow; append logs a detached snapshot, not these local values.
+    deepFreeze(header)
+    const boundaryMessages = session.deriveMessages()
+    for (const message of boundaryMessages) {
+      if (this.frozenMessages.has(message)) continue
+      deepFreeze(message)
+      this.frozenMessages.add(message)
+    }
+    Object.freeze(boundaryMessages)
+    const request = markAgentLoopRequest(Object.freeze({
+      ...header.config,
+      messages: boundaryMessages,
+      toolHistory: session.toolHistory(),
+      ...header.tools !== undefined ? { tools: header.tools } : {},
+      sessionId: this.session.id,
+      signal,
+    }))
+    return request</code></pre></figure>
+<p><code>session.deriveMessages()</code> 读到本次可见的历史。请求对象同时带上工具历史、工具声明、Session 身份和取消信号。条件展开 <code>...header.tools !== undefined ? { tools: header.tools } : {}</code> 可在心里加括号读成 <code>...(条件 ? 有字段的对象 : 空对象)</code>。随后对流逐块 <code>for await</code>，同时检查取消信号。</p>
+<figure class="sample source" data-file="packages/core/agent-loop/src/agent.ts" data-start="479" data-end="498"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/agent.ts · L479–498</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 用已准备的配置、工具和 turn/step 坐标组装请求。
+const request = this.buildRequest(
+  config,
+  preparedCall,
+  assembly.tools,
+  { turn, step },
+  startsRequestSeries,
+  signal,
+)
+// 为这次模型尝试创建流记录，实时帧通过事件发给订阅者。
+const live = new AssistantStreamAttempt(
+  this.session.id,
+  ++this.assistantAttemptCounter,
+  () =&gt; ++this.assistantStreamRevision,
+  turn,
+  step,
+  (frame) =&gt; { this.dispatch.emit('agent/assistant-stream', { frame }) },
+)
+let started = false
+try {
+  // 优先走已绑定的模型调用，缺少绑定时走通用流入口。
+  const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request)
+  signal.throwIfAborted()
+  live.start()
+  started = true
+  // 逐个等待并消费模型 chunk。收到取消时跳出这一执行路径。
+  for await (const chunk of stream) {
+    signal.throwIfAborted()
+    live.push(chunk)
+  }
+  signal.throwIfAborted()</code></pre><pre class="raw-code" tabindex="0" hidden><code>      const request = this.buildRequest(config, preparedCall, assembly.tools, { turn, step }, startsRequestSeries, signal)
+      const live = new AssistantStreamAttempt(
+        this.session.id,
+        ++this.assistantAttemptCounter,
+        () =&gt; ++this.assistantStreamRevision,
+        turn,
+        step,
+        (frame) =&gt; { this.dispatch.emit('agent/assistant-stream', { frame }) },
+      )
+      let started = false
+      try {
+        const stream = preparedCall?.stream(request) ?? this.loopCtx.llm.stream(request)
+        signal.throwIfAborted()
+        live.start()
+        started = true
+        for await (const chunk of stream) {
+          signal.throwIfAborted()
+          live.push(chunk)
+        }
+        signal.throwIfAborted()</code></pre></figure>
+<h3>4. 模型要求调用工具时</h3>
+<figure class="sample source" data-file="packages/core/agent-loop/src/agent.ts" data-start="574" data-end="597"><figcaption><span><a href="../deepseek-harness-master/packages/core/agent-loop/src/agent.ts" title="打开本地源文件">仓库摘录 · packages/core/agent-loop/src/agent.ts · L574–597</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 把流式尝试结算成完整 assistant/message，并把事件追加到 Session。
+live.settle(
+  'assistant/message',
+  () =&gt; this.session.append('assistant/message', {
+    turn,
+    step,
+    message,
+    ...live.usage === undefined ? {} : { usage: live.usage },
+    stream: live.stream,
+  }, { surfaceOp: 'append' }).seq,
+)
+// 达到 token 上限时，保留对应的 Step 结果。
+if (finish.kind === 'max-tokens') return { kind: 'max-tokens' }
+
+// 从模型消息里找工具调用。没有工具时，这条路径完成。
+const toolCalls = message.content.filter(block =&gt; block.type === 'tool-call')
+if (toolCalls.length === 0) return { kind: 'completed' }
+const maxParallelToolCalls = this.loopCtx.agentLoop.config.maxParallelToolCalls.get()
+try {
+  // 把调用、可用工具集合、并发上限和日志位置交给工具执行器。
+  const result = await this.loopCtx.tools.execute({
+    calls: toolCalls, signal, agent: this, log: { turn, step },
+    maxParallelToolCalls, toolSet: decision.toolSet,
+  })
+  // 执行器返回的额外上下文进入下一 Step 队列。
+  for (const context of result.additionalContexts) {
+    this.inbox.splice('next-step', this.inbox.nextStep.length, 0, [context])
+  }
+  // 批次已结束就返回 completed，否则由外层决定如何继续。
+  return result.concluded ? { kind: 'completed' } : null</code></pre><pre class="raw-code" tabindex="0" hidden><code>        live.settle(
+          'assistant/message',
+          () =&gt; this.session.append('assistant/message', {
+            turn,
+            step,
+            message,
+            ...live.usage === undefined ? {} : { usage: live.usage },
+            stream: live.stream,
+          }, { surfaceOp: 'append' }).seq,
+        )
+        if (finish.kind === 'max-tokens') return { kind: 'max-tokens' }
+
+        const toolCalls = message.content.filter(block =&gt; block.type === 'tool-call')
+        if (toolCalls.length === 0) return { kind: 'completed' }
+        const maxParallelToolCalls = this.loopCtx.agentLoop.config.maxParallelToolCalls.get()
+        try {
+          const result = await this.loopCtx.tools.execute({
+            calls: toolCalls, signal, agent: this, log: { turn, step },
+            maxParallelToolCalls, toolSet: decision.toolSet,
+          })
+          for (const context of result.additionalContexts) {
+            this.inbox.splice('next-step', this.inbox.nextStep.length, 0, [context])
+          }
+          return result.concluded ? { kind: 'completed' } : null</code></pre></figure>
+<p>先结算完整的 <code>assistant/message</code>，再从内容块中找 <code>type === "tool-call"</code>。没有工具调用，这条路径完成。存在工具调用，则把调用数组、Agent、取消信号、turn/step 和并发限制交给 <code>ctx.tools.execute</code>。若工具批次还需要模型继续，返回 <code>null</code> 交由外层继续调度。<code>finally</code> 会在该 step 收尾写入 <code>step/end</code>。失败或取消的 assistant 尝试还可能结算为 <code>assistant/attempt</code>，见同一文件的错误分支。</p>
+
+<details><summary>自测 · 为什么只看到 turn/start 也可能是正常路径？</summary><p><code>preStep</code> 拒绝或首次重写为空时，可以从 <code>turn/start</code> 收束到 <code>turn/end</code>，没有 <code>step/start</code>。如果连结束事件也没有，再去检查异常和中途退出。</p></details>
+</section>
+<section class="chapter" id="tools"><header><div class="num">CHAPTER 07</div><h2>精读 todo_write · 一个工具如何进入系统</h2><p class="lede">用真实注册、schema、执行结果和测试理解扩展点。</p></header>
+<p><code>todo_write</code> 一次替换整个清单。Base YAML 中的 <code>id: tool-todo</code> 把包挂上。入口声明依赖 <code>tools</code> 和 <code>sessionProjections</code>，在 <code>apply</code> 内注册投影和工具。项目中的品牌 ID、可配置策略、结构化返回值在这一条路径上都能看到。</p>
+<figure class="sample source" data-file="packages/bundle/base/cordis.patch.yml" data-start="445" data-end="449"><figcaption><span><a href="../deepseek-harness-master/packages/bundle/base/cordis.patch.yml" title="打开本地源文件">仓库摘录 · packages/bundle/base/cordis.patch.yml · L445–449</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code># base bundle 默认挂上待办工具包。
+- id: tool-todo
+  name: '@deepseek-ai/dsh-tool-todo'
+  config:
+    # 这一层允许多个事项同时处于 in_progress。
+    allowParallelInProgress: true</code></pre><pre class="raw-code" tabindex="0" hidden><code>    - id: tool-todo
+      name: '@deepseek-ai/dsh-tool-todo'
+      config:
+        allowParallelInProgress: true</code></pre></figure>
+<figure class="sample source" data-file="packages/todo/tool-todo/src/index.ts" data-start="22" data-end="43"><figcaption><span><a href="../deepseek-harness-master/packages/todo/tool-todo/src/index.ts" title="打开本地源文件">仓库摘录 · packages/todo/tool-todo/src/index.ts · L22–43</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 插件名字供 Loader 标识。注册前需要工具服务和 Session 投影服务。
+export const name = 'tool-todo'
+export const inject = ['tools', 'sessionProjections']
+
+// 这三个字符串是待办事项允许的状态。as const 让类型记住精确字面量。
+const STATUSES = ['pending', 'in_progress', 'completed'] as const
+
+// 接口声明 TypeScript 中的配置形状。
+export interface Config {
+  // 开关决定能否同时有多个进行中的待办。
+  allowParallelInProgress: boolean
+}
+
+// 同名 Config 值是运行时 schema。这个字段必须是布尔值。
+export const Config: z&lt;Config&gt; = z.object({
+  allowParallelInProgress: z.boolean().required(),
+})</code></pre><pre class="raw-code" tabindex="0" hidden><code>export const name = 'tool-todo'
+export const inject = ['tools', 'sessionProjections']
+
+/** The valid {@link TodoItem} statuses, as a runtime set for input narrowing. */
+const STATUSES = ['pending', 'in_progress', 'completed'] as const
+
+/** Model-facing todo tool configuration. */
+export interface Config {
+  /**
+   * Required deployment choice for whether several todos may be `in_progress` at once. True suits
+   * agents that run work concurrently — subagents, background commands, workflow fan-out — and the
+   * description then instructs the model to mark every actively worked task. False restores the
+   * single-active discipline: the description asks for exactly one, and a call marking more is
+   * rejected.
+   */
+  allowParallelInProgress: boolean
+}
+
+/** Schemastery configuration for the todo tool consumer. */
+export const Config: z&lt;Config&gt; = z.object({
+  allowParallelInProgress: z.boolean().required(),
+})</code></pre></figure>
+<figure class="sample source" data-file="packages/todo/tool-todo/src/index.ts" data-start="118" data-end="145"><figcaption><span><a href="../deepseek-harness-master/packages/todo/tool-todo/src/index.ts" title="打开本地源文件">仓库摘录 · packages/todo/tool-todo/src/index.ts · L118–145</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>export async function apply(ctx: Context, config: Config): Promise&lt;void&gt; {
+  // 从配置读出是否允许并行进行的事项。
+  const allowParallel = config.allowParallelInProgress
+  // 先登记 todos 投影。状态是待办数组，或还没有清单时的 null。
+  await ctx.sessionProjections.register&lt;'todos', TodoItem[] | null&gt;({
+    key: 'todos',
+    stateSchema: todosProjectionSchema,
+    init: () =&gt; null,
+    apply: (state, event) =&gt; {
+      // 收到 todo/write 就用整份新清单。开启下一轮时清空。其他事件不变。
+      if (event.type === 'todo/write') return event.data.todos
+      if (event.type === 'turn/start') return null
+      return state
+    },
+    // 向读取方提供投影视图。stateVersion 用于区分投影状态版本。
+    wire: { viewSchema: todosProjectionSchema, view: state =&gt; state, summary: false },
+    stateVersion: 2,
+  })
+  // 再注册模型能调用的 todo_write 工具。
+  ctx.tools.register(defineTool({
+    name: 'todo_write',
+    description: describe(allowParallel),
+    parameters: {
+      // 输入要带完整的 todos 数组。调用时替换的是整份清单。
+      todos: {
+        type: 'array',
+        required: true,
+        description: 'The COMPLETE task list, replacing any previous list.',
+        items: {
+          type: 'object',</code></pre><pre class="raw-code" tabindex="0" hidden><code>export async function apply(ctx: Context, config: Config): Promise&lt;void&gt; {
+  const allowParallel = config.allowParallelInProgress
+  // Standing-plan fold: latest whole todo/write list, cleared by the next
+  // turn/start (turn/end keeps the finished checklist visible); null before the
+  // first write or after a later turn begins; every other event returns the
+  // same state reference.
+  await ctx.sessionProjections.register&lt;'todos', TodoItem[] | null&gt;({
+    key: 'todos',
+    stateSchema: todosProjectionSchema,
+    init: () =&gt; null,
+    apply: (state, event) =&gt; {
+      if (event.type === 'todo/write') return event.data.todos
+      if (event.type === 'turn/start') return null
+      return state
+    },
+    wire: { viewSchema: todosProjectionSchema, view: state =&gt; state, summary: false },
+    stateVersion: 2,
+  })
+  ctx.tools.register(defineTool({
+    name: 'todo_write',
+    description: describe(allowParallel),
+    parameters: {
+      todos: {
+        type: 'array',
+        required: true,
+        description: 'The COMPLETE task list, replacing any previous list.',
+        items: {
+          type: 'object',</code></pre></figure>
+<h3>把输入模式、业务动作、输出模式和文字分开</h3>
+<ol><li><strong>输入</strong>：<code>parameters.todos</code> 规定数组、项目结构和允许的状态。<code>defineTool</code> 同时用它推导 <code>args</code> 类型，并为模型传入的 JSON 做运行时校验。</li><li><strong>业务检查</strong>：<code>toTodoList</code> 清理并验证内容，<code>allowParallelInProgress</code> 控制允许几个进行中的事项。<code>exec.agent</code> 指这次调用的所有者。没有 Agent 就无法把清单写入所属 Session，因此抛出错误。</li><li><strong>结构化结果</strong>：<code>execute</code> 写 <code>todo/write</code>，返回 <code>todos</code> 和 <code>counts</code>。<code>output.schema</code> 描述这个返回值。</li><li><strong>模型可见内容</strong>：<code>output.render</code> 把返回值投影成文本块，工具管线据此产生 tool result。网页卡片是另一个呈现面。</li></ol>
+<figure class="sample source" data-file="packages/todo/tool-todo/src/index.ts" data-start="188" data-end="211"><figcaption><span><a href="../deepseek-harness-master/packages/todo/tool-todo/src/index.ts" title="打开本地源文件">仓库摘录 · packages/todo/tool-todo/src/index.ts · L188–211</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>  // 把执行结果的计数渲染成发给模型的文本块。
+  render: (_args, value) =&gt; [{
+    type: 'text',
+    text: `Updated todo list: ${value.counts.pending} pending, ${value.counts.inProgress} in progress, ${value.counts.completed} completed.`,
+  }],
+},
+// execute 负责业务动作。先整理并检查传进来的清单。
+execute(args, exec) {
+  const todos = toTodoList(args.todos, allowParallel)
+  // 没有调用者 Agent，就没有归属的 Session，直接报错。
+  if (!exec.agent) {
+    throw new Error('todo_write requires an owning agent session')
+  }
+  // 把整份清单记为一条 Session 领域事件。
+  exec.agent.session.append('todo/write', { todos })
+  // 根据状态分组计数，连同清单作为结构化值返回。
+  const count = (status: TodoItem['status']): number =&gt;
+    todos.filter(t =&gt; t.status === status).length
+  return Promise.resolve({
+    todos: todos.map(todo =&gt; ({ content: todo.content, status: todo.status })),
+    counts: {
+      pending: count('pending'),
+      inProgress: count('in_progress'),
+      completed: count('completed'),
+    },
+  })
+},
+// 另有调用卡片的展示描述，与发给模型的结果分开。
+presentCall: args =&gt; ({ card: 'generic', title: 'Update todo list', kind: 'other', rawInput: args.todos }),</code></pre><pre class="raw-code" tabindex="0" hidden><code>      render: (_args, value) =&gt; [{
+        type: 'text',
+        text: `Updated todo list: ${value.counts.pending} pending, ${value.counts.inProgress} in progress, ${value.counts.completed} completed.`,
+      }],
+    },
+    execute(args, exec) {
+      const todos = toTodoList(args.todos, allowParallel)
+      if (!exec.agent) {
+        // The list is per-agent-session state; a non-agent caller (no owning
+        // session) has nowhere to write it. Reject rather than silently no-op.
+        throw new Error('todo_write requires an owning agent session')
+      }
+      exec.agent.session.append('todo/write', { todos })
+      const count = (status: TodoItem['status']): number =&gt; todos.filter(t =&gt; t.status === status).length
+      return Promise.resolve({
+        todos: todos.map(todo =&gt; ({ content: todo.content, status: todo.status })),
+        counts: {
+          pending: count('pending'),
+          inProgress: count('in_progress'),
+          completed: count('completed'),
+        },
+      })
+    },
+    presentCall: args =&gt; ({ card: 'generic', title: 'Update todo list', kind: 'other', rawInput: args.todos }),</code></pre></figure>
+<p>工具管线从 <code>tools/pre-execute</code> 做准入，<code>tools/execute</code> 包裹实际分发，<code>tools/post-execute</code> 处理结果策略。若要计时或观察，使用对应扩展点并在应该委托时调用 <code>next()</code>。若修改权限策略，应在它所属的 guard 或前置钩子处理。三个调用点都在 <a class="source-path" href="../deepseek-harness-master/packages/core/tools/src/pipeline.ts">packages/core/tools/src/pipeline.ts</a>。</p>
+<figure class="sample source" data-file="packages/core/tools/src/index.ts" data-start="148" data-end="153"><figcaption><span><a href="../deepseek-harness-master/packages/core/tools/src/index.ts" title="打开本地源文件">仓库摘录 · packages/core/tools/src/index.ts · L148–153</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>  // 在当前插件的生命周期内注册工具。effect 返回解除注册的操作。
+  return this.layers.effect(
+    this.ctx,
+    // 用工具名登记定义和启用条件。
+    layer =&gt; layer.tools.insert(name, { definition, when: options.when }),
+    { label: 'tools.register()' },
+  )
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>    return this.layers.effect(
+      this.ctx,
+      layer =&gt; layer.tools.insert(name, { definition, when: options.when }),
+      { label: 'tools.register()' },
+    )
+  }</code></pre></figure>
+<p><code>register</code> 最终把定义放进当前层的 effect，返回 disposer。挂载和卸载测试验证了同一个 registry：挂上工具时 schema 可见，释放 fiber 后不可见。</p>
+<figure class="sample source" data-file="packages/todo/tool-todo/tests/tool-todo.spec.ts" data-start="217" data-end="227"><figcaption><span><a href="../deepseek-harness-master/packages/todo/tool-todo/tests/tool-todo.spec.ts" title="打开本地源文件">仓库摘录 · packages/todo/tool-todo/tests/tool-todo.spec.ts · L217–227</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 测试插件卸载时，工具定义是否也一起消失。
+it('unregisters the tool when its contributing fiber is disposed (HMR-safety)', async () =&gt; {
+  // 先搭建插件运行所需的几个服务。
+  const ctx = new Context()
+  await ctx.plugin(SystemPrompt)
+  await ctx.plugin(ToolRuntime)
+  await ctx.plugin(NativeToolExecutor)
+  await ctx.plugin(SessionProjectionRegistry)
+  // 挂载待办插件，检查注册表能找到 todo_write。
+  const fiber = await ctx.plugin(tool, { allowParallelInProgress: true })
+  expect(ctx.tools.schemas().some(s =&gt; s.name === 'todo_write')).toBe(true)
+  // 释放插件 fiber 后，再查一次。工具此时应不可见。
+  await fiber.dispose()
+  expect(ctx.tools.schemas().some(s =&gt; s.name === 'todo_write')).toBe(false)
+})</code></pre><pre class="raw-code" tabindex="0" hidden><code>  it('unregisters the tool when its contributing fiber is disposed (HMR-safety)', async () =&gt; {
+    const ctx = new Context()
+    await ctx.plugin(SystemPrompt)
+    await ctx.plugin(ToolRuntime)
+    await ctx.plugin(NativeToolExecutor)
+    await ctx.plugin(SessionProjectionRegistry)
+    const fiber = await ctx.plugin(tool, { allowParallelInProgress: true })
+    expect(ctx.tools.schemas().some(s =&gt; s.name === 'todo_write')).toBe(true)
+    await fiber.dispose()
+    expect(ctx.tools.schemas().some(s =&gt; s.name === 'todo_write')).toBe(false)
+  })</code></pre></figure>
+<h3>先把预期结果写得具体</h3>
+<figure class="sample source" data-file="packages/todo/tool-todo/tests/tool-todo.spec.ts" data-start="72" data-end="90"><figcaption><span><a href="../deepseek-harness-master/packages/todo/tool-todo/tests/tool-todo.spec.ts" title="打开本地源文件">仓库摘录 · packages/todo/tool-todo/tests/tool-todo.spec.ts · L72–90</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 这个测试要同时检查工具结果与所属 Session 的事件。
+it('appends a todo/write event carrying the whole list to the calling session', async () =&gt; {
+  const ctx = await setup(true)
+  const agent = agentWithSession('writer')
+  // 输入两条待办，一条进行中，一条待处理。
+  const todos: TodoItem[] = [
+    { content: 'plan', status: 'in_progress' },
+    { content: 'build', status: 'pending' },
+  ]
+  // 通过工具调用入口执行，先确认没有错误。
+  const result = await callTodo(ctx, { todos }, { agent })
+  expect(result.isError).toBe(false)
+  if (result.isError) throw new Error('expected todo_write success')
+  // 验证结构化结果里的清单和计数。
+  expect(result.value).toEqual({
+    todos,
+    counts: { pending: 1, inProgress: 1, completed: 0 },
+  })
+  // 也检查模型收到的文本。
+  expect(text(result)).toContain('1 pending, 1 in progress, 0 completed')
+
+  // 最后去 Agent 的 Session 日志里确认整份清单确实写入。
+  const event = agent.session.snapshotEvents().findLast(e =&gt; e.type === 'todo/write')!
+  expect(event.data.todos).toEqual(todos)
+})</code></pre><pre class="raw-code" tabindex="0" hidden><code>  it('appends a todo/write event carrying the whole list to the calling session', async () =&gt; {
+    const ctx = await setup(true)
+    const agent = agentWithSession('writer')
+    const todos: TodoItem[] = [
+      { content: 'plan', status: 'in_progress' },
+      { content: 'build', status: 'pending' },
+    ]
+    const result = await callTodo(ctx, { todos }, { agent })
+    expect(result.isError).toBe(false)
+    if (result.isError) throw new Error('expected todo_write success')
+    expect(result.value).toEqual({
+      todos,
+      counts: { pending: 1, inProgress: 1, completed: 0 },
+    })
+    expect(text(result)).toContain('1 pending, 1 in progress, 0 completed')
+
+    const event = agent.session.snapshotEvents().findLast(e =&gt; e.type === 'todo/write')!
+    expect(event.data.todos).toEqual(todos)
+  })</code></pre></figure>
+<p>这个测试给两项，分别处于 <code>in_progress</code> 和 <code>pending</code>。它同时检查三个出口：程序值中的计数、文本里的计数、所属 Session 的 <code>todo/write</code>。这比只检查 <code>execute</code> 返回成功覆盖更多真实行为。</p>
+</section>
+<section class="chapter" id="session"><header><div class="num">CHAPTER 08</div><h2>Session 记录、投影与 Web 旁路</h2><p class="lede">区分实时 chunk、已提交事件、模型历史，以及 Web 入口如何抵达同一个 Agent。</p></header>
+<h3>1. 从仓库录制的结果倒读</h3>
+<p>这里可以直接打开实际录制的 <a class="source-path" href="../deepseek-harness-master/snapshots/session/todo-write/session.v4.jsonl">snapshots/session/todo-write/session.v4.jsonl</a>。下列几行来自同一份文件。日志用于说明真实事件数据的形状，和上一章单元测试的两项输入分别来自不同用例。</p>
+<figure class="sample source" data-file="snapshots/session/todo-write/session.v4.jsonl" data-start="17" data-end="18"><figcaption><span><a href="../deepseek-harness-master/snapshots/session/todo-write/session.v4.jsonl" title="打开本地源文件">仓库摘录 · snapshots/session/todo-write/session.v4.jsonl · L17–18</a> <span class="annotated-kind">JSONL · 逐条展开</span></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// todo/write 是领域事件。data.todos 保存这次写入的完整清单。
+{
+  "type": "todo/write",
+  "data": {
+    "todos": [
+      {
+        "content": "read the code",
+        "status": "in_progress"
+      },
+      {
+        "content": "watch the background build",
+        "status": "in_progress"
+      },
+      {
+        "content": "write the fix",
+        "status": "pending"
+      }
+    ]
+  }
+}
+
+// tool/result 是工具管线记录的结果。关联调用 ID，并保存发给模型的文本。
+{
+  "type": "tool/result",
+  "data": {
+    "turn": 1,
+    "step": 1,
+    "message": {
+      "role": "tool",
+      "source": {
+        "kind": "tool",
+        "callId": "call_00_UHvM5RrwIkjNJ9xh3S735164"
+      },
+      "toolCallId": "call_00_UHvM5RrwIkjNJ9xh3S735164",
+      "content": [
+        {
+          "type": "text",
+          "text": "Updated todo list: 1 pending, 2 in progress, 0 completed."
+        }
+      ],
+      "isError": false,
+      "id": "{{message:5}}"
+    }
+  },
+  "sourceEventSeqs": [
+    14
+  ],
+  "surfaceOp": "append"
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>{"type":"todo/write","data":{"todos":[{"content":"read the code","status":"in_progress"},{"content":"watch the background build","status":"in_progress"},{"content":"write the fix","status":"pending"}]}}
+{"type":"tool/result","data":{"turn":1,"step":1,"message":{"role":"tool","source":{"kind":"tool","callId":"call_00_UHvM5RrwIkjNJ9xh3S735164"},"toolCallId":"call_00_UHvM5RrwIkjNJ9xh3S735164","content":[{"type":"text","text":"Updated todo list: 1 pending, 2 in progress, 0 completed."}],"isError":false,"id":"{{message:5}}"}},"sourceEventSeqs":[14],"surfaceOp":"append"}</code></pre></figure>
+<figure class="sample source" data-file="snapshots/session/todo-write/session.v4.jsonl" data-start="23" data-end="23"><figcaption><span><a href="../deepseek-harness-master/snapshots/session/todo-write/session.v4.jsonl" title="打开本地源文件">仓库摘录 · snapshots/session/todo-write/session.v4.jsonl · L23–23</a> <span class="annotated-kind">JSONL · 逐条展开</span></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// turn/end 记录本轮结束原因。这里的 completed 表示正常完成。
+{
+  "type": "turn/end",
+  "data": {
+    "turn": 1,
+    "reason": {
+      "kind": "completed"
+    }
+  }
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>{"type":"turn/end","data":{"turn":1,"reason":{"kind":"completed"}}}</code></pre></figure>
+<p><code>todo/write</code> 是清单的领域事实。<code>tool/result</code> 内有一条模型可见的工具消息，录制的文字是 <code>Updated todo list: 1 pending, 2 in progress, 0 completed.</code>。<code>turn/end</code> 给出该轮结束原因。相同 Session 里的 <code>agent/assistant-stream</code> 是进程内的实时事件通道；已经结算的 assistant 消息或尝试会有自己的耐久事件形状。实时 UI 可以先看到 chunk，持久历史根据结算事件恢复。</p>
+<h3>一份日志，可派生两种不同读法</h3>
+<div class="cards"><div><strong>模型历史 · Session.deriveMessages</strong>沿 surface 的序号读取能生成消息的事件。尾部追加可以增量派生，出现替换等代次变化时重建缓存。</div><div><strong>待办 UI 状态 · todos 投影</strong>在 <code>todo/write</code> 时采用最新完整列表，下一次 <code>turn/start</code> 清空，其他事件保留当前状态。</div></div>
+<figure class="sample source" data-file="packages/core/session/src/index.ts" data-start="999" data-end="1018"><figcaption><span><a href="../deepseek-harness-master/packages/core/session/src/index.ts" title="打开本地源文件">仓库摘录 · packages/core/session/src/index.ts · L999–1018</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 从 Session 的 surface 投影中派生本次请求能看到的消息。
+deriveMessages(): Message[] {
+  const surface = this.surface
+  const nodes = surface.nodes
+  const generation = surface.contentGeneration
+  // 投影代次变化时，旧缓存失效，从头开始重建。
+  if (generation !== this.derivedGeneration) {
+    this.derived = []
+    this.derivedNodes = 0
+    this.derivedGeneration = generation
+  }
+  // 代次未变化时，从上次处理的位置继续，只读新增节点。
+  for (const seq of nodes.slice(this.derivedNodes)) {
+    // seq 来自日志本身。末尾的 ! 表示作者在这里依赖下标有效的约束。
+    const msg = this.deriveEventMessage(this.log[seq]!)
+    // 仅把实际派生出消息的事件放入结果。
+    if (msg) this.derived.push(msg)
+  }
+  this.derivedNodes = nodes.length</code></pre><pre class="raw-code" tabindex="0" hidden><code>  deriveMessages(): Message[] {
+    const surface = this.surface
+    const nodes = surface.nodes
+    const generation = surface.contentGeneration
+    if (generation !== this.derivedGeneration) {
+      this.derived = []
+      this.derivedNodes = 0
+      this.derivedGeneration = generation
+    }
+    for (const seq of nodes.slice(this.derivedNodes)) {
+      // Surface sequences are built from this.log — seq is always a valid
+      // index by construction. The non-null assertion expresses that invariant.
+      // oxlint-disable-next-line typescript/no-non-null-assertion
+      const msg = this.deriveEventMessage(this.log[seq]!)
+      // A surface node is one of the five message-producing types, but an
+      // empty-content assistant/message (a max-tokens step that hosts only
+      // usage) derives to null and must not enter the transcript.
+      if (msg) this.derived.push(msg)
+    }
+    this.derivedNodes = nodes.length</code></pre></figure>
+<p>不是每条事件都属于模型消息历史。<code>todo/write</code> 用于领域投影，而带对应 surface 操作的 <code>tool/result</code> 可进入模型历史。改变模型所见内容需要保留可重建的日志事实。保存到磁盘、识别版本、迁移历史代次属于持久化 provider。做第一次扩展时先用已有事件与结构，碰到格式或迁移再读 <a class="source-path" href="../deepseek-harness-master/docs/session-format-status.md">docs/session-format-status.md</a>。</p>
+<h3>2. Web 用不同入口，复用 Agent</h3>
+<figure class="diagram"><div class="flow"><div class="step"><strong>浏览器 Client</strong><small>remote.session.prompt(...)</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>Host Controller</strong><small>@Remote('prompt') → commands.prompt</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>Agent</strong><small>steer 或 followup → 同一 Loop</small></div></div><figcaption>图 04 · Web 的输入链。Headless 则从 runner 直接调用 followup。Web 的历史读取与 SSE 观察是另外的入口。</figcaption></figure>
+<figure class="sample source" data-file="packages/api/session-controller/src/client/sessions/session.ts" data-start="265" data-end="280"><figcaption><span><a href="../deepseek-harness-master/packages/api/session-controller/src/client/sessions/session.ts" title="打开本地源文件">仓库摘录 · packages/api/session-controller/src/client/sessions/session.ts · L265–280</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 在等待远程调用之前，先在客户端标记首条提示已发出。
+const firstPrompt = this.blankBit &amp;&amp; !this.firstPromptPendingTurn
+if (firstPrompt) this.firstPromptPendingTurn = true
+let result: RemoteResult&lt;{ accepted: true }&gt;
+// 没有子目标地址时，走普通 Session 的远程提交入口。
+if (this.address === undefined) {
+  const clientTimeZone = resolvedClientTimeZone()
+  // 发送请求 ID、会话 ID、交付模式、内容和时区，signal 用于取消。
+  result = await this.remote.session.prompt({
+    requestId: requestId ?? randomUUID() as SessionRequestId,
+    sessionId: this.sessionId,
+    mode,
+    content,
+    clientTimeZone,
+  }, signal)
+// 目标分支另有对文件内容的限制。这里展示的是分支入口。
+} else if (content.some(part =&gt; part.type === 'file')) {
+  result = {
+    ok: false,</code></pre><pre class="raw-code" tabindex="0" hidden><code>    // Before the first await, so a turn observed ahead of the receipt clears it.
+    const firstPrompt = this.blankBit &amp;&amp; !this.firstPromptPendingTurn
+    if (firstPrompt) this.firstPromptPendingTurn = true
+    let result: RemoteResult&lt;{ accepted: true }&gt;
+    if (this.address === undefined) {
+      const clientTimeZone = resolvedClientTimeZone()
+      result = await this.remote.session.prompt({
+        requestId: requestId ?? randomUUID() as SessionRequestId,
+        sessionId: this.sessionId,
+        mode,
+        content,
+        clientTimeZone,
+      }, signal)
+    } else if (content.some(part =&gt; part.type === 'file')) {
+      result = {
+        ok: false,</code></pre></figure>
+<figure class="sample source" data-file="packages/api/session-controller/src/index.ts" data-start="467" data-end="481"><figcaption><span><a href="../deepseek-harness-master/packages/api/session-controller/src/index.ts" title="打开本地源文件">仓库摘录 · packages/api/session-controller/src/index.ts · L467–481</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 把这个 Host 方法注册为名叫 prompt 的远程入口。
+@Remote('prompt')
+async prompt(request: SessionPromptRequest, signal: AbortSignal): Promise&lt;SessionPromptValue&gt; {
+  // 先检查请求是否取消，再拒绝无效的非空内容列表。
+  signal.throwIfAborted()
+  if (request.content.length &gt; 0 &amp;&amp; !hasPromptContent(request.content)) {
+    throw new RemoteError('gateway/bad-request', 'prompt content must include non-whitespace text or an attachment', {})
+  }
+  // 客户端提供时区时做规范化。
+  const clientTimeZone = request.clientTimeZone === undefined
+    ? undefined
+    : canonicalClientTimeZone(request.clientTimeZone)
+  // 提供了值但规范化失败时，抛出结构化远程错误。
+  if (request.clientTimeZone !== undefined &amp;&amp; clientTimeZone === undefined) {
+    throw new RemoteError(
+      'session/invalid-time-zone',
+      'clientTimeZone must be UTC or a valid IANA Area/Location name',
+      { value: request.clientTimeZone },
+    )</code></pre><pre class="raw-code" tabindex="0" hidden><code>  @Remote('prompt')
+  async prompt(request: SessionPromptRequest, signal: AbortSignal): Promise&lt;SessionPromptValue&gt; {
+    signal.throwIfAborted()
+    if (request.content.length &gt; 0 &amp;&amp; !hasPromptContent(request.content)) {
+      throw new RemoteError('gateway/bad-request', 'prompt content must include non-whitespace text or an attachment', {})
+    }
+    const clientTimeZone = request.clientTimeZone === undefined
+      ? undefined
+      : canonicalClientTimeZone(request.clientTimeZone)
+    if (request.clientTimeZone !== undefined &amp;&amp; clientTimeZone === undefined) {
+      throw new RemoteError(
+        'session/invalid-time-zone',
+        'clientTimeZone must be UTC or a valid IANA Area/Location name',
+        { value: request.clientTimeZone },
+      )</code></pre></figure>
+<figure class="sample source" data-file="packages/api/session-controller/src/commands.ts" data-start="362" data-end="375"><figcaption><span><a href="../deepseek-harness-master/packages/api/session-controller/src/commands.ts" title="打开本地源文件">仓库摘录 · packages/api/session-controller/src/commands.ts · L362–375</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 先接收并验证附件内容。如果请求 ID 已处理，就返回接受回执。
+const content = await this.ctx.attachments.admitPromptContent(admission.content)
+if (this.hasPromptRequest(agent.session, request.requestId)) return { accepted: true }
+const message: UserMessage = createUserMessage({ content, source })
+// 等待期间 Agent 可能已销毁，重新确认注册表里还是同一个实例。
+if (this.ctx.agents.get(agent.id) !== agent) {
+  throw new RemoteError(
+    'session/not-found',
+    `session "${agent.id}" was disposed during prompt admission`,
+    { sessionId: agent.id },
+  )
+}
+// using 让附件绑定在退出当前作用域时自动清理。
+using binding = this.ctx.fileUploads.bindPrompt(agent, admission.receiptIds, request.requestId)
+// steer 进入下一 Step，否则用 followup 提交下一轮。
+if (request.mode === 'steer') agent.steer(message)
+else agent.followup(message)
+// 消息成功提交后，确认这次附件绑定。
+binding.commit()</code></pre><pre class="raw-code" tabindex="0" hidden><code>        const content = await this.ctx.attachments.admitPromptContent(admission.content)
+        if (this.hasPromptRequest(agent.session, request.requestId)) return { accepted: true }
+        const message: UserMessage = createUserMessage({ content, source })
+        if (this.ctx.agents.get(agent.id) !== agent) {
+          throw new RemoteError(
+            'session/not-found',
+            `session "${agent.id}" was disposed during prompt admission`,
+            { sessionId: agent.id },
+          )
+        }
+        using binding = this.ctx.fileUploads.bindPrompt(agent, admission.receiptIds, request.requestId)
+        if (request.mode === 'steer') agent.steer(message)
+        else agent.followup(message)
+        binding.commit()</code></pre></figure>
+<p>控制器校验边界数据后把请求交给命令层。命令层完成附件输入的准入并检查 Agent 仍然存在，按模式选择 <code>steer</code> 或 <code>followup</code>。这里的 <code>using binding</code> 把附件绑定资源的生命周期限制在块内。成功走 <code>commit()</code>，退出作用域时仍走资源的 dispose 契约。Web 请求的接受回执与最终助手答复是不同阶段。追回传时可继续查 <code>SessionController</code> 上的 <code>page</code> 和 stream Remote，或从 <a class="source-path" href="../deepseek-harness-master/docs/api-gateway.md">docs/api-gateway.md</a> 跟路由和生成的 Remote 声明。</p>
+</section>
+<section class="chapter" id="develop"><header><div class="num">CHAPTER 09</div><h2>自己开发 · 从一个插件到可验证的改动</h2><p class="lede">先用 overlay 挂一段最小代码，再做模型工具。用仓库已有测试的方式验证行为。</p></header>
+<h3>1. 先让 Loader 调到你的代码</h3>
+<p>完成「在 Windows 上从源码启动」中的安装和构建后，在开发检出的根目录建 <code>scratch-plugin/src</code>，把下面官方教程的代码存为 <code>scratch-plugin/src/my-plugin.ts</code>。这个练习只验证插件是否成功加载。</p>
+<figure class="sample source" data-file="docs/user/develop/basic/index.md" data-start="36" data-end="43"><figcaption><span><a href="../deepseek-harness-master/docs/user/develop/basic/index.md" title="打开本地源文件">仓库摘录 · docs/user/develop/basic/index.md · L36–43</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// 只导入 Context 的类型。这里无需加载 Cordis 的运行时代码。
+import type { Context } from '@deepseek-ai/cordis'
+
+// 插件名字由 Loader 读取。
+export const name = 'hello-plugin'
+
+// 挂载插件时，Cordis 会调用 apply 并传入当前上下文。
+export function apply(ctx: Context) {
+  // 这行日志用来确认你的插件确实被挂载。
+  console.log('[hello-plugin] plugin loaded!')
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>import type { Context } from '@deepseek-ai/cordis'
+
+export const name = 'hello-plugin'
+
+export function apply(ctx: Context) {
+  // Required dependencies are ready before apply runs.
+  console.log('[hello-plugin] plugin loaded!')
+}</code></pre></figure>
+<p>创建 <code>scratch-plugin/cordis.yml</code>。把路径替换成你实际开发检出中的绝对路径。在 PowerShell 中可用 <code>(Resolve-Path .\scratch-plugin\src\my-plugin.ts).Path.Replace('\', '/')</code> 得到可填入的路径。这里用正斜杠和 YAML 单引号，路径里的空格仍留在引号内。</p>
+<figure class="sample"><figcaption><span>scratch-plugin/cordis.yml · 本地 overlay 示例</span></figcaption><pre class="reading-code" tabindex="0"><code># 通过 overlay 给配置树插入一行。
+- insert:
+    # id 用来定位配置行。
+    - id: scratch-greet
+      # name 指向插件文件。请替换为你自己的绝对路径。
+      name: 'C:/path/to/deepseek-harness/scratch-plugin/src/my-plugin.ts'</code></pre><div class="out"><strong>组合后的变化</strong>
+插入 id 为 scratch-greet 的新行。name 指向本地 TS 模块。</div></figure>
+<figure class="sample"><figcaption><span>PowerShell · 先看组合，再启动</span></figcaption><pre class="reading-code" tabindex="0"><code># 第一条只打印组合结果，确认配置包含 scratch-greet。
+pnpm dsh web --dump-config --patch ./scratch-plugin/cordis.yml
+# 确认配置后，用相同 overlay 启动 Web。
+pnpm dsh web --patch ./scratch-plugin/cordis.yml</code></pre><div class="out"><strong>预期观察</strong>
+配置输出包含 scratch-greet 和你填入的路径。
+启动时终端打印 [hello-plugin] plugin loaded!</div></figure>
+<p><code>--patch</code> 只给这次启动增加覆盖层。想撤掉练习就用不带该 overlay 的启动命令。<code>id</code> 是 patch 对这行的地址，<code>name</code> 是 Loader 要加载的模块，模块里 <code>export const name</code> 则是插件自身的名字。</p>
+<h3>2. 做成模型可以调用的 greet</h3>
+<p>把同一个 <code>my-plugin.ts</code> 替换成下方官方 <code>greet</code> 示例，然后重新启动带同一 overlay 的 Web。逐行对照上一节的 <code>todo_write</code>：依赖声明 → 注册 → 输入 schema → <code>execute</code> → 返回 schema → 文本渲染。</p>
+<figure class="sample source" data-file="docs/user/develop/basic/tool.md" data-start="12" data-end="33"><figcaption><span><a href="../deepseek-harness-master/docs/user/develop/basic/tool.md" title="打开本地源文件">仓库摘录 · docs/user/develop/basic/tool.md · L12–33</a></span><span class="sample-controls"><button class="copy source-toggle" type="button" aria-pressed="false">看原文</button></span></figcaption><pre class="reading-code" tabindex="0"><code>// Context 是类型。defineTool 是运行时会调用的工具定义函数。
+import type { Context } from '@deepseek-ai/cordis'
+import { defineTool } from '@deepseek-ai/dsh-tools'
+
+export const name = 'greet-tool'
+// 声明依赖 tools，等这个服务可用再运行 apply。
+export const inject = ['tools']
+
+export function apply(ctx: Context) {
+  // 把工具定义登记到当前插件的上下文。
+  ctx.tools.register(defineTool({
+    name: 'greet',
+    description: 'Greet someone by name.',
+    // 输入必须有字符串 name，检查器也据此推断 execute 的参数。
+    parameters: {
+      name: {
+        type: 'string',
+        required: true,
+        description: 'The name to greet',
+      },
+    },
+    // 成功返回的值必须是字符串，再把值包装为模型可读的文本块。
+    output: {
+      schema: { type: 'string' },
+      render: (_args, value) =&gt; [{ type: 'text', text: value }],
+    },
+    // 执行工具主体，返回带名字的问候语。
+    async execute(args) {
+      return `Hello, ${args.name}!`
+    },
+  }))
+}</code></pre><pre class="raw-code" tabindex="0" hidden><code>import type { Context } from '@deepseek-ai/cordis'
+import { defineTool } from '@deepseek-ai/dsh-tools'
+
+export const name = 'greet-tool'
+export const inject = ['tools']
+
+export function apply(ctx: Context) {
+  ctx.tools.register(defineTool({
+    name: 'greet',
+    description: 'Greet someone by name.',
+    parameters: {
+      name: { type: 'string', required: true, description: 'The name to greet' },
+    },
+    output: {
+      schema: { type: 'string' },
+      render: (_args, value) =&gt; [{ type: 'text', text: value }],
+    },
+    async execute(args) {
+      return `Hello, ${args.name}!`
+    },
+  }))
+}</code></pre></figure>
+<figure class="sample"><figcaption>行为验收 · 示例输入到工具输出</figcaption><pre tabindex="0"><code>工具名       greet
+模型传入     {"name":"Ada"}
+execute 返回  "Hello, Ada!"
+render 返回   [{"type":"text","text":"Hello, Ada!"}]</code></pre><div class="out"><strong>预期观察</strong>
+有可用模型凭据时，向 Web 发「请调用 greet 工具向 Ada 问好」。
+若模型实际选用工具，可在工具结果中看到 Hello, Ada!。
+把 name 换成数字时，输入校验应拒绝该调用。</div></figure>
+<p>配置能组合出插件，只说明它被选中。工具进入模型请求还取决于当前 Agent 可用工具集合与策略。故障按层定位：配置输出没有该行，查 patch 路径和顺序；有该行但没有启动日志，查绝对路径、依赖服务和启动诊断；工具已挂载但无调用，查是否进了当前请求的工具 schema；有调用却失败，查入参、前置策略、执行器和返回 schema。</p>
+<h3>3. 把练习变成一次正式修改</h3>
+<div class="table"><table><thead><tr><th>需求</th><th>从哪个已有实现照着改</th><th>优先验证</th></tr></thead><tbody>
+<tr><td>改现有工具的行为</td><td>从对应包的 <code>defineTool</code> 和 <code>execute</code> 开始。<code>todo_write</code> 的配置、投影、输出分开放。</td><td>输入、结构化结果、模型文本、应写的事件、卸载清理。</td></tr>
+<tr><td>给请求或工具加策略</td><td>从 <a class="source-path" href="../deepseek-harness-master/docs/cordis-primer.md">docs/cordis-primer.md</a> 的 waterfall 入手，跟到 <code>agent/pre-step</code> 或 <code>tools/pre-execute</code>。</td><td>允许、拒绝和异常三条路径。观察或包装的监听器应委托 <code>next()</code>。</td></tr>
+<tr><td>接新模型 provider</td><td>从现有 <code>llm-deepseek-api-key</code> 的注册查到 <code>LlmAdapter</code>，再看 <a class="source-path" href="../deepseek-harness-master/docs/cookbook/adding-an-llm-adapter.md">docs/cookbook/adding-an-llm-adapter.md</a>。</td><td>路由选择、凭据缺失、stream chunk、取消信号和适配器测试。</td></tr>
+<tr><td>改 Web UI 或 RPC</td><td>从 browser client 或 <code>SessionController</code> 的 <code>@Remote</code> 切入。先确认字段属于 wire、Host 业务还是 UI。</td><td>Typert 生成、Host/Client 各自检查，选对应 Web 证据。</td></tr>
+<tr><td>引入持久事件或新包</td><td>事件从 <code>SessionEventMap</code> 和投影看起。包从 <a class="source-path" href="../deepseek-harness-master/docs/cookbook/adding-a-package.md">docs/cookbook/adding-a-package.md</a> 查工作区清单、编译面和测试。</td><td>已发布格式、重放、版本与迁移规则。检查引用路径与包声明。</td></tr>
+</tbody></table></div>
+<h3>第一道真实改动练习</h3>
+<p>选一个小的 <code>todo_write</code> 行为，从需求写到测试。例如「输入内容两端空白时，存下修剪后的文本」。打开 <a class="source-path" href="../deepseek-harness-master/packages/todo/tool-todo/tests/tool-todo.spec.ts">packages/todo/tool-todo/tests/tool-todo.spec.ts</a>，先找已有的 trim 测试，再反查 <code>toTodoList</code>。随后为你的变体补一条有意义的边界用例。若变更模型看到的文本，检查录制 Session 中的 <code>tool/result</code>，以仓库测试策略决定应更新的 snapshot。Session 格式和核心循环都有更广的兼容性要求，第一次扩展适合落在已有插件契约上。</p>
+<figure class="sample"><figcaption><span>PowerShell · 按改动选择检查</span></figcaption><pre class="reading-code" tabindex="0"><code># 先只跑待办工具相关的单测。
+pnpm exec vitest run packages/todo/tool-todo/tests/tool-todo.spec.ts
+# 显式使用录制回放模式，避免调用真实模型。
+$env:DSH_SNAPSHOT = 'replay'
+# 只跑 Headless 快照里名为 todo-write 的场景。
+pnpm exec vitest run --config vitest.snapshot.config.ts snapshots/session/headless.snapshot.ts -t todo-write
+# 清除本次设置的环境变量。
+Remove-Item Env:DSH_SNAPSHOT
+# 最后检查 TypeScript 的跨包类型关系。
+pnpm run typecheck</code></pre><div class="out"><strong>各命令的验收点</strong>
+Vitest 通过，关注真正运行的测试数量。
+回放命中 todo-write，用录制输入验证最终 Session；无需真实 API 密钥。
+typecheck 退出码为 0。需验证构建产物时，再走 build 或 artifacts + check。</div></figure>
+<p>上面的回放命令适用于已按开发文档完成准备的环境。若看到零个测试匹配，检查 <code>-t</code> 传参和场景名。回放配置在 <a class="source-path" href="../deepseek-harness-master/vitest.snapshot.config.ts">vitest.snapshot.config.ts</a>，测试驱动在 <a class="source-path" href="../deepseek-harness-master/snapshots/session/headless.snapshot.ts">snapshots/session/headless.snapshot.ts</a>，测试分层在 <a class="source-path" href="../deepseek-harness-master/docs/testing.md">docs/testing.md</a>。涉及打包后的入口，再选对应 built smoke；Provider 的真实 API e2e 单独用凭据执行。提交前按 <a class="source-path" href="../deepseek-harness-master/AGENTS.md">AGENTS.md</a> 的改动范围选择检查。</p>
+<h3>下一次读源码时的顺序</h3>
+<ol class="checklist"><li>写下你要观察的输入和结果，例如 <code>todo_write</code> 的两个状态计数。</li><li>用配置找到行的 <code>id</code> 和模块 <code>name</code>，打开对应 <code>package.json</code> 与实现。</li><li>追实现入口的 <code>inject</code>，分别定位服务定义、provider、调用者。定位到一个方法后，再查它的调用和测试。</li><li>标记模型所见、UI 所见、Session 所存各属于哪个出口。改动后到对应的结果处验证。</li></ol>
+</section>
+<footer class="footer">本地源码快照 · package.json 0.2.2-rc.1 <a href="#top">回到顶部 ↑</a></footer></main></div>
+<script>
+(() => {
+  const progress = document.querySelector("#progress");
+  const track = () => {
+    const distance = document.documentElement.scrollHeight - innerHeight;
+    progress.style.width = (distance > 0 ? Math.min(100, scrollY / distance * 100) : 0) + "%";
+  };
+  addEventListener("scroll", track, { passive: true });
+  addEventListener("resize", track);
+  document.addEventListener("toggle", track, true);
+  track();
+  document.querySelector("#print").addEventListener("click", () => window.print());
+
+  const links = new Map([...document.querySelectorAll(".toc a")].map(a => [a.hash.slice(1), a]));
+  let active = null;
+  const updateChapter = () => {
+    let current = null;
+    for (const section of document.querySelectorAll("main section[id]")) {
+      if (section.getBoundingClientRect().top > 135) break;
+      current = links.get(section.id);
+    }
+    if (current === active) return;
+    active?.removeAttribute("aria-current");
+    current?.setAttribute("aria-current", "location");
+    active = current;
+  };
+  addEventListener("scroll", updateChapter, { passive: true });
+  addEventListener("resize", updateChapter);
+  document.addEventListener("toggle", updateChapter, true);
+  updateChapter();
+
+  const mapSearch = document.querySelector("#map-search");
+  const mapFilter = document.querySelector("#map-filter");
+  const mapRows = [...document.querySelectorAll("#project-map tbody tr")];
+  mapSearch.hidden = false;
+  mapFilter.addEventListener("input", () => {
+    const query = mapFilter.value.trim().toLowerCase();
+    let shown = 0;
+    for (const row of mapRows) {
+      row.hidden = !row.textContent.toLowerCase().includes(query);
+      if (!row.hidden) shown += 1;
+    }
+    document.querySelector("#map-count").textContent = shown + " 项";
+    track();
+    updateChapter();
+  });
+  const tokenPattern = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\/\/[^\n]*|#[ \t][^\n]*)|\b(const|let|type|interface|class|readonly|function|async|await|return|throw|if|else|switch|case|default|for|of|in|import|export|from|new|extends|implements|satisfies|infer|unknown|never|number|string|boolean|undefined|null|true|false|def|print|None|True|False|try|catch)\b/g;
+  function highlight(code) {
+    const source = code.textContent;
+    const fragment = document.createDocumentFragment();
+    let end = 0;
+    for (const match of source.matchAll(tokenPattern)) {
+      fragment.append(source.slice(end, match.index));
+      const span = document.createElement("span");
+      span.className = match[1] ? "literal" : match[2] ? "comment" : "token";
+      span.textContent = match[0];
+      fragment.append(span);
+      end = match.index + match[0].length;
+    }
+    fragment.append(source.slice(end));
+    code.replaceChildren(fragment);
+  }
+
+  for (const sample of document.querySelectorAll(".sample")) {
+    const caption = sample.querySelector("figcaption");
+    const label = caption.querySelector("span")?.textContent ?? caption.textContent;
+    const reading = sample.querySelector(".reading-code");
+    const raw = sample.querySelector(".raw-code");
+    const toggle = sample.querySelector(".source-toggle");
+    if (reading) highlight(reading.querySelector("code"));
+    if (raw) highlight(raw.querySelector("code"));
+
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        const showRaw = raw.hidden;
+        raw.hidden = !showRaw;
+        reading.hidden = showRaw;
+        toggle.setAttribute("aria-pressed", String(showRaw));
+        toggle.textContent = showRaw ? "看注释" : "看原文";
+      });
+    }
+
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "copy";
+    copy.textContent = "复制";
+    copy.setAttribute("aria-label", "复制 " + label);
+    let reset;
+    copy.addEventListener("click", async () => {
+      const code = sample.querySelector("pre:not([hidden]) code");
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        copy.textContent = "已复制";
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(code);
+        const selection = getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        copy.textContent = "已选中";
+      }
+      clearTimeout(reset);
+      reset = setTimeout(() => { copy.textContent = "复制"; }, 2300);
+    });
+    (sample.querySelector(".sample-controls") ?? caption).append(copy);
+  }
+})();
+</script></body></html>

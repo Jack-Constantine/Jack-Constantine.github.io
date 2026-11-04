@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TypeScript 从第一行开始 · 语法与运行手册</title>
+<style>
+:root{color-scheme:light;--paper:#f5f4ee;--surface:#fffefa;--ink:#15292e;--muted:#4e6365;--line:#d8e1d9;--accent:#006654;--soft:#e2f3e9;--code:#122731;--code-text:#ecf7f6;--warm:#f7ead1;--max:1120px;--mono:"Cascadia Code",Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:4.5rem}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.78 system-ui,"Microsoft YaHei",sans-serif}a{color:var(--accent);text-underline-offset:.2em}button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,pre:focus-visible{outline:3px solid #d38d29;outline-offset:3px}.skip{position:absolute;left:.8rem;top:-10rem;background:var(--surface);padding:.5rem;z-index:9}.skip:focus{top:.8rem}.bar{position:sticky;top:0;z-index:3;background:var(--surface);border-bottom:1px solid var(--line)}.bar-inner{max-width:1450px;margin:auto;padding:.55rem clamp(1rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:.5rem}.brand{display:flex;gap:.65rem;align-items:center;font-weight:750;text-decoration:none;color:var(--ink)}.badge{font:700 .85rem var(--mono);background:var(--accent);color:#fff;padding:.42rem;border-radius:.35rem}.bar-actions{display:flex;align-items:center;gap:.6rem}.bar-actions button,.demo button,.copy,.bar-actions a{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:.4rem;padding:.18rem .58rem;text-decoration:none}.progress{height:3px;background:var(--soft)}.progress span{display:block;height:100%;background:#269b76;width:0}
+.hero{background:#142f32;color:#f5fcf7;border-bottom:5px solid #8ed2b4;padding:clamp(2.5rem,7vw,6rem) clamp(1rem,5vw,4rem)}.hero-inner{max-width:var(--max);margin:auto;display:grid;grid-template-columns:1.35fr 1fr;align-items:center;gap:clamp(1rem,5vw,5rem)}.eyebrow,.num,.unit{font:700 .78rem/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase}.eyebrow{color:#abe9cb}.hero h1{font-size:clamp(2.4rem,6.5vw,5.4rem);line-height:1.04;letter-spacing:-.055em;margin:.5em 0 .35em}.hero h1 span{color:#a1e2bf;display:block}.hero p{color:#d3e4df;margin-bottom:1.55rem;max-width:34em}.hero a{display:inline-block;padding:.42rem 1rem;background:#a1e2bf;color:#142f32;border-radius:.4rem;text-decoration:none;font-weight:700}.hero-card{border:1px solid #507371;border-radius:.8rem;background:#19383b;overflow:hidden}.hero-card header{padding:.65rem 1rem;border-bottom:1px solid #507371;color:#d7e8e3}.hero-card ol{margin:0;padding:1rem 1rem 1.1rem 2.8rem}.hero-card li{padding:.35rem 0}.hero-card code{background:#244a4a;color:#d8f6e8}
+.layout{max-width:1450px;margin:auto;padding:1.5rem clamp(.85rem,4vw,3rem) 4rem;display:grid;grid-template-columns:215px minmax(0,1fr);gap:clamp(1rem,4vw,3rem)}.toc{align-self:start;position:sticky;top:4.4rem;max-height:calc(100vh - 5rem);overflow:auto;padding:0 .4rem .7rem 0}.toc strong{display:block;margin:.4rem .55rem}.toc .unit{display:block;color:var(--muted);margin:1.1rem .55rem .35rem}.toc a{display:block;padding:.22rem .55rem;border-radius:.35rem;font-size:.88rem;color:var(--muted);text-decoration:none}.toc a:hover,.toc a[aria-current]{background:var(--soft);color:var(--accent);font-weight:680}.toc .idx{font: .79rem var(--mono);margin-right:.45rem}.intro,.chapter{background:var(--surface);border:1px solid var(--line);border-radius:.8rem;padding:clamp(1rem,3vw,2.5rem);margin-bottom:1.25rem}.intro{background:var(--soft)}.intro h2{margin-top:0}.num,.unit{color:var(--accent)}h2{font-size:clamp(1.45rem,3.4vw,2.25rem);line-height:1.22;margin:.45rem 0 .75rem;letter-spacing:-.024em}h3{line-height:1.35;font-size:1.18rem;margin:1.75rem 0 .45rem}p{margin:.55rem 0 .85rem}.lede{color:var(--muted);font-size:1.03rem}.chapter>header{border-bottom:1px solid var(--line);padding-bottom:.65rem;margin-bottom:1rem}.pair,.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:.9rem 0}.pair>*{margin:0}.cards>div,.step{border:1px solid var(--line);border-radius:.5rem;padding:.72rem .9rem;background:var(--paper)}.step strong,.cards strong{display:block}.step small{color:var(--muted)}figure{margin:.9rem 0}.sample{border-radius:.5rem;overflow:hidden;background:var(--code);color:var(--code-text);min-width:0;align-self:start}.sample figcaption{background:#203b46;display:flex;justify-content:space-between;gap:.5rem;align-items:center;padding:.35rem .85rem;font:.8rem/1.5 var(--mono);color:#d3e9e6;min-height:2.2rem}.sample .copy{background:#203b46;color:#edf9f7;border-color:#658083;font-size:.76rem;white-space:nowrap}.sample pre{margin:0;overflow:auto;padding:.8rem .95rem;font:.88rem/1.62 var(--mono);tab-size:2}.sample code,.out code{padding:0;background:none;color:inherit}.out{border-top:1px solid #45636a;background:#0e2027;color:#a6e3bd;padding:.5rem .95rem;white-space:pre-wrap;overflow-wrap:anywhere;font:.82rem/1.6 var(--mono)}code{font-family:var(--mono);font-size:.91em;color:var(--accent);background:var(--soft);padding:.1em .26em;border-radius:.24em}kbd{font-family:var(--mono)}.callout{margin:1rem 0;padding:.65rem .9rem;border-left:4px solid #bc852d;background:var(--warm);border-radius:0 .4rem .4rem 0}.callout p,.step p{margin:.25rem 0}.flow{display:flex;gap:.45rem;align-items:stretch;margin:.65rem 0}.flow .step{flex:1;min-width:0}.arrow{display:grid;place-items:center;color:var(--accent);font-weight:800}.diagram>figcaption{font-size:.88rem;color:var(--muted)}.table{overflow:auto;margin:.85rem 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:.93rem}td,th{padding:.56rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--soft)}ul,ol{padding-left:1.5rem}li+li{margin-top:.26rem}details{margin:1rem 0;border:1px solid var(--line);border-radius:.48rem;padding:.58rem .85rem;background:var(--paper)}summary{font-weight:700;cursor:pointer}details p:last-child{margin-bottom:.2rem}.demo{padding:.8rem 1rem;border:1px solid var(--line);border-radius:.55rem;background:var(--soft);margin:1rem 0}.demo p{margin:.35rem 0}.demo output{display:block;white-space:pre-wrap;font: .88rem/1.65 var(--mono);padding:.4rem .5rem;min-height:2rem}.demo button[aria-pressed=true]{color:white;background:var(--accent);border-color:var(--accent)}.token{color:#8eddbb}.literal{color:#ffd391}.comment{color:#a7c1c9}.footer{color:var(--muted);font-size:.9rem;padding:.6rem}.checklist li{margin:.45rem 0}
+@media(max-width:1000px){.layout{grid-template-columns:175px minmax(0,1fr);gap:1rem}.pair{grid-template-columns:1fr}}@media(max-width:720px){.hero-inner,.layout{display:block}.hero-card{margin-top:1.4rem}.toc{position:static;max-height:none;padding:.7rem 0 1.2rem}.toc nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.08rem}.toc .unit{grid-column:1/-1}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.cards{grid-template-columns:1fr}.bar-inner{padding:.5rem .8rem}.sample pre{font-size:.82rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{.bar,.toc,.copy,.demo button,.skip{display:none}.layout{display:block;padding:0}.hero{padding:1rem}.hero a{display:none}.chapter{border:0;padding:.5rem 0}h2,h3{break-after:avoid}.sample,.diagram{break-inside:avoid}.sample pre{white-space:pre-wrap}.sample,.sample figcaption,.out,.hero{background:white;color:black;border:1px solid #ccc}.hero h1 span,.hero p,.eyebrow,.token,.literal,.comment{color:#222}}
+.sample pre{white-space:pre-wrap;overflow-wrap:anywhere;font-variant-ligatures:none}.bar-actions{flex-shrink:0;white-space:nowrap}
+@media(max-width:480px){.bar-inner{gap:.35rem}.bar-actions{gap:.3rem}.bar-actions button,.bar-actions a{font-size:.79rem;padding:.18rem .38rem}.brand{gap:.35rem;font-size:.8rem}.badge{font-size:.72rem;padding:.36rem}.bar .progress{height:2px}}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#content">跳到正文</a>
+<div class="bar"><div class="bar-inner"><a class="brand" href="#top"><span class="badge">TS</span> TypeScript 入门手册</a><div class="bar-actions"><a href="#toc">目录</a><button id="print" type="button">打印 / PDF</button></div></div><div class="progress" aria-hidden="true"><span id="progress"></span></div></div>
+<header class="hero"><div class="hero-inner"><div><div class="eyebrow">TypeScript from zero · 零基础路线</div><h1>TypeScript <span>从第一行开始</span></h1><p>先用 TypeScript 写出第一行代码，逐个认识符号、变量、条件、循环、函数和对象。掌握这些写法之后，再用 Python 对照理解语言差异，最后动手跑通一个 Node.js 项目。</p><a href="#basics-01">开始第一课 ↓</a></div><div class="hero-card"><header>阅读路线 / 21 章</header><ol><li><strong>基础语法</strong> · 从一行输出到小程序</li><li><strong>Python 对照</strong> · 用熟悉的语言理解差异</li><li><strong>类型推理</strong> · 联合、收窄、泛型与校验</li><li><strong>项目执行</strong> · 模块、异步、构建与 CLI</li></ol></div></div></header>
+<div class="layout">
+<aside class="toc" id="toc"><strong>学习目录</strong><nav aria-label="课程目录">
+<span class="unit">01 / 基础语法</span>
+<a href="#basics-01"><span class="idx">01</span>第一行 TypeScript</a>
+<a href="#basics-02"><span class="idx">02</span>变量与基本类型</a>
+<a href="#basics-03"><span class="idx">03</span>条件与比较</a>
+<a href="#basics-04"><span class="idx">04</span>数组与循环</a>
+<a href="#basics-05"><span class="idx">05</span>函数与返回值</a>
+<a href="#basics-06"><span class="idx">06</span>对象与对象类型</a>
+<span class="unit">02 / Python 对照</span>
+<a href="#ch00"><span class="idx">07</span>两条时间线</a>
+<a href="#ch01"><span class="idx">08</span>变量、值与作用域</a>
+<a href="#ch02"><span class="idx">09</span>控制流与空值</a>
+<a href="#ch03"><span class="idx">10</span>集合与解构</a>
+<a href="#ch04"><span class="idx">11</span>函数、闭包与 this</a>
+<a href="#ch05"><span class="idx">12</span>对象、接口与类</a>
+<span class="unit">03 / 类型推理</span>
+<a href="#ch06"><span class="idx">13</span>联合与收窄</a>
+<a href="#ch07"><span class="idx">14</span>泛型与类型约束</a>
+<a href="#ch08"><span class="idx">15</span>类型变换与推断</a>
+<a href="#ch09"><span class="idx">16</span>输入校验与异常</a>
+<span class="unit">04 / 项目执行</span>
+<a href="#ch10"><span class="idx">17</span>模块与依赖解析</a>
+<a href="#ch11"><span class="idx">18</span>Promise 与事件循环</a>
+<a href="#ch12"><span class="idx">19</span>异步迭代与取消</a>
+<a href="#ch13"><span class="idx">20</span>编译与调试</a>
+<a href="#ch14"><span class="idx">21</span>实战 · 任务 CLI</a>
+<a href="#refs">官方资料</a>
+</nav></aside>
+<main id="content">
+<div class="intro"><h2>先把一小段 TS 读顺</h2><p>第 01 至 06 章只写 TypeScript。读每段代码时，先按顺序读出它做了什么，再猜会显示什么，最后看代码框下方的结果。每章都有一道可以先猜再展开的练习。</p><p>从第 07 章开始，再拿 Python 来对照已经学过的概念。示例按段独立阅读，跨文件示例会注明文件名。跟着动手时，可以先在本地跑第一章的 <code>hello.ts</code>。</p></div>
+<section class="chapter" id="basics-01"><header><div class="num">CHAPTER 01</div><h2>写下第一行 TypeScript</h2><p class="lede">先写出一条能运行的语句，再认识这一行里的点、括号、引号和分号。</p></header>
+<figure class="sample"><figcaption>TypeScript · hello.ts</figcaption><pre tabindex="0"><code>console.log("你好，TypeScript！");</code></pre><div class="out"><strong>输出</strong>
+你好，TypeScript！</div></figure>
+<ol><li><code>console</code> 是运行环境已经提供的一个对象，可以先把它理解为一组和控制台有关的工具。</li><li>点 <code>.</code> 用来取出对象上的成员。<code>console.log</code> 取出负责打印的函数。</li><li><code>(...)</code> 调用这个函数，括号里是交给它的内容。<code>"你好，TypeScript！"</code> 是一个字符串，引号标记文字的起止位置。</li><li>分号 <code>;</code> 在这里结束这条语句。入门示例统一写上分号。语法符号使用半角字符，字符串里的文字可以使用中文标点。</li></ol>
+<h3>把代码存进文件，然后在终端运行</h3>
+<p>以下动手示例使用 Node.js 24。打开 PowerShell，输入 <code>node --version</code> 确认环境。用文本编辑器新建文件，存为 <code>hello.ts</code>。在该文件所在的目录打开终端，再输入下方命令。上一框是<strong>文件内容</strong>，下一框是<strong>终端命令</strong>。</p>
+<figure class="sample"><figcaption>PowerShell · 运行文件</figcaption><pre tabindex="0"><code>node hello.ts</code></pre><div class="out"><strong>终端输出</strong>
+你好，TypeScript！</div></figure>
+<p>每个示例可以单独保存运行。练习时可以反复替换 <code>hello.ts</code> 的内容，保存后再次执行命令。当前先观察程序做了什么，后面再讲 Node 如何处理 <code>.ts</code> 和怎样检查类型。</p>
+<h3>顺序、注释与表达式</h3>
+<figure class="sample"><figcaption>TypeScript · 三条打印语句</figcaption><pre tabindex="0"><code>// 这一行写给读代码的人
+console.log("2 + 3");
+console.log(2 + 3);
+console.log("总计", 2 + 3);</code></pre><div class="out"><strong>输出</strong>
+2 + 3
+5
+总计 5</div></figure>
+<p>程序从上到下执行。<code>//</code> 到行末是注释。第二行代码中的 <code>"2 + 3"</code> 整体是一段文字；下一行中的 <code>2 + 3</code> 会先计算，得到 <code>5</code> 再交给 <code>log</code>。这里能产生值的 <code>2 + 3</code> 叫表达式。逗号分隔多个参数，<code>log</code> 在同一行显示它们。</p>
+<details><summary>自测 · <code>console.log("10", 10 + 1);</code> 会显示什么？</summary><p>显示 <code>10 11</code>。第一个参数是文本，第二个参数是加法的结果。直接打印时，字符串外的引号一般不会出现在终端里。</p></details>
+</section>
+<section class="chapter" id="basics-02"><header><div class="num">CHAPTER 02</div><h2>声明变量，认识三种基本类型</h2><p class="lede">用名字保存值。先学会辨认声明、类型注解、赋值和取值。</p></header>
+<figure class="sample"><figcaption>TypeScript · 逐字读一条声明</figcaption><pre tabindex="0"><code>const title: string = "整理笔记";
+let count: number = 1;
+const ready: boolean = true;
+
+count = count + 2;
+console.log(title, count, ready);</code></pre><div class="out"><strong>输出</strong>
+整理笔记 3 true</div></figure>
+<div class="table"><table><thead><tr><th>部分</th><th>在第一行里的意思</th></tr></thead><tbody><tr><td><code>const</code></td><td>声明一个初始化后不能重新赋值的名字。需要重新赋值时用 <code>let</code>。</td></tr><tr><td><code>title</code></td><td>变量名。后面直接写 <code>title</code> 就读取它保存的值。</td></tr><tr><td><code>: string</code></td><td>类型注解，说明这个名字应保存字符串。数值用 <code>number</code>，真假值用 <code>boolean</code>。</td></tr><tr><td><code>= "整理笔记"</code></td><td>初始化，给变量第一个值。后面的 <code>count = count + 2</code> 先算等号右边，再把新值写回左边。</td></tr></tbody></table></div>
+<h3>初始值已经给出类型线索</h3>
+<figure class="sample"><figcaption>TypeScript · 让检查器推断类型</figcaption><pre tabindex="0"><code>let score = 10;
+score = score + 5;
+const label = "得分";
+console.log(label, score);
+console.log(typeof score, typeof label, typeof false);</code></pre><div class="out"><strong>输出</strong>
+得分 15
+number string boolean</div></figure>
+<p>从 <code>10</code> 就能推断 <code>score</code> 应该装数值。这里的 <code>typeof</code> 在运行时查看值的类别。若加一行 <code>score = "十五";</code>，TypeScript 类型检查会给出 <code>TS2322</code>，因为字符串不能赋给 <code>number</code>。第 20 章会演示如何独立运行检查。直接运行 <code>node hello.ts</code> 主要用于观察执行行为。</p>
+<figure class="sample"><figcaption>TypeScript · 把值拼进一行文字</figcaption><pre tabindex="0"><code>const name = "小林";
+const done = 2;
+console.log(`${name}已经完成 ${done + 1} 项。`);</code></pre><div class="out"><strong>输出</strong>
+小林已经完成 3 项。</div></figure>
+<p>模板字符串的边界是反引号 <code>&#96;</code>。遇到 <code>${...}</code>，先计算里面的表达式，再把结果放进文字。常见错误是把反引号换成普通引号，那样会原样打印 <code>${name}</code>。</p>
+<details><summary>自测 · 要每天增加 <code>done</code>，该用 const 还是 let？</summary><p>用 <code>let done = 2;</code>。接下来执行 <code>done = done + 1;</code>，再打印 <code>done</code>，输出是 <code>3</code>。</p></details>
+</section>
+<section class="chapter" id="basics-03"><header><div class="num">CHAPTER 03</div><h2>写条件，让程序选择一条路</h2><p class="lede">区分赋值和比较，读懂括号中的条件和花括号中的语句。</p></header>
+<figure class="sample"><figcaption>TypeScript · if / else if / else</figcaption><pre tabindex="0"><code>const score = 72;
+
+if (score &gt;= 90) {
+  console.log("优秀");
+} else if (score &gt;= 60) {
+  console.log("通过");
+} else {
+  console.log("待练习");
+}
+console.log("评估结束");</code></pre><div class="out"><strong>输出</strong>
+通过
+评估结束</div></figure>
+<p><code>if (条件) { ... }</code> 中，圆括号包住要判断的表达式，花括号包住满足条件时执行的语句。这里先检查 <code>72 &gt;= 90</code>，得到 <code>false</code>。继续检查 <code>72 &gt;= 60</code>，得到 <code>true</code>，于是打印「通过」。这一组分支只执行其中一块。最后一行在花括号外，所以无论选中哪条分支，都会打印「评估结束」。</p>
+<figure class="sample"><figcaption>TypeScript · 比较与组合</figcaption><pre tabindex="0"><code>const mode: string = "preview";
+const count = 2;
+console.log(count === 2);
+console.log(count !== 2);
+console.log(mode === "preview" &amp;&amp; count &gt; 0);
+console.log(mode === "run" || count &gt; 0);</code></pre><div class="out"><strong>输出</strong>
+true
+false
+true
+true</div></figure>
+<p><code>=</code> 写入值，<code>===</code> 比较是否相等，<code>!==</code> 比较是否不等。<code>&amp;&amp;</code> 用来组合「两个条件都成立」，<code>||</code> 表示「至少一个条件成立」，<code>!</code> 反转一个条件。刚开始可以用括号明确每个子条件的边界。</p>
+<details><summary>自测 · 把第一段的 <code>score</code> 改为 90，会输出什么？</summary><p>先输出「优秀」，再输出「评估结束」。第一条条件已经成立，后面的 <code>else if</code> 不再进入。</p></details>
+</section>
+<section class="chapter" id="basics-04"><header><div class="num">CHAPTER 04</div><h2>用数组装多个值，再逐个处理</h2><p class="lede">认识方括号的两种写法，学会用循环完成一次累计。</p></header>
+<figure class="sample"><figcaption>TypeScript · 创建、读取和追加</figcaption><pre tabindex="0"><code>const tasks: string[] = ["读资料", "写笔记"];
+console.log(tasks[0]);
+console.log(tasks[1]);
+tasks.push("做练习");
+console.log(tasks.length);</code></pre><div class="out"><strong>输出</strong>
+读资料
+写笔记
+3</div></figure>
+<p><code>string[]</code> 在类型位置读作「字符串数组」。等号右边的 <code>["读资料", "写笔记"]</code> 创建一个数组。变量后面的 <code>[0]</code> 是索引，取第一项。<code>.push(...)</code> 调用数组的方法追加一项，<code>.length</code> 读取长度，所以后面没有圆括号。<code>const tasks</code> 固定这个名字所指向的数组，仍可以往数组里加元素。</p>
+<figure class="sample"><figcaption>TypeScript · for...of 循环</figcaption><pre tabindex="0"><code>const costs = [2, 4, 3];
+let total = 0;
+for (const cost of costs) {
+  total = total + cost;
+  console.log("当前总计", total);
+}
+console.log("最终总计", total);</code></pre><div class="out"><strong>输出</strong>
+当前总计 2
+当前总计 6
+当前总计 9
+最终总计 9</div></figure>
+<p><code>for (const cost of costs)</code> 读作「从 <code>costs</code> 中依次取一个值，这一次叫它 <code>cost</code>」。花括号内的代码重复执行。<code>total</code> 放在循环外，只初始化一次。第一轮算 <code>0 + 2</code>，第二轮接着算 <code>2 + 4</code>，第三轮算 <code>6 + 3</code>。若把 <code>let total = 0;</code> 挪进循环，每轮都会从零重新开始。</p>
+<h3>需要索引时，用三段式 for</h3>
+<figure class="sample"><figcaption>TypeScript · 用索引给任务编号</figcaption><pre tabindex="0"><code>const tasks = ["读资料", "写笔记"];
+for (let i = 0; i &lt; tasks.length; i = i + 1) {
+  console.log(i + 1, tasks[i]);
+}</code></pre><div class="out"><strong>输出</strong>
+1 读资料
+2 写笔记</div></figure>
+<p>圆括号里的三个部分用分号隔开。<code>let i = 0</code> 只执行一次。每轮开始前检查 <code>i &lt; tasks.length</code>。如果条件成立，执行花括号里的代码，再执行 <code>i = i + 1</code>，回到条件检查。索引从零开始，给人看的编号用 <code>i + 1</code>。</p>
+<h3>只要条件成立就重复，用 while</h3>
+<figure class="sample"><figcaption>TypeScript · 倒数</figcaption><pre tabindex="0"><code>let remaining = 3;
+while (remaining &gt; 0) {
+  console.log(remaining);
+  remaining = remaining - 1;
+}
+console.log("开始");</code></pre><div class="out"><strong>输出</strong>
+3
+2
+1
+开始</div></figure>
+<p><code>while</code> 在每一轮前判断条件。这里每轮都减少 <code>remaining</code>，到零时退出。循环里遇到 <code>break</code> 会立即离开循环，遇到 <code>continue</code> 会跳过当前轮余下的语句。写 <code>while</code> 时留意每条分支是否都能让循环最终结束。</p>
+<details><summary>自测 · <code>costs</code> 如果是 <code>[]</code>，还有哪一行输出？</summary><p>循环体执行零次，最终输出 <code>最终总计 0</code>。动手时可以写成 <code>const costs: number[] = [];</code>，明确空数组今后应保存数值。</p></details>
+</section>
+<section class="chapter" id="basics-05"><header><div class="num">CHAPTER 05</div><h2>写一个函数，给它参数并接住返回值</h2><p class="lede">把声明和调用分开看，再识别项目里常见的箭头写法。</p></header>
+<figure class="sample"><figcaption>TypeScript · function 声明和两次调用</figcaption><pre tabindex="0"><code>function add(a: number, b: number): number {
+  return a + b;
+}
+
+const sum = add(2, 3);
+console.log(sum);
+console.log(add(sum, 1));</code></pre><div class="out"><strong>输出</strong>
+5
+6</div></figure>
+<ol><li><code>function add</code> 定义一个名叫 <code>add</code> 的函数。程序随后遇到 <code>add(2, 3)</code> 才会执行函数体。</li><li><code>(a: number, b: number)</code> 声明两个参数及各自的类型。调用 <code>add(2, 3)</code> 时，<code>a</code> 得到 <code>2</code>，<code>b</code> 得到 <code>3</code>。</li><li>右括号后的 <code>: number</code> 是<strong>返回类型</strong>。<code>return a + b;</code> 结束本次调用，把计算结果交回调用处。</li><li><code>const sum = add(2, 3);</code> 把返回的值保存到 <code>sum</code>。下面的 <code>console.log(sum)</code> 才把它显示出来。</li></ol>
+<h3>箭头函数的两种函数体</h3>
+<figure class="sample"><figcaption>TypeScript · 表达式体和花括号块</figcaption><pre tabindex="0"><code>const twice = (n: number) =&gt; n * 2;
+const triple = (n: number) =&gt; {
+  return n * 3;
+};
+console.log(twice(4), triple(4));</code></pre><div class="out"><strong>输出</strong>
+8 12</div></figure>
+<p><code>=&gt;</code> 左边是参数，右边是函数体。只有一个表达式时，它的结果自动返回。右边若是花括号语句块，需要用 <code>return</code> 交回结果。第 11 章会进一步讲回调和闭包，初学时先练习从调用找到函数定义，再顺着 <code>return</code> 找到返回值。</p>
+<details><summary>自测 · <code>console.log(add(3, add(1, 2)));</code> 会输出什么？</summary><p>输出 <code>6</code>。先执行内层的 <code>add(1, 2)</code>，得到 <code>3</code>；外层实际执行 <code>add(3, 3)</code>。</p></details>
+</section>
+<section class="chapter" id="basics-06"><header><div class="num">CHAPTER 06</div><h2>用对象把相关值放在一起</h2><p class="lede">从属性读写过渡到对象类型，然后串起前六章的写法。</p></header>
+<figure class="sample"><figcaption>TypeScript · 对象与属性</figcaption><pre tabindex="0"><code>const task = { title: "整理笔记", done: false };
+console.log(task.title, task.done);
+task.done = true;
+console.log(task.title, task.done);</code></pre><div class="out"><strong>输出</strong>
+整理笔记 false
+整理笔记 true</div></figure>
+<p>等号右侧的 <code>{ ... }</code> 创建一个对象。<code>title: "整理笔记"</code> 是一个属性，冒号左边是键，右边是值。属性用逗号分隔。<code>task.title</code> 读取 <code>title</code>，<code>task.done = true;</code> 修改 <code>done</code>。这里的花括号是在表达式中构造值，条件或函数中的花括号则包住一组语句。</p>
+<h3>把对象的形状写成类型</h3>
+<figure class="sample"><figcaption>TypeScript · 类型、函数、数组和循环放在一起</figcaption><pre tabindex="0"><code>type Task = {
+  title: string;
+  done: boolean;
+};
+
+function describe(task: Task): string {
+  if (task.done) {
+    return `已完成：${task.title}`;
+  }
+  return `待处理：${task.title}`;
+}
+
+const tasks: Task[] = [
+  { title: "读资料", done: true },
+  { title: "做练习", done: false },
+];
+
+for (const task of tasks) {
+  console.log(describe(task));
+}</code></pre><div class="out"><strong>输出</strong>
+已完成：读资料
+待处理：做练习</div></figure>
+<ol><li><code>type Task = { ... }</code> 给一份类型起名字，描述有哪些属性、每个属性接受什么样的值。这里的 <code>title: string</code> 写的是字段类型。</li><li><code>describe(task: Task)</code> 的参数需要符合这份类型。函数先看 <code>done</code>，再返回一条文字。命中第一个 <code>return</code> 时，函数立即结束。</li><li><code>Task[]</code> 表示数组中每一项都是符合 <code>Task</code> 形状的对象。循环把它们逐个交给 <code>describe</code>，再打印返回值。</li></ol>
+<details><summary>自测 · 把第二项的 <code>done</code> 改为 <code>true</code>，再添加第三项</summary><p>第二行会变成 <code>已完成：做练习</code>。如果第三项是 <code>{ title: "复盘", done: false }</code>，就会再打印一行 <code>待处理：复盘</code>。</p></details>
+<div class="callout"><p><strong>基础练习</strong> · 先试着独立声明一个任务数组，写一个函数返回任务标题，用 <code>for...of</code> 把它们打印出来。能读写这些语句后，进入第 07 章，把刚学的语法和熟悉的 Python 行为放在一起比较。</p></div>
+</section>
+<section class="chapter" id="ch00"><header><div class="num">CHAPTER 07</div><h2>一份代码，两条时间线</h2><p class="lede">看懂 .ts 文件怎样变成可执行行为，以及为什么类型正确和程序正常是两回事。</p></header>
+<figure class="diagram"><div class="flow"><div class="step"><strong>① 编写 .ts</strong><small>JavaScript 表达式 + 类型语法</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>② TypeScript 检查</strong><small>分析声明、调用关系和控制流</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>③ 生成 .js</strong><small>擦除类型，按配置转换语法</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>④ Node.js 执行</strong><small>解析模块、求值、调用宿主 API</small></div></div><figcaption>图 01 · 第 21 章采用的路线。②可以单独运行，转译工具也可以单独完成③。</figcaption></figure>
+<div class="pair">
+<figure class="sample"><figcaption>Python · print 和注解</figcaption><pre tabindex="0"><code>def double(n: int) -&gt; int:
+    return n * 2
+
+print(double(4))
+print(double("4"))</code></pre><div class="out"><strong>Python 输出</strong>
+8
+44</div></figure>
+<figure class="sample"><figcaption>TypeScript · 相同业务</figcaption><pre tabindex="0"><code>function double(n: number): number {
+  return n * 2;
+}
+console.log(double(4));
+console.log(double("4"));</code></pre><div class="out"><strong>tsc 诊断与强行运行 JS 时的结果</strong>
+TS2345: string 不能传给 number 参数
+8
+8</div></figure>
+</div>
+<p>这里有两个变化。Python 的类型注解通常交给额外工具检查，Python 的字符串可以乘整数做重复。TypeScript 检查器会拒绝第二次调用；一旦对应 JavaScript 真的运行，JS 的 <code>*</code> 会把数字字符串转成数值。静态诊断与运算符语义各有自己的规则。</p>
+<div class="demo" id="erase-demo"><strong>实验 · 同一函数经过类型擦除</strong><p><button type="button" data-stage="source" aria-pressed="true">查看 TS 源码</button> <button type="button" data-stage="emit" aria-pressed="false">查看 JS 产物</button></p><output aria-live="polite">type Count = number;
+const count: Count = 4;
+console.log(count * 2);</output><p>运行产物会打印 <code>8</code>。上图的②可以发现错误；<code>noEmitOnError</code> 决定发现错误时是否停止输出新产物。</p></div>
+<p>把浏览器和 Node.js 理解成两种宿主。浏览器提供 DOM，Node 提供文件系统和进程 API。两者都能执行 JavaScript，所提供的 API 不同。TypeScript 的类型注解和 <code>.d.ts</code> 声明可描述这些 API，实际实现由宿主或依赖提供。</p>
+<h3>回到第一章的运行命令</h3>
+<p>第 01 章用 <code>node hello.ts</code> 直接启动代码。Node.js 24 可以擦除该示例的类型语法，再运行留下的 JavaScript。这条路径主要用于观察执行行为。到第 21 章再安装 <code>tsc</code>，把类型检查、生成文件和执行产物接起来。</p>
+<details><summary>深入一层 · Node 开始执行后发生什么？</summary><p>加载器解析入口与依赖。对 ESM 来说，静态导入关系会在模块求值前建立。Node 使用的 V8 引擎解析 JavaScript、执行代码，并可根据运行反馈优化热点代码。函数调用创建执行上下文，调用结束后相应的栈帧退出。数组和对象通常通过引用共享，闭包引用的值也可在调用返回后继续存活。垃圾回收器根据可达性回收内存，所以函数返回并不意味着它创建的每个对象都会立刻消失。</p><p>例如第 11 章的 <code>counter()</code> 返回一个函数。只要返回的函数还可达，它引用的计数状态就能继续被读写。到了第 18 章，<code>await</code> 挂起后，恢复执行所需的状态也会跨调度保留。这里用调用栈和引用关系理解程序行为，V8 的实际存储位置可能受优化影响。</p></details>
+<details><summary>自测 · 能否用类型决定运行时分支？</summary><p>类型别名 <code>type Count = number</code> 在产物里消失，无法写 <code>x instanceof Count</code>。可以执行 <code>typeof x === "number"</code>，因为 <code>typeof</code> 读取的是运行时值。</p></details>
+</section>
+<section class="chapter" id="ch01"><header><div class="num">CHAPTER 08</div><h2>变量、值与作用域</h2><p class="lede">把 Python 名称绑定的直觉迁移到 let、const、块作用域和 JS 基本类型。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 绑定与共享对象</figcaption><pre tabindex="0"><code>items = ["read"]
+alias = items
+alias.append("write")
+print(items)
+if True:
+    status = "ready"
+print(status)</code></pre><div class="out"><strong>输出</strong>
+['read', 'write']
+ready</div></figure>
+<figure class="sample"><figcaption>TypeScript · const 与块</figcaption><pre tabindex="0"><code>const items = ["read"];
+const alias = items;
+alias.push("write");
+console.log(JSON.stringify(items));
+if (true) {
+  const status = "ready";
+  console.log(status);
+}</code></pre><div class="out"><strong>输出</strong>
+["read","write"]
+ready</div></figure>
+</div>
+<p><code>const</code> 固定变量的绑定，数组、对象内部仍可修改。<code>let</code> 允许重新赋值。<code>let</code> 和 <code>const</code> 属于最近的一层块，如果把示例里的 <code>console.log(status)</code> 移到块外，就无法访问这个局部变量。它们从进入作用域到初始化之间处于暂时性死区，提前读取会触发 <code>ReferenceError</code>。旧代码里的 <code>var</code> 通常是函数级作用域，声明前读到的可能是 <code>undefined</code>。</p>
+<div class="table"><table><thead><tr><th>Python 直觉</th><th>TypeScript 写法</th><th>运行语义</th></tr></thead><tbody>
+<tr><td><code>str</code> / f-string</td><td><code>string</code> / <code>`Hi ${name}`</code></td><td>反引号支持插值和多行。JS 字符串以 UTF-16 码元计长度。</td></tr>
+<tr><td><code>int</code>、<code>float</code></td><td><code>number</code> / <code>bigint</code></td><td><code>number</code> 是双精度浮点数，整数安全范围有限。<code>bigint</code> 用 <code>42n</code>，可表示大整数，算术通常要保持两侧同种类型。</td></tr>
+<tr><td><code>bool</code></td><td><code>boolean</code></td><td>字面量 <code>true</code>、<code>false</code>，小写。</td></tr>
+<tr><td><code>None</code></td><td><code>null</code>、<code>undefined</code></td><td>缺失属性、未传入的参数常得到 <code>undefined</code>，<code>null</code> 常表示协议显式给出的空值。</td></tr>
+<tr><td>唯一哨兵 <code>object()</code></td><td><code>Symbol("tag")</code></td><td>每次调用 <code>Symbol()</code> 得到新的身份，可作为对象的属性键。</td></tr>
+</tbody></table></div>
+<figure class="sample"><figcaption>TypeScript · 数值与字符串</figcaption><pre tabindex="0"><code>console.log(5 / 2, Math.floor(-5 / 2));
+console.log(-5 % 2);
+console.log(Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2);
+console.log(String(9007199254740993n));
+console.log("🚀".length, [..."🚀"].length);
+console.log(Number("oops"), Number.isNaN(Number("oops")));</code></pre><div class="out"><strong>输出</strong>
+2.5 -3
+-1
+true
+9007199254740993
+2 1
+NaN true</div></figure>
+<p>JS 的 <code>%</code> 求余跟随被除数的符号，Python 的整数 <code>%</code> 跟随除数的符号。<code>Math.trunc</code> 朝零截断，<code>Math.floor</code> 朝负无穷取整。<code>[...s]</code> 按 Unicode 码点迭代，组合字符与复杂 emoji 仍可能跨多个码点。</p>
+<figure class="sample"><figcaption>TypeScript · 注解和推断</figcaption><pre tabindex="0"><code>let retries = 3;              // 推断为 number
+const mode = "dry-run";       // 推断为字面量 "dry-run"
+let stage: "new" | "done" = "new";
+stage = "done";
+console.log(retries, mode, stage);</code></pre><div class="out"><strong>输出</strong>
+3 dry-run done</div></figure>
+<p>给局部变量一个初始值往往已经足够。显式注解更适合对外边界、空集合的元素、稍后赋值的变量，以及需要限制取值的字段。</p>
+</section>
+<section class="chapter" id="ch02"><header><div class="num">CHAPTER 09</div><h2>控制流、比较与空值</h2><p class="lede">用代码看清真假、相等、默认值以及循环的边界。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 空容器与等值</figcaption><pre tabindex="0"><code>print(bool([]), bool({}))
+print([1] == [1])
+print("" or "fallback")
+for index, item in enumerate(["a", "b"]):
+    print(index, item)</code></pre><div class="out"><strong>输出</strong>
+False False
+True
+fallback
+0 a
+1 b</div></figure>
+<figure class="sample"><figcaption>TypeScript · 对象为真、按身份比较</figcaption><pre tabindex="0"><code>const first = [1];
+const second = [1];
+console.log(Boolean([]), Boolean({}));
+console.log(first === second);
+for (const [index, item] of ["a", "b"].entries()) {
+  console.log(index, item);
+}</code></pre><div class="out"><strong>输出</strong>
+true true
+false
+0 a
+1 b</div></figure>
+</div>
+<p>条件使用 <code>if (条件) { ... } else if (...) { ... } else { ... }</code>。常见 falsy 值有 <code>false</code>、<code>0</code>、<code>0n</code>、<code>""</code>、<code>NaN</code>、<code>null</code>、<code>undefined</code>。判空数组用 <code>items.length === 0</code>，判空对象可用 <code>Object.keys(obj).length === 0</code> 检查可枚举的自有字符串键。<code>===</code> 不做跨类型强制转换，对象则按身份比较。<code>==</code> 有转换规则，阅读时留意 <code>x == null</code> 常被用来同时匹配 <code>null</code> 与 <code>undefined</code>。</p>
+<figure class="sample"><figcaption>TypeScript · 三种默认值行为</figcaption><pre tabindex="0"><code>const configured: { retries?: number; name?: string | null } = {
+  retries: 0,
+  name: "",
+};
+console.log(configured.retries || 3);
+console.log(configured.retries ?? 3);
+console.log(JSON.stringify(configured.name?.trim() ?? "anonymous"));
+console.log(({ name: null }).name ?? "anonymous");
+const { retries = 5 } = configured;
+console.log(retries);</code></pre><div class="out"><strong>输出</strong>
+3
+0
+""
+anonymous
+0</div></figure>
+<ul><li><code>a || b</code> 在 <code>a</code> 为 falsy 时求值 <code>b</code>。<code>a &amp;&amp; b</code> 在 <code>a</code> 为 truthy 时求值 <code>b</code>。它们返回操作数。</li><li><code>a ?? b</code> 在 <code>a</code> 是 <code>null</code> 或 <code>undefined</code> 时求值 <code>b</code>。</li><li><code>a?.b</code>、<code>a?.[key]</code>、<code>fn?.()</code> 分别对左侧的对象或函数进行空值短路。对多层可空属性逐层写 <code>user?.profile?.name</code>。</li><li>默认参数、解构默认值只在值是 <code>undefined</code> 时启用。允许传入 <code>null</code> 时，它会原样保留。</li></ul>
+<figure class="sample"><figcaption>TypeScript · 值、键与分支</figcaption><pre tabindex="0"><code>const names = ["a", "b"];
+for (const value of names) console.log(value);
+for (const key in names) console.log(typeof key, key);
+const count = names.length;
+console.log(count &gt; 0 ? "work" : "idle");</code></pre><div class="out"><strong>输出</strong>
+a
+b
+string 0
+string 1
+work</div></figure>
+<p><code>for...of</code> 迭代可迭代值。<code>for...in</code> 遍历对象可枚举的字符串属性名，可能包含原型上的属性；普通对象的自有键值对用 <code>Object.entries(obj)</code>。<code>switch</code> 匹配后会继续执行后续分支，除非遇到 <code>break</code>、<code>return</code> 或 <code>throw</code>。</p>
+<details><summary>自测 · 要保留重试次数 0，该选哪个运算符？</summary><p>选 <code>retries ?? 3</code>。分别代入 <code>0</code>、<code>undefined</code> 和 <code>null</code>，结果是 <code>0</code>、<code>3</code> 和 <code>3</code>。</p></details>
+</section>
+<section class="chapter" id="ch03"><header><div class="num">CHAPTER 10</div><h2>数组、对象、Map 与解构</h2><p class="lede">用 Python 列表推导式和字典经验，迁移到常见的数据处理链。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 推导式</figcaption><pre tabindex="0"><code>names = ["  Ada ", "", " Lin "]
+cleaned = [s.strip() for s in names if s.strip()]
+print(cleaned)
+head, *tail = cleaned
+print(head, tail)</code></pre><div class="out"><strong>输出</strong>
+['Ada', 'Lin']
+Ada ['Lin']</div></figure>
+<figure class="sample"><figcaption>TypeScript · map / filter</figcaption><pre tabindex="0"><code>const names = ["  Ada ", "", " Lin "];
+const cleaned = names.map(s =&gt; s.trim()).filter(s =&gt; s.length &gt; 0);
+const [head = "(empty)", ...tail] = cleaned;
+console.log(JSON.stringify(cleaned));
+console.log(head, JSON.stringify(tail));</code></pre><div class="out"><strong>输出</strong>
+["Ada","Lin"]
+Ada ["Lin"]</div></figure>
+</div>
+<p><code>map</code> 逐项变换，<code>filter</code> 按条件保留，<code>find</code> 返回第一个命中值或 <code>undefined</code>，<code>some</code> 判断是否存在。聚合时可写 <code>nums.reduce((sum, n) =&gt; sum + n, 0)</code>，最后的初始值让空数组也得到确定结果。用 <code>sort((a, b) =&gt; a - b)</code> 做数值排序，默认排序按字符串比较。<code>sort</code> 会修改数组，<code>[...nums].sort(...)</code> 先复制外层。</p>
+<figure class="sample"><figcaption>TypeScript · 对象解构、改名、合并</figcaption><pre tabindex="0"><code>const defaults = { name: "runner", retries: 2, nested: { log: false } };
+const settings = { ...defaults, retries: 0 };
+const { name: label, retries, ...rest } = settings;
+settings.nested.log = true;
+console.log(label, retries, JSON.stringify(rest));
+console.log(defaults.retries, defaults.nested.log);</code></pre><div class="out"><strong>输出</strong>
+runner 0 {"nested":{"log":true}}
+2 true</div></figure>
+<p>对象展开的同名键由后写的属性覆盖。对象展开与数组展开都是浅复制。这里 <code>settings.nested</code> 和 <code>defaults.nested</code> 持有同一个对象。<code>{ name: label }</code> 的冒号表示把属性 <code>name</code> 绑定到局部变量 <code>label</code>。</p>
+<div class="table"><table><thead><tr><th>要表达的数据</th><th>常见写法</th><th>读代码时要注意</th></tr></thead><tbody>
+<tr><td>同类元素序列</td><td><code>string[]</code> / <code>Array&lt;string&gt;</code></td><td>越界索引给出 <code>undefined</code>。默认的 <code>strict</code> 未启用 <code>noUncheckedIndexedAccess</code>。</td></tr>
+<tr><td>固定位置和含义</td><td><code>[string, number]</code></td><td>元组在运行时仍是数组。可以用 <code>readonly [string, number]</code> 限制通过该引用修改。</td></tr>
+<tr><td>按键查值</td><td><code>Record&lt;string, number&gt;</code> 或 <code>Map&lt;string, number&gt;</code></td><td>前者描述普通对象的类型，后者是运行时容器，能用对象作键，<code>get</code> 将缺失建模为 <code>undefined</code>。</td></tr>
+<tr><td>去重与成员判断</td><td><code>Set&lt;string&gt;</code></td><td><code>new Set(items)</code> 后用 <code>.has(value)</code> 检查成员。对象按身份去重。</td></tr>
+</tbody></table></div>
+<figure class="sample"><figcaption>TypeScript · Map、Set 与索引</figcaption><pre tabindex="0"><code>const counts = new Map&lt;string, number&gt;();
+for (const name of ["read", "read", "write"]) {
+  counts.set(name, (counts.get(name) ?? 0) + 1);
+}
+const tags = [...new Set(["ts", "node", "ts"])];
+console.log(JSON.stringify([...counts]));
+console.log(counts.get("missing"), JSON.stringify(tags));
+const empty: string[] = [];
+console.log(empty[0]);</code></pre><div class="out"><strong>输出</strong>
+[["read",2],["write",1]]
+undefined ["ts","node"]
+undefined</div></figure>
+<p>常见陷阱是用 <code>Record&lt;string, Value&gt;</code> 后把任意键都当成存在。有限集合用 <code>Record&lt;"read" | "write", Value&gt;</code> 强制填齐已知键，动态查找可以用 <code>Map.get</code>、显式 <code>Value | undefined</code> 或开启索引访问检查。</p>
+</section>
+<section class="chapter" id="ch04"><header><div class="num">CHAPTER 11</div><h2>函数、回调、闭包与 this</h2><p class="lede">从 def、lambda 和闭包出发，读懂 TS 项目里大量出现的箭头函数与函数类型。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 关键字参数</figcaption><pre tabindex="0"><code>def label(name: str, *, prefix: str = "job") -&gt; str:
+    return f"{prefix}:{name}"
+
+print(label("read"))
+print(label("read", prefix="task"))</code></pre><div class="out"><strong>输出</strong>
+job:read
+task:read</div></figure>
+<figure class="sample"><figcaption>TypeScript · 用对象传命名选项</figcaption><pre tabindex="0"><code>type Options = { prefix?: string };
+function label(name: string, { prefix = "job" }: Options = {}): string {
+  return `${prefix}:${name}`;
+}
+
+console.log(label("read"));
+console.log(label("read", { prefix: "task" }));</code></pre><div class="out"><strong>输出</strong>
+job:read
+task:read</div></figure>
+</div>
+<p>函数名后的一对括号是参数，最后一个冒号后的 <code>string</code> 是返回类型。这里第二个参数先用 <code>= {}</code> 处理整个参数缺失，再用 <code>prefix = "job"</code> 处理对象属性缺失。<code>n?: number</code> 允许省略参数，函数体中 <code>n</code> 可能为 <code>undefined</code>。<code>...args: string[]</code> 把剩余位置参数收成数组，调用侧的 <code>fn(...args)</code> 把数组展开成实参。</p>
+<figure class="sample"><figcaption>TypeScript · 函数签名与箭头</figcaption><pre tabindex="0"><code>type Transform = (value: string) =&gt; string;
+const upper: Transform = value =&gt; value.toUpperCase();
+const asEntry = (value: string) =&gt; ({ value, size: value.length });
+const list = (...values: string[]) =&gt; values.map(upper).map(asEntry);
+console.log(JSON.stringify(list("ts", "node")));</code></pre><div class="out"><strong>输出</strong>
+[{"value":"TS","size":2},{"value":"NODE","size":4}]</div></figure>
+<p><code>(value: string) =&gt; string</code> 在类型位置描述调用形状。<code>value =&gt; value.toUpperCase()</code> 在值位置创建函数，并借助上下文推断参数类型。箭头函数的表达式体自动返回结果，花括号块体需要 <code>return</code>。返回对象字面量时用 <code>({ value })</code> 包起来。</p>
+<figure class="sample"><figcaption>TypeScript · 闭包保留可变绑定</figcaption><pre tabindex="0"><code>function counter(start = 0) {
+  let n = start;
+  return () =&gt; ++n;
+}
+const a = counter(10);
+const b = counter();
+console.log(a(), a(), b());</code></pre><div class="out"><strong>输出</strong>
+11 12 1</div></figure>
+<p>两次调用 <code>counter</code> 创建独立的局部作用域。返回的函数仍引用各自的 <code>n</code>，因此能跨调用积累状态。普通函数和方法的 <code>this</code> 取决于调用方式。执行 <code>obj.run()</code> 时接收者是 <code>obj</code>，取出 <code>const run = obj.run</code> 后直接调用会丢失接收者。箭头函数从定义处捕获 <code>this</code>。</p>
+<figure class="sample"><figcaption>TypeScript · 传递方法时保留接收者</figcaption><pre tabindex="0"><code>const job = {
+  name: "read",
+  run() { return this.name.toUpperCase(); },
+};
+const bound = job.run.bind(job);
+const wrapped = () =&gt; job.run();
+console.log(bound(), wrapped());</code></pre><div class="out"><strong>输出</strong>
+READ READ</div></figure>
+<h3>重载描述调用约定，函数体负责实际分支</h3>
+<figure class="sample"><figcaption>TypeScript · 重载</figcaption><pre tabindex="0"><code>function format(input: string): string;
+function format(input: number): string;
+function format(input: string | number): string {
+  return typeof input === "number" ? input.toFixed(1) : input.trim();
+}
+console.log(format(3), format(" hi "));</code></pre><div class="out"><strong>输出</strong>
+3.0 hi</div></figure>
+<p>调用侧看到上面两条重载签名。第三条给实现使用。传入类型仍为 <code>string | number</code> 的变量时，两条公开重载可能都匹配不上。这个例子两种输入返回相同类型，也可以直接公开一个联合参数签名。<code>void</code> 作为回调返回类型时表示调用方会忽略结果，例如 <code>forEach</code> 接受返回值会被丢弃的回调。</p>
+</section>
+<section class="chapter" id="ch05"><header><div class="num">CHAPTER 12</div><h2>对象形状、接口与类</h2><p class="lede">分清形状约束、实例身份和可变状态。</p></header>
+<figure class="sample"><figcaption>TypeScript · 结构兼容</figcaption><pre tabindex="0"><code>interface Job {
+  readonly id: string;
+  retries?: number;
+}
+function describe(job: Job): string {
+  return `${job.id}/${job.retries ?? 0}`;
+}
+const task = { id: "read", owner: "Lin" };
+console.log(describe(task));
+// describe({ id: "read", owner: "Lin" }); // 多余属性检查</code></pre><div class="out"><strong>输出与诊断</strong>
+read/0
+取消最后一行注释：对象字面量含 Job 未声明的 owner。</div></figure>
+<p>只要变量的形状满足接口，它就可以传给 <code>describe</code>。可以把这想成由检查器提前确认的鸭子类型。直接传入新鲜对象字面量时，额外的属性检查常用于捕捉拼写错误。<code>readonly</code> 限制通过这个类型视图写入，约束不会递归，也不会冻结 JS 对象。<code>Object.freeze</code> 会在运行时冻结对象的外层。</p>
+<p><code>retries?: number</code> 表示属性可缺失，读取时可能得到 <code>undefined</code>。<code>retries: number | undefined</code> 要求键存在，值可为 <code>undefined</code>。开启 <code>exactOptionalPropertyTypes</code> 后，若希望可选属性还允许显式写入 <code>undefined</code>，要把它写进属性的值类型。</p>
+<figure class="sample"><figcaption>TypeScript · interface、type 与交叉类型</figcaption><pre tabindex="0"><code>interface Identified { id: string }
+interface NamedJob extends Identified { name: string }
+type Timed = { timeoutMs: number };
+type TimedJob = NamedJob &amp; Timed;
+const job: TimedJob = { id: "a", name: "read", timeoutMs: 500 };
+console.log(job.name, job.timeoutMs);</code></pre><div class="out"><strong>输出</strong>
+read 500</div></figure>
+<p><code>interface</code> 可用 <code>extends</code> 扩展对象形状，同名接口在适用作用域可合并。<code>type</code> 还可为联合、元组、原始类型及类型计算起别名。<code>A &amp; B</code> 表示同一个值要同时满足两种约束，遇到同名字段类型冲突可能得到 <code>never</code>。运行时合并对象由 <code>{...a, ...b}</code> 完成。</p>
+<div class="pair">
+<figure class="sample"><figcaption>Python · self 与实例</figcaption><pre tabindex="0"><code>class Counter:
+    def __init__(self, name: str):
+        self.name = name
+        self.n = 0
+
+    def step(self) -&gt; str:
+        self.n += 1
+        return f"{self.name}:{self.n}"
+
+print(Counter("job").step())</code></pre><div class="out"><strong>输出</strong>
+job:1</div></figure>
+<figure class="sample"><figcaption>TypeScript · this 与私有字段</figcaption><pre tabindex="0"><code>interface Stepper { step(): string }
+
+class Counter implements Stepper {
+  #n = 0;
+  readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  step(): string {
+    this.#n += 1;
+    return `${this.name}:${this.#n}`;
+  }
+}
+const c: Stepper = new Counter("job");
+console.log(c.step());
+console.log(c instanceof Counter);</code></pre><div class="out"><strong>输出</strong>
+job:1
+true</div></figure>
+</div>
+<p><code>class</code> 同时有类型和运行时值两面。<code>new Counter(...)</code> 产生对象，<code>instanceof Counter</code> 检查该构造函数的原型是否出现在对象的原型链上。<code>implements</code> 用于静态检查，接口不进入原型链。TS 的 <code>private</code> 主要由类型检查器约束，JS 的 <code>#n</code> 有运行时私有语义。读到 <code>constructor(public name: string) {}</code> 时，<code>public</code> 参数属性是 TS 简写，会在实例上创建并初始化属性。</p>
+<p>类的普通方法由实例通过原型链找到，实例字段属于每个实例。<code>extends Base</code> 建立继承关系，派生构造器在使用 <code>this</code> 之前调用 <code>super(...)</code>。<code>static</code> 成员从类本身访问。<code>abstract</code> 声明由派生类完成的契约。</p>
+</section>
+<section class="chapter" id="ch06"><header><div class="num">CHAPTER 13</div><h2>联合、收窄与穷尽检查</h2><p class="lede">联合类型让状态差异进入类型系统，再用真实分支把类型范围缩小。</p></header>
+<figure class="sample"><figcaption>TypeScript · 从 string | number 收窄</figcaption><pre tabindex="0"><code>function normalize(id: string | number): string {
+  if (typeof id === "string") {
+    return id.trim();
+  }
+  return id.toString(10);
+}
+console.log(normalize("  abc "), normalize(42));</code></pre><div class="out"><strong>输出</strong>
+abc 42</div></figure>
+<p>联合 <code>A | B</code> 代表值可能属于任一成员。检查器只允许无条件访问所有成员共同支持的操作。<code>typeof</code>、<code>instanceof</code>、字面量比较、<code>in</code> 和 <code>Array.isArray</code> 都能提供收窄线索。记得 <code>typeof null === "object"</code>，要处理可空对象时先显式排除 <code>null</code>。</p>
+<figure class="diagram"><div class="flow"><div class="step"><strong>输入</strong><small>Result = Ok | Failed</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>检查 result.kind</strong><small>运行时比较字符串</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>分支内获得专属字段</strong><small>ok → value；error → message</small></div></div><figcaption>图 02 · 运行时检查驱动静态收窄。标签字段应为各分支独有的字面量。</figcaption></figure>
+<figure class="sample"><figcaption>TypeScript · 可辨识联合</figcaption><pre tabindex="0"><code>type Result =
+  | { kind: "ok"; value: number }
+  | { kind: "error"; message: string };
+
+function unreachable(value: never): never {
+  throw new Error(`Unexpected result: ${JSON.stringify(value)}`);
+}
+function show(result: Result): string {
+  switch (result.kind) {
+    case "ok": return `value=${result.value}`;
+    case "error": return `error=${result.message}`;
+    default: return unreachable(result);
+  }
+}
+console.log(show({ kind: "ok", value: 0 }));
+console.log(show({ kind: "error", message: "timeout" }));</code></pre><div class="out"><strong>输出</strong>
+value=0
+error=timeout</div></figure>
+<p><code>never</code> 表示在当前静态分析里没有可达的值，也可作为总会抛异常的函数返回类型。新增 <code>{ kind: "cancelled" }</code> 后，若忘记补 <code>case</code>，默认分支仍可能收到 <code>cancelled</code>，便会在传给 <code>unreachable</code> 时得到编译诊断。用 <code>kind</code>、<code>type</code> 或 <code>status</code> 区分请求结果、事件、命令和状态，是阅读 TS 项目时值得优先识别的结构。</p>
+<figure class="sample"><figcaption>TypeScript · 字面量为何被拓宽</figcaption><pre tabindex="0"><code>type Job = { kind: "read" | "write"; path: string };
+const loose = { kind: "read", path: "in.txt" }; // kind 推断为 string
+const exact = { kind: "read", path: "in.txt" } satisfies Job;
+const fixed = ["read", "write"] as const;
+console.log(exact.kind, fixed[1]);</code></pre><div class="out"><strong>输出</strong>
+read write</div></figure>
+<p>普通对象的属性可被重新赋值，初始化时的 <code>"read"</code> 常被拓宽成 <code>string</code>。<code>satisfies Job</code> 检查表达式满足目标约束，并保留表达式自己的推断结果。<code>as const</code> 让字面量保留精确值，将对象字面量属性标为只读，并把数组字面量推断为只读元组。两者在运行时都被擦除。</p>
+<details><summary>自测 · 为什么 <code>if (value)</code> 可能把合法输入排除？</summary><p>如果 <code>value</code> 的类型是 <code>number | undefined</code>，<code>0</code> 是合法数值但在真假判断中为假。用 <code>value !== undefined</code> 表达检查的真实目的。</p></details>
+</section>
+<section class="chapter" id="ch07"><header><div class="num">CHAPTER 14</div><h2>泛型保留输入与输出的关系</h2><p class="lede">把 T 看成由调用决定的类型参数。像 Python 的 TypeVar 一样，重点在各个位置的类型如何关联。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · TypeVar 泛型函数</figcaption><pre tabindex="0"><code>from typing import TypeVar
+
+T = TypeVar("T")
+
+def first(items: list[T]) -&gt; T | None:
+    return items[0] if items else None
+
+print(first([10, 20]))
+print(first([]))</code></pre><div class="out"><strong>输出</strong>
+10
+None</div></figure>
+<figure class="sample"><figcaption>TypeScript · 从实参推断 T</figcaption><pre tabindex="0"><code>function first&lt;T&gt;(items: readonly T[]): T | undefined {
+  return items[0];
+}
+const a = first([10, 20]);     // number | undefined
+const b = first&lt;string&gt;([]);  // string | undefined
+console.log(a, b);</code></pre><div class="out"><strong>输出</strong>
+10 undefined</div></figure>
+</div>
+<p><code>first&lt;T&gt;</code> 宣告了类型参数。<code>readonly T[]</code> 允许传入可变或只读数组，函数体只能通过这个引用读取。<code>T | undefined</code> 表达空数组的运行结果。若改成 <code>any[] → any</code>，调用后就失去了元素类型的线索。</p>
+<figure class="sample"><figcaption>TypeScript · K 受 T 的键约束</figcaption><pre tabindex="0"><code>function get&lt;T extends object, K extends keyof T&gt;(obj: T, key: K): T[K] {
+  return obj[key];
+}
+const job = { name: "read", retries: 2 };
+const name = get(job, "name");       // string
+const retries = get(job, "retries"); // number
+console.log(name.toUpperCase(), retries + 1);
+// get(job, "retry");               // 不在 keyof T 中</code></pre><div class="out"><strong>输出</strong>
+READ 3</div></figure>
+<p>这里的 <code>extends</code> 表示类型约束。第一步推断 <code>T = { name: string; retries: number }</code>，第二步得到 <code>keyof T = "name" | "retries"</code>，第三步用传入的键决定 <code>K</code>，最后 <code>T[K]</code> 读出对应属性的类型。<code>keyof</code> 计算类型层的键，<code>Object.keys</code> 才会枚举某个实际对象的键。</p>
+<figure class="sample"><figcaption>TypeScript · 泛型数据结构</figcaption><pre tabindex="0"><code>type Outcome&lt;T, E = string&gt; =
+  | { ok: true; value: T }
+  | { ok: false; error: E };
+
+function parseCount(text: string): Outcome&lt;number&gt; {
+  if (!/^\d+$/.test(text)) return { ok: false, error: "expected digits" };
+  const count = Number(text);
+  if (!Number.isSafeInteger(count)) return { ok: false, error: "unsafe integer" };
+  return { ok: true, value: count };
+}
+for (const raw of ["0", "x", "9007199254740993"]) {
+  const result = parseCount(raw);
+  console.log(result.ok ? result.value : result.error);
+}</code></pre><div class="out"><strong>输出</strong>
+0
+expected digits
+unsafe integer</div></figure>
+<p><code>E = string</code> 给类型参数默认值。只传 <code>Outcome&lt;number&gt;</code> 时错误载荷为字符串，也可以在另一个接口里写 <code>Outcome&lt;User, Error&gt;</code>。泛型从实参推断或由调用方提供，执行函数时没有一个名叫 <code>T</code> 的运行时参数。想按类别构造实例时，需要传构造函数或工厂等运行时值。</p>
+</section>
+<section class="chapter" id="ch08"><header><div class="num">CHAPTER 15</div><h2>类型变换与推断</h2><p class="lede">顺着符号从里向外读，弄懂项目里常见的 keyof、typeof、映射类型与 infer。</p></header>
+<figure class="sample"><figcaption>TypeScript · 从运行时配置派生类型</figcaption><pre tabindex="0"><code>const actions = ["read", "write"] as const;
+type Action = (typeof actions)[number];
+type Handler = (path: string) =&gt; string;
+
+const handlers = {
+  read: path =&gt; `read ${path}`,
+  write: path =&gt; `write ${path}`,
+} satisfies Record&lt;Action, Handler&gt;;
+
+console.log(actions.map(action =&gt; handlers[action]("a.txt")).join("\n"));</code></pre><div class="out"><strong>输出</strong>
+read a.txt
+write a.txt</div></figure>
+<ol><li><code>typeof actions</code> 在类型位置获取变量的静态类型，这里是 <code>readonly ["read", "write"]</code>。表达式里的 <code>typeof actions</code> 则在运行时得到 <code>"object"</code>。</li><li><code>[number]</code> 获取数字索引可读出的元素类型，即 <code>"read" | "write"</code>。</li><li><code>Record&lt;Action, Handler&gt;</code> 要求每个动作名对应一个函数。添加动作后缺少相应实现，检查器会指出。</li></ol>
+<div class="table"><table><thead><tr><th>类型工具</th><th>怎么读</th><th>常见场景</th></tr></thead><tbody>
+<tr><td><code>Pick&lt;Job, "id" | "name"&gt;</code></td><td>只取这些字段</td><td>列表摘要</td></tr>
+<tr><td><code>Omit&lt;Job, "id"&gt;</code></td><td>去掉这些字段</td><td>服务端创建 ID 的输入类型</td></tr>
+<tr><td><code>Partial&lt;Job&gt;</code></td><td>各字段变成可选</td><td>浅层补丁对象</td></tr>
+<tr><td><code>Required&lt;Job&gt;</code> / <code>Readonly&lt;Job&gt;</code></td><td>字段改为必选 / 只读</td><td>解析完默认值的配置 / 对外只读视图</td></tr>
+<tr><td><code>Extract&lt;Event, { kind: "done" }&gt;</code></td><td>保留能赋给目标类型的联合成员</td><td>挑出某一类事件载荷</td></tr>
+<tr><td><code>ReturnType&lt;typeof load&gt;</code> / <code>Awaited&lt;T&gt;</code></td><td>读出返回类型 / 展开等待后的值类型</td><td>从异步函数签名导出数据模型</td></tr>
+</tbody></table></div>
+<figure class="sample"><figcaption>TypeScript · 映射和条件类型</figcaption><pre tabindex="0"><code>type Settings = { path: string; retries: number };
+type Readers&lt;T&gt; = {
+  [K in keyof T]: () =&gt; T[K];
+};
+const readers: Readers&lt;Settings&gt; = {
+  path: () =&gt; "out.txt",
+  retries: () =&gt; 3,
+};
+
+type Item&lt;T&gt; = T extends readonly (infer U)[] ? U : never;
+type Name = Item&lt;readonly ["read", "write"]&gt;;
+const action: Name = "read";
+console.log(readers.path(), readers.retries(), action);</code></pre><div class="out"><strong>输出</strong>
+out.txt 3 read</div></figure>
+<p><code>[K in keyof T]</code> 逐个键生成属性，类似在类型层做字典推导。<code>T extends ... ? X : Y</code> 在类型层做可赋值关系的判断。<code>infer U</code> 让检查器在匹配数组形状时提取元素类型。条件左侧为裸类型参数时会对联合成员分别计算，例如 <code>Item&lt;string[] | number[]&gt;</code> 得到 <code>string | number</code>。可以用 <code>[T] extends [...]</code> 包住类型，按整个联合作判断。</p>
+<p>读复杂类型时用纸笔代入具体输入。例如从 <code>Awaited&lt;ReturnType&lt;typeof load&gt;&gt;</code> 最内层开始，依次写出 <code>() =&gt; Promise&lt;Job&gt;</code>、<code>Promise&lt;Job&gt;</code>、<code>Job</code>。静态类型变换不会替你删字段或复制对象，若要真正移除数据，要做运行时投影，例如 <code>const { secret, ...publicData } = job</code>。</p>
+</section>
+<section class="chapter" id="ch09"><header><div class="num">CHAPTER 16</div><h2>外部数据、断言与异常</h2><p class="lede">给来自文件、命令行或网络的值安排明确的运行时检查。</p></header>
+<figure class="diagram"><div class="flow"><div class="step"><strong>文本</strong><small>文件、请求、环境变量</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>解析</strong><small>JSON.parse → unknown</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>校验</strong><small>检查对象与关键属性</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>可信结构</strong><small>业务函数读取具体字段</small></div></div><figcaption>图 03 · 解析成功只代表格式可读。校验成功才支持关于字段形状的判断。</figcaption></figure>
+<figure class="sample"><figcaption>TypeScript · 两类失败与自定义类型守卫</figcaption><pre tabindex="0"><code>type Job = { name: string; retries: number };
+
+function isJob(value: unknown): value is Job {
+  return typeof value === "object" &amp;&amp; value !== null
+    &amp;&amp; "name" in value &amp;&amp; typeof value.name === "string"
+    &amp;&amp; "retries" in value &amp;&amp; typeof value.retries === "number"
+    &amp;&amp; Number.isSafeInteger(value.retries) &amp;&amp; value.retries &gt;= 0;
+}
+
+function parseJob(text: string): Job {
+  const raw: unknown = JSON.parse(text);
+  if (!isJob(raw)) throw new Error("invalid job shape");
+  return raw;
+}
+
+for (const text of ['{"name":"read","retries":0}', '{"name":"read"}', '{']) {
+  try {
+    console.log(parseJob(text).name.toUpperCase());
+  } catch (err: unknown) {
+    if (err instanceof SyntaxError) console.log("invalid JSON");
+    else console.log(err instanceof Error ? err.message : String(err));
+  }
+}</code></pre><div class="out"><strong>输出</strong>
+READ
+invalid job shape
+invalid JSON</div></figure>
+<p><code>JSON.parse</code> 的库签名返回 <code>any</code>，这里主动接到 <code>unknown</code>，避免不可信值绕过检查。<code>value is Job</code> 告诉检查器：守卫为真时可以按 <code>Job</code> 读字段。守卫本身的判断由作者负责，漏掉 <code>retries</code> 的检查也可能照样编译。处理外部输入时可检查类型之外的业务约束，例如次数非负和路径非空。</p>
+<div class="table"><table><thead><tr><th>语法</th><th>影响</th><th>阅读时的问题</th></tr></thead><tbody>
+<tr><td><code>any</code></td><td>允许许多未检查的操作，结果还能继续传播为 any</td><td>数据来自哪里，在哪里获得保证？</td></tr>
+<tr><td><code>unknown</code></td><td>可接收任意值，使用前要收窄</td><td>检查覆盖了哪些字段或分支？</td></tr>
+<tr><td><code>value as Job</code></td><td>可接受的断言改变静态视图</td><td>运行时是否有证据支持这一形状？</td></tr>
+<tr><td><code>value!</code></td><td>在类型上排除 <code>null</code> 和 <code>undefined</code></td><td>哪个前置条件保证了值存在？</td></tr>
+<tr><td><code>String(value)</code> / <code>Number(value)</code></td><td>运行时转换</td><td>是否要拒绝 <code>NaN</code>、空字符串等特殊结果？</td></tr>
+</tbody></table></div>
+<figure class="sample"><figcaption>TypeScript · 断言与真实转换的区别</figcaption><pre tabindex="0"><code>const raw: unknown = "42";
+const asserted = raw as number;
+const converted = Number(raw);
+console.log(typeof asserted, asserted + 1);
+console.log(typeof converted, converted + 1);</code></pre><div class="out"><strong>输出</strong>
+string 421
+number 43</div></figure>
+<p>JS 可以抛出任何值，<code>catch</code> 里先用 <code>instanceof Error</code> 收窄，再取 <code>message</code>。<code>finally</code> 在成功、异常或提前返回时都会执行，适合释放资源。可预期且需要调用者分类处理的失败，也可显式返回第 14 章那样的 <code>Outcome</code>。</p>
+</section>
+<section class="chapter" id="ch10"><header><div class="num">CHAPTER 17</div><h2>import、export 与依赖解析</h2><p class="lede">把 Python 的 import 经验迁移到 Node.js，同时建立 ESM 和 CommonJS 的概念。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 模块导入</figcaption><pre tabindex="0"><code># task.py
+def run(name: str) -&gt; str:
+    return name.upper()
+
+# main.py
+from task import run
+print(run("read"))</code></pre><div class="out"><strong>python main.py</strong>
+READ</div></figure>
+<figure class="sample"><figcaption>TypeScript · Node ESM，先编译再运行</figcaption><pre tabindex="0"><code>// task.ts
+export type Task = { name: string };
+export function run(task: Task) {
+  return task.name.toUpperCase();
+}
+
+// main.ts
+import { run, type Task } from "./task.js";
+const task: Task = { name: "read" };
+console.log(run(task));</code></pre><div class="out"><strong>node dist/main.js</strong>
+READ</div></figure>
+</div>
+<p>右侧是两个文件。以第 21 章的 <code>NodeNext</code> 配置为例，TypeScript 检查 <code>main.ts</code> 时可用 <code>./task.js</code> 找到 <code>task.ts</code>。编译产物保留 <code>./task.js</code>，Node 运行时会找到真正的 <code>dist/task.js</code>。<code>type Task</code> 这一导入项被擦除。只有类型时可直接写 <code>import type { Task } from "./task.js"</code>。</p>
+<div class="table"><table><thead><tr><th>看到的写法</th><th>含义</th></tr></thead><tbody>
+<tr><td><code>import { run as execute } from "./task.js"</code></td><td>命名导入并在当前文件改名。</td></tr>
+<tr><td><code>import run from "./task.js"</code></td><td>导入模块的默认导出，由 <code>export default</code> 对应提供。</td></tr>
+<tr><td><code>import * as task from "./task.js"</code></td><td>获得模块命名空间，通过 <code>task.run</code> 读导出。</td></tr>
+<tr><td><code>export { run } from "./task.js"</code></td><td>从当前入口重新导出。读 <code>index.ts</code> 时可能还要再跳一层。</td></tr>
+<tr><td><code>import "./setup.js"</code></td><td>为了执行模块顶层的初始化逻辑而导入。</td></tr>
+<tr><td><code>const task = await import("./task.js")</code></td><td>在执行到该表达式时动态加载，结果是模块命名空间的 Promise。</td></tr>
+<tr><td><code>const task = require("./task.cjs")</code></td><td>CommonJS 的典型加载写法，导出对象通常来自 <code>module.exports</code>。</td></tr>
+</tbody></table></div>
+<p>ESM 的静态导入由宿主在模块求值前处理，导入绑定随导出绑定更新。依赖模块的顶层代码会参与求值，循环依赖时可能在绑定初始化前就被读取。<code>package.json</code> 里的 <code>"type": "module"</code> 让该包范围下的 <code>.js</code> 明确按 ESM 解释。<code>.mjs</code> 明确是 ESM，<code>.cjs</code> 明确是 CommonJS。编译时 <code>.mts</code>、<code>.cts</code> 可分别输出为两者。</p>
+<p>以 <code>import { readFile } from "node:fs/promises"</code> 为例，<code>node:</code> 指向 Node 内置模块。<code>"some-package"</code> 这样的裸模块说明符通常交给包解析，包的 <code>exports</code> 能指定不同条件的公共入口。<code>"./task.js"</code> 则相对当前模块解析。<code>paths</code> 可以告诉 TS 检查器怎样查别名，运行时要由 Node 的包映射、打包器等机制提供对应解析。</p>
+<div class="callout"><p><strong>两套问题要分别查。</strong> <code>TS2307</code> 属于检查时的解析问题。<code>ERR_MODULE_NOT_FOUND</code> 来自 Node，先查产物路径、文件扩展名、依赖是否安装和包导出规则。</p></div>
+</section>
+<section class="chapter" id="ch11"><header><div class="num">CHAPTER 18</div><h2>Promise、async/await 与事件循环</h2><p class="lede">学会预测输出顺序，理解等待 I/O 时函数和运行时分别在做什么。</p></header>
+<div class="pair">
+<figure class="sample"><figcaption>Python · 调用 async def 得到协程对象</figcaption><pre tabindex="0"><code>import asyncio
+
+async def work():
+    print("work")
+    return 7
+
+async def main():
+    pending = work()
+    print("after call")
+    print(await pending)
+
+asyncio.run(main())</code></pre><div class="out"><strong>输出</strong>
+after call
+work
+7</div></figure>
+<figure class="sample"><figcaption>TypeScript · async 函数立即进入函数体</figcaption><pre tabindex="0"><code>async function work(): Promise&lt;number&gt; {
+  console.log("work");
+  return 7;
+}
+
+async function main() {
+  const pending = work();
+  console.log("after call");
+  console.log(await pending);
+}
+void main();</code></pre><div class="out"><strong>输出</strong>
+work
+after call
+7</div></figure>
+</div>
+<p>调用 JS 的 <code>async</code> 函数会同步执行到首次挂起或完成，同时给调用者一个 Promise。<code>return 7</code> 让 Promise 兑现为 <code>7</code>。<code>throw</code> 让 Promise 拒绝。<code>await</code> 会暂停当前 async 函数后续的执行，即使等待的值已兑现，续段也会稍后调度。调用者和事件循环可以继续处理别的工作。示例中的 <code>void main()</code> 丢弃返回值，真实入口仍需处理可能的拒绝，例如 <code>main().catch(report)</code>。</p>
+<figure class="sample"><figcaption>TypeScript · 预测输出顺序</figcaption><pre tabindex="0"><code>console.log("A: sync start");
+
+setTimeout(() =&gt; console.log("D: timer"), 0);
+Promise.resolve().then(() =&gt; console.log("C: promise"));
+
+console.log("B: sync end");</code></pre><div class="out"><strong>输出</strong>
+A: sync start
+B: sync end
+C: promise
+D: timer</div></figure>
+<div class="demo"><strong>实验 · 在浏览器运行上方的调度顺序</strong><p><button id="async-run" type="button">运行并观察</button></p><output id="async-log" aria-live="polite">点击运行后，这里逐行显示输出。</output></div>
+<figure class="diagram"><div class="flow"><div class="step"><strong>当前调用栈</strong><small>执行脚本，记录 A、B</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>Promise 微任务</strong><small>运行 then 回调，记录 C</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>计时器回调</strong><small>到达可调度时机，记录 D</small></div></div><figcaption>图 04 · 本例没有混入 Node 特有的 <code>process.nextTick</code> 或其他事件循环阶段。</figcaption></figure>
+<p>同步函数通过调用栈执行。网络和文件 I/O 由宿主协调，完成后相关回调或 Promise 续段才有机会运行。同步的长循环仍会占用 JS 执行线程。<code>setTimeout(fn, 0)</code> 代表尽早调度，运行顺序还受当前任务和队列影响。</p>
+<figure class="sample"><figcaption>TypeScript · 并发启动，按输入顺序返回结果</figcaption><pre tabindex="0"><code>function delayed(value: string, ms: number): Promise&lt;string&gt; {
+  return new Promise(resolve =&gt; setTimeout(() =&gt; resolve(value), ms));
+}
+async function main() {
+  const results = await Promise.all([delayed("slow", 25), delayed("fast", 5)]);
+  console.log(JSON.stringify(results));
+}
+void main();</code></pre><div class="out"><strong>输出</strong>
+["slow","fast"]</div></figure>
+<p>两个 <code>delayed</code> 在构造数组时就启动。<code>Promise.all</code> 兑现后的数组保持输入顺序，任一个拒绝会使组合 Promise 拒绝，其他操作仍会继续，除非另外取消。要收集成功与失败两类结果，用 <code>Promise.allSettled</code>。异步有先后依赖时按次序 <code>await</code>；独立操作可先发起再一起等待。需要逐项等待时用 <code>for...of</code> 加 <code>await</code>，<code>forEach(async ...)</code> 会丢弃回调返回的 Promise。</p>
+<details><summary>自测 · 两次 await 写在循环里，会发生什么？</summary><p>若每次迭代先创建一个 Promise 再等待它，第二次操作要等第一次完成才启动。若循环前已把两项操作都启动，随后逐项等待只决定消费顺序。</p></details>
+</section>
+<section class="chapter" id="ch12"><header><div class="num">CHAPTER 19</div><h2>异步迭代、流式事件与取消</h2><p class="lede">读懂一串分批到达的值，以及调用方如何通知底层操作停止。</p></header>
+<figure class="sample"><figcaption>TypeScript · async function* + for await</figcaption><pre tabindex="0"><code>type Progress =
+  | { kind: "chunk"; text: string }
+  | { kind: "done" };
+
+async function* stream(): AsyncGenerator&lt;Progress&gt; {
+  yield { kind: "chunk", text: "hello" };
+  await Promise.resolve();
+  yield { kind: "chunk", text: " world" };
+  yield { kind: "done" };
+}
+
+async function main() {
+  let message = "";
+  for await (const event of stream()) {
+    if (event.kind === "chunk") message += event.text;
+    else console.log(message);
+  }
+}
+void main();</code></pre><div class="out"><strong>输出</strong>
+hello world</div></figure>
+<p>和 Python 的异步生成器与 <code>async for</code> 类似，<code>async function*</code> 返回可异步迭代的生成器。每次请求下一项都会得到一个 Promise，兑现为迭代结果对象，形如 <code>{ value, done }</code>。<code>for await...of</code> 替你等待、取值并判断结束。这里的业务事件 <code>{ kind: "done" }</code> 和迭代器自身的 <code>done: true</code> 属于两层协议。提前 <code>break</code> 会在可用时调用并等待迭代器的 <code>return()</code>，生成器可在 <code>finally</code> 中清理资源。</p>
+<figure class="sample"><figcaption>TypeScript · Node.js · 把 signal 传给支持取消的 API</figcaption><pre tabindex="0"><code>import { setTimeout as delay } from "node:timers/promises";
+
+const controller = new AbortController();
+
+async function run(signal: AbortSignal) {
+  try {
+    await delay(1000, undefined, { signal });
+    console.log("finished");
+  } catch (err) {
+    if (err instanceof Error &amp;&amp; err.name === "AbortError") {
+      console.log("cancelled");
+      return;
+    }
+    throw err;
+  }
+}
+
+const pending = run(controller.signal);
+controller.abort();
+await pending;</code></pre><div class="out"><strong>输出</strong>
+cancelled</div></figure>
+<p>按第 21 章的 ESM 配置运行这段代码，顶层 <code>await</code> 在模块中有效。取消是一种合作机制。调用 <code>abort()</code> 后，信号被标为已取消，支持该信号的 API 会按各自的契约作出响应。自己实现长操作时，要在合适的边界检查 <code>signal.aborted</code> 或监听 <code>abort</code>。如果函数接收了信号却没有继续传给实际工作，底层 I/O 仍可能继续。</p>
+</section>
+<section class="chapter" id="ch13"><header><div class="num">CHAPTER 20</div><h2>tsc、运行器与调试</h2><p class="lede">从启动脚本追到真正执行的文件，区分检查、转译、打包和宿主执行。</p></header>
+<figure class="diagram"><div class="flow"><div class="step"><strong>npm run build</strong><small>读取 package.json 的 scripts</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>本地 tsc</strong><small>读取 tsconfig.json，检查并生成 JS</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>node dist/main.js</strong><small>解析 ESM 依赖，运行模块</small></div></div><figcaption>图 05 · <code>npm</code> 负责依赖与脚本，<code>tsc</code> 负责检查和产物，<code>node</code> 负责执行。</figcaption></figure>
+<div class="table"><table><thead><tr><th>设置 / 文件</th><th>解决什么问题</th></tr></thead><tbody>
+<tr><td><code>package.json</code></td><td>项目脚本、依赖、JS 模块类型和包元数据。<code>package-lock.json</code> 记录依赖解析结果。</td></tr>
+<tr><td><code>strict</code></td><td>打开一组严格检查，例如空值处理和隐式 any。<code>noUncheckedIndexedAccess</code> 与 <code>exactOptionalPropertyTypes</code> 是另行选择的检查。</td></tr>
+<tr><td><code>target</code> / <code>lib</code></td><td><code>target</code> 影响输出的 JS 语法级别以及默认库选择；<code>lib</code> 决定可见的标准 API 声明。两者都不会自动补齐宿主缺失的 API。</td></tr>
+<tr><td><code>module</code> / <code>moduleResolution</code></td><td>模块的发射和解释方式，以及检查器如何寻找导入目标。让它们与实际宿主或打包器的规则一致。</td></tr>
+<tr><td><code>rootDir</code> / <code>outDir</code></td><td>控制源文件相对路径如何映射到输出目录。用 <code>include</code> 指定初始文件集合。</td></tr>
+<tr><td><code>noEmit</code> / <code>noEmitOnError</code></td><td>前者只检查不写产物，后者发现错误就不写新产物。旧的 <code>dist</code> 文件可能仍留在磁盘上。</td></tr>
+<tr><td><code>sourceMap</code></td><td>写出从 JS 位置映射回 TS 的数据。Node 启用 <code>--enable-source-maps</code> 后可在堆栈中使用。</td></tr>
+<tr><td><code>.d.ts</code> 与 <code>@types/node</code></td><td>描述值和 API 的类型。Node 的 API 实现来自运行时，安装类型声明只让检查器认识它。</td></tr>
+</tbody></table></div>
+<p><strong>转译</strong>是把 TS/新语法变成目标 JS。<strong>打包</strong>根据依赖图生成一个或多个交付文件，可以同时承担转译。一个项目可以用转译器快速输出，用 <code>tsc --noEmit</code> 单独检查。支持类型擦除的 Node 版本还能运行部分 <code>.ts</code>：它擦除可消除的类型语法，不做类型检查，也不会用 <code>tsconfig.json</code> 改写路径别名或降级语法。普通 <code>enum</code>、构造器参数属性等需要生成 JS 的语法，单纯擦除无法处理。直接运行 TS 的导入后缀要指向运行时实际可加载的文件。</p>
+<figure class="sample"><figcaption>TypeScript · 比较类型和运行时错误</figcaption><pre tabindex="0"><code>const names: string[] = [];
+const first = names[0];
+console.log(first.toUpperCase());</code></pre><div class="out"><strong>默认 strict 下的现象</strong>
+类型检查可以通过。
+运行时：TypeError: Cannot read properties of undefined (reading 'toUpperCase')
+启用 noUncheckedIndexedAccess 后：编译期提示 first 可能是 undefined。</div></figure>
+<p>调试时先辨认错误所在的层。<code>TS...</code> 诊断看类型、库声明和编译配置。<code>ERR_MODULE_NOT_FOUND</code> 看入口、依赖和文件后缀。<code>TypeError</code> 看真实数据与调用堆栈。若代码刚改过，先确认执行命令指向本次成功构建的产物。<code>node --enable-source-maps dist/main.js</code> 可以让堆栈定位到原始 TS 行。</p>
+</section>
+<section class="chapter" id="ch14"><header><div class="num">CHAPTER 21</div><h2>实战 · 一个任务命令行工具</h2><p class="lede">从空目录搭项目，把运行时校验、判别联合、异步文件读取和 ESM 接在一起。</p></header>
+<p>这个 CLI 从 JSON 文件读任务，接受 <code>count</code> 和 <code>echo</code> 两种命令。以下用 Node.js 24、npm 与 TypeScript 5.9。Windows PowerShell 可以直接使用下面的 <code>npm.cmd</code>，macOS/Linux 使用 <code>npm</code>。在自己选的练习位置执行，接下来把各代码框保存为标出的文件。</p>
+<figure class="sample"><figcaption>PowerShell · 初始化项目</figcaption><pre tabindex="0"><code>mkdir ts-task-lab
+cd ts-task-lab
+npm.cmd init -y
+npm.cmd install -D typescript@5.9.3 @types/node@24
+mkdir src</code></pre><div class="out"><strong>产物</strong>
+创建 package.json、package-lock.json、node_modules/ 与 src/。</div></figure>
+<p>在生成的 <code>package.json</code> 中保留 <code>devDependencies</code>，添加 <code>"type": "module"</code> 并更新 <code>scripts</code>。下面给出一个完整文件形状，也可直接替换。</p>
+<figure class="sample"><figcaption>package.json</figcaption><pre tabindex="0"><code>{
+  "name": "ts-task-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "tsc",
+    "start": "node --enable-source-maps dist/main.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "5.9.3"
+  }
+}</code></pre><div class="out"><strong>npm 脚本入口</strong>
+check → 类型检查    build → 生成 JS    start → 运行产物</div></figure>
+<p>如果替换了整个 <code>package.json</code>，运行一次 <code>npm.cmd install</code> 同步锁文件。这里把类型包作为开发依赖，因为执行产物时只用 Node 内置模块。</p>
+<figure class="sample"><figcaption>tsconfig.json</figcaption><pre tabindex="0"><code>{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}</code></pre><div class="out"><strong>路径映射</strong>
+src/main.ts → dist/main.js + dist/main.js.map
+src/task.ts → dist/task.js + dist/task.js.map</div></figure>
+<figure class="sample"><figcaption>src/task.ts</figcaption><pre tabindex="0"><code>export type Task =
+  | { kind: "count"; items: string[] }
+  | { kind: "echo"; text: string };
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) &amp;&amp;
+    value.every((item: unknown) =&gt; typeof item === "string");
+}
+
+export function parseTask(value: unknown): Task {
+  if (typeof value !== "object" || value === null || !("kind" in value)) {
+    throw new Error("expected a task object");
+  }
+
+  switch (value.kind) {
+    case "count":
+      if ("items" in value &amp;&amp; isStringArray(value.items)) {
+        return { kind: "count", items: value.items };
+      }
+      break;
+    case "echo":
+      if ("text" in value &amp;&amp; typeof value.text === "string") {
+        return { kind: "echo", text: value.text };
+      }
+      break;
+  }
+  throw new Error("invalid task fields");
+}
+
+function unreachable(task: never): never {
+  throw new Error(`Unexpected task: ${JSON.stringify(task)}`);
+}
+
+export function execute(task: Task): string {
+  switch (task.kind) {
+    case "count": return `count=${task.items.length}`;
+    case "echo": return `echo=${task.text}`;
+    default: return unreachable(task);
+  }
+}</code></pre><div class="out"><strong>输入 → 返回值 / 异常</strong>
+{"kind":"count","items":["a","b"]} → "count=2"
+{"kind":"echo","text":"hello"} → "echo=hello"
+{"kind":"count","items":[3]} → Error: invalid task fields</div></figure>
+<p><code>parseTask</code> 接收的是 JSON 解码后的值。JSON 数组没有 JavaScript 稀疏数组的空洞，所以这里用 <code>every</code> 检查每项。若把守卫复用于接受任意 JS 数组的公共接口，要考虑 <code>every</code> 会跳过空洞。<code>execute</code> 接收已经验证过的 <code>Task</code>，可以根据标签直接访问对应字段。</p>
+<figure class="sample"><figcaption>src/main.ts</figcaption><pre tabindex="0"><code>import { readFile } from "node:fs/promises";
+import { execute, parseTask, type Task } from "./task.js";
+
+async function main(): Promise&lt;void&gt; {
+  const path = process.argv[2];
+  if (path === undefined) {
+    throw new Error("usage: npm start -- task.json");
+  }
+
+  const text = await readFile(path, "utf8");
+  const raw: unknown = JSON.parse(text);
+  const task: Task = parseTask(raw);
+  console.log(execute(task));
+}
+
+main().catch((error: unknown) =&gt; {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exitCode = 1;
+});</code></pre><div class="out"><strong>行为</strong>
+成功：将结果写到 stdout，退出码 0。
+失败：将错误写到 stderr，退出码 1。</div></figure>
+<figure class="sample"><figcaption>task.json</figcaption><pre tabindex="0"><code>{"kind":"count","items":["read","write","test"]}</code></pre><div class="out"><strong>业务输出</strong>
+count=3</div></figure>
+<figure class="sample"><figcaption>bad-task.json</figcaption><pre tabindex="0"><code>{"kind":"count","items":[1]}</code></pre><div class="out"><strong>错误输出</strong>
+invalid task fields</div></figure>
+<figure class="sample"><figcaption>PowerShell · 检查、构建并运行</figcaption><pre tabindex="0"><code>npm.cmd run check
+npm.cmd run build
+node --enable-source-maps dist/main.js task.json
+node --enable-source-maps dist/main.js bad-task.json
+$LASTEXITCODE</code></pre><div class="out"><strong>关键输出（省略 npm 脚本回显）</strong>
+count=3
+invalid task fields
+1</div></figure>
+<p>也可以运行 <code>npm.cmd start -- task.json</code>。<code>--</code> 之后的参数传给脚本。相对文件路径按当前工作目录解析，示例命令在练习项目根目录执行。<code>process.argv[0]</code> 是 Node 可执行文件路径，<code>[1]</code> 是入口脚本路径，<code>[2]</code> 才是第一项业务参数。</p>
+<figure class="diagram"><div class="flow"><div class="step"><strong>main.ts</strong><small>参数 → readFile → JSON.parse</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>parseTask</strong><small>unknown → Task 或 Error</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>execute</strong><small>按 kind 收窄 → 字符串</small></div><span class="arrow" aria-hidden="true">→</span><div class="step"><strong>进程出口</strong><small>stdout 或 stderr + 退出码</small></div></div><figcaption>图 06 · 从启动到退出。<code>parseTask</code> 是不可信输入进入业务逻辑的边界。</figcaption></figure>
+<details><summary>练习一 · 给工具添加 join 任务</summary><p>新增 <code>{ kind: "join"; items: string[]; separator?: string }</code>。先只改 <code>Task</code>，再运行 <code>npm.cmd run check</code>，观察遗漏 <code>case</code> 时的诊断。接着在解析边界接受缺失的 <code>separator</code> 或字符串，并在执行分支调用 <code>task.items.join(task.separator ?? ",")</code>。输入 <code>{"kind":"join","items":["a","b"],"separator":""}</code> 应输出 <code>ab</code>。</p></details>
+<details><summary>练习二 · 跟踪三类失败</summary><p>运行时分别尝试省略路径、传入只含 <code>{</code> 的文件和传入 <code>bad-task.json</code>。前者在参数检查失败，中间在 <code>JSON.parse</code> 失败，最后一个在 <code>parseTask</code> 失败。三个错误都会走入口的 <code>.catch()</code>，可以逐个预测会执行到哪一行。</p></details>
+<details><summary>练习三 · 把编译诊断和模块加载错误分开</summary><p>把 <code>from "./task.js"</code> 临时改为 <code>from "./missing.js"</code>，运行类型检查会得到找不到模块的诊断。恢复并重新构建后，若暂时改名 <code>dist/task.js</code>，再运行 JS 就会得到 <code>ERR_MODULE_NOT_FOUND</code>。最后恢复文件名或重新构建。</p></details>
+<h3>下次打开一个陌生 TS 项目</h3>
+<ol class="checklist"><li>从 <code>package.json</code> 的 <code>scripts</code> 找实际入口，再看 <code>tsconfig.json</code> 的模块模式、检查设置与输出目录。</li><li>从入口跟到参数、文件或网络输入，标记值第一次被校验的位置。遇到 <code>as</code> 或 <code>!</code>，向前寻找约束成立的证据。</li><li>先读联合类型的标签与分支，再读各分支的字段。遇到泛型，代入一个具体调用值，把 <code>T</code>、<code>K</code> 等依次写下来。</li><li>每遇到 <code>await</code>、回调或 <code>yield</code>，记下操作何时启动、结果怎么传递、失败和取消由谁处理。</li><li>选一个具体输入，预测控制台输出和退出码，再运行验证。</li></ol>
+</section>
+<section class="chapter" id="refs"><header><div class="num">REFERENCE</div><h2>按主题查官方文档</h2></header><ul>
+<li>基础、类型擦除、编译诊断。<a href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html">TypeScript Handbook · The Basics</a></li>
+<li>控制流、判别联合、穷尽检查。<a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html">TypeScript Handbook · Narrowing</a></li>
+<li>泛型、映射类型、条件类型。<a href="https://www.typescriptlang.org/docs/handbook/2/types-from-types.html">TypeScript Handbook · Creating Types from Types</a></li>
+<li>ESM、CommonJS 与编译选项。<a href="https://www.typescriptlang.org/docs/handbook/modules/reference.html">TypeScript · Modules Reference</a></li>
+<li>Node 原生类型擦除及其限制。<a href="https://nodejs.org/api/typescript.html">Node.js · TypeScript</a></li>
+<li>调用栈、队列与 Promise 续段。<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">MDN · JavaScript execution model</a></li>
+</ul></section>
+<footer class="footer">TypeScript 从第一行开始 <a href="#top">回到顶部 ↑</a></footer>
+</main></div>
+<script>
+(() => {
+  const progress = document.querySelector("#progress");
+  const track = () => {
+    const distance = document.documentElement.scrollHeight - innerHeight;
+    progress.style.width = (distance > 0 ? Math.min(100, scrollY / distance * 100) : 0) + "%";
+  };
+  addEventListener("scroll", track, { passive: true });
+  addEventListener("resize", track);
+  document.addEventListener("toggle", track, true);
+  track();
+  document.querySelector("#print").addEventListener("click", () => window.print());
+
+  const links = new Map([...document.querySelectorAll(".toc a")].map(a => [a.hash.slice(1), a]));
+  let active = null;
+  const updateChapter = () => {
+    let current = null;
+    for (const section of document.querySelectorAll("main section[id]")) {
+      if (section.getBoundingClientRect().top > 135) break;
+      current = links.get(section.id);
+    }
+    if (current === active) return;
+    active?.removeAttribute("aria-current");
+    current?.setAttribute("aria-current", "location");
+    active = current;
+  };
+  addEventListener("scroll", updateChapter, { passive: true });
+  addEventListener("resize", updateChapter);
+  document.addEventListener("toggle", updateChapter, true);
+  updateChapter();
+
+  const eraseDemo = document.querySelector("#erase-demo");
+  const stageButtons = [...eraseDemo.querySelectorAll("button")];
+  const stageText = {
+    source: 'type Count = number;\nconst count: Count = 4;\nconsole.log(count * 2);',
+    emit: 'const count = 4;\nconsole.log(count * 2);',
+  };
+  for (const button of stageButtons) {
+    button.addEventListener("click", () => {
+      for (const item of stageButtons) item.setAttribute("aria-pressed", String(item === button));
+      eraseDemo.querySelector("output").textContent = stageText[button.dataset.stage];
+    });
+  }
+
+  const run = document.querySelector("#async-run");
+  const log = document.querySelector("#async-log");
+  run.addEventListener("click", () => {
+    run.disabled = true;
+    log.textContent = "A: sync start";
+    const write = line => { log.textContent += "\n" + line; };
+    setTimeout(() => {
+      write("D: timer");
+      run.disabled = false;
+    }, 0);
+    Promise.resolve().then(() => write("C: promise"));
+    write("B: sync end");
+  });
+
+  const tokenPattern = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\/\/[^\n]*|#[ \t][^\n]*)|\b(const|let|type|interface|class|readonly|function|async|await|return|throw|if|else|switch|case|default|for|of|in|import|export|from|new|extends|implements|satisfies|infer|unknown|never|number|string|boolean|undefined|null|true|false|def|print|None|True|False|try|catch)\b/g;
+  for (const sample of document.querySelectorAll(".sample")) {
+    const caption = sample.querySelector("figcaption");
+    const code = sample.querySelector("pre code");
+    const source = code.textContent;
+    const label = caption.textContent;
+    if (/^(TypeScript|Python|.*\.ts$|.*\.json$)/.test(label)) {
+      const fragment = document.createDocumentFragment();
+      let end = 0;
+      for (const match of source.matchAll(tokenPattern)) {
+        fragment.append(source.slice(end, match.index));
+        const span = document.createElement("span");
+        span.className = match[1] ? "literal" : match[2] ? "comment" : "token";
+        span.textContent = match[0];
+        fragment.append(span);
+        end = match.index + match[0].length;
+      }
+      fragment.append(source.slice(end));
+      code.replaceChildren(fragment);
+    }
+
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "copy";
+    copy.textContent = "复制";
+    copy.setAttribute("aria-label", "复制 " + label);
+    let reset;
+    copy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(source);
+        copy.textContent = "已复制";
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(code);
+        const selection = getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        copy.textContent = "已选中，请手动复制";
+      }
+      clearTimeout(reset);
+      reset = setTimeout(() => { copy.textContent = "复制"; }, 2300);
+    });
+    caption.append(copy);
+  }
+})();
+</script>
+</body>
+</html>

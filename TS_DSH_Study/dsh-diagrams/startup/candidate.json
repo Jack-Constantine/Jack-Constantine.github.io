@@ -1,0 +1,251 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "DSH 启动与插件挂载",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "output": "dsh-diagrams/startup/startup.html",
+    "repository": {
+      "url": "https://github.com/deepseek-ai/deepseek-harness.git",
+      "revision": "43f83f8c951f4df3f3af5b01e12d7afc8f73d9ef",
+      "link_mode": "local-only"
+    }
+  },
+  "lanes": [
+    {
+      "id": "launch",
+      "label": "命令与参数"
+    },
+    {
+      "id": "compose",
+      "label": "配置与运行时"
+    },
+    {
+      "id": "result",
+      "label": "其他出口",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "entry",
+      "lane": "launch",
+      "col": 0,
+      "type": "backend",
+      "label": "执行 dsh",
+      "sublabel": "tsx/esm 预加载",
+      "sources": [
+        {
+          "path": "package.json",
+          "line": 211,
+          "end_line": 216,
+          "label": "根脚本"
+        },
+        {
+          "path": "apps/cli/src/bin.ts",
+          "line": 76,
+          "end_line": 78,
+          "label": "直接入口保护"
+        }
+      ]
+    },
+    {
+      "id": "parse",
+      "lane": "launch",
+      "col": 1,
+      "type": "backend",
+      "label": "解析参数",
+      "sublabel": "选 mode 与 profile",
+      "sources": [
+        {
+          "path": "apps/cli/src/args.ts",
+          "line": 146,
+          "end_line": 177,
+          "label": "参数定义"
+        },
+        {
+          "path": "apps/cli/src/bin.ts",
+          "line": 26,
+          "end_line": 46,
+          "label": "CLI 分派"
+        }
+      ]
+    },
+    {
+      "id": "compose",
+      "lane": "compose",
+      "col": 2,
+      "type": "backend",
+      "label": "组合配置",
+      "sublabel": "按优先级收集 patch",
+      "sources": [
+        {
+          "path": "apps/cli/src/profile-boot.ts",
+          "line": 292,
+          "end_line": 310,
+          "label": "组合配置和进程信号"
+        },
+        {
+          "path": "packages/boot/app-boot/src/profile-context.ts",
+          "line": 74,
+          "end_line": 84,
+          "label": "覆盖顺序"
+        }
+      ]
+    },
+    {
+      "id": "prepare",
+      "lane": "compose",
+      "col": 3,
+      "type": "backend",
+      "label": "准备 Host",
+      "sublabel": "Loader、环境与 argv",
+      "sources": [
+        {
+          "path": "apps/cli/src/profile-boot.ts",
+          "line": 313,
+          "end_line": 345,
+          "label": "准备服务与就绪"
+        },
+        {
+          "path": "packages/boot/app-boot/src/index.ts",
+          "line": 1220,
+          "end_line": 1236,
+          "label": "Loader 与根 Include"
+        }
+      ]
+    },
+    {
+      "id": "mount",
+      "lane": "compose",
+      "col": 4,
+      "type": "backend",
+      "label": "挂载插件树",
+      "sublabel": "Include 与注入依赖",
+      "sources": [
+        {
+          "path": "packages/boot/app-boot/src/index.ts",
+          "line": 1220,
+          "end_line": 1236,
+          "label": "Loader 与根 Include"
+        },
+        {
+          "path": "packages/bundle/headless/cordis.patch.yml",
+          "line": 13,
+          "end_line": 23,
+          "label": "启动服务与 Runner"
+        }
+      ]
+    },
+    {
+      "id": "ready",
+      "lane": "compose",
+      "col": 5,
+      "type": "backend",
+      "label": "应用就绪",
+      "sublabel": "提交就绪信号",
+      "sources": [
+        {
+          "path": "apps/cli/src/profile-boot.ts",
+          "line": 313,
+          "end_line": 345,
+          "label": "准备服务与就绪"
+        }
+      ]
+    },
+    {
+      "id": "dump",
+      "lane": "result",
+      "col": 2,
+      "type": "backend",
+      "label": "输出组合配置",
+      "sublabel": "--dump-config 分支",
+      "sources": [
+        {
+          "path": "apps/cli/src/bin.ts",
+          "line": 56,
+          "end_line": 64,
+          "label": "打印配置分支"
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "lane": "result",
+      "col": 5,
+      "type": "backend",
+      "label": "报告启动失败",
+      "sublabel": "StartupError → 退出 1",
+      "sources": [
+        {
+          "path": "apps/cli/src/bin.ts",
+          "line": 42,
+          "end_line": 47,
+          "label": "StartupError 处理"
+        }
+      ]
+    }
+  ],
+  "mainPath": [
+    "entry",
+    "parse",
+    "compose",
+    "prepare",
+    "mount",
+    "ready"
+  ],
+  "edges": [
+    {
+      "id": "entry-to-parse",
+      "from": "entry",
+      "to": "parse",
+      "label": "读取 argv",
+      "variant": "emphasis"
+    },
+    {
+      "id": "parse-to-compose",
+      "from": "parse",
+      "to": "compose",
+      "label": "profile 分支",
+      "variant": "emphasis"
+    },
+    {
+      "id": "compose-to-prepare",
+      "from": "compose",
+      "to": "prepare",
+      "label": "传入配置",
+      "variant": "emphasis"
+    },
+    {
+      "id": "prepare-to-mount",
+      "from": "prepare",
+      "to": "mount",
+      "label": "挂根 Include",
+      "variant": "emphasis"
+    },
+    {
+      "id": "mount-to-ready",
+      "from": "mount",
+      "to": "ready",
+      "label": "挂载成功",
+      "variant": "emphasis"
+    },
+    {
+      "id": "parse-to-dump",
+      "from": "parse",
+      "to": "dump",
+      "label": "查看配置",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "mount-to-error",
+      "from": "mount",
+      "to": "error",
+      "label": "启动异常",
+      "variant": "security",
+      "role": "error"
+    }
+  ]
+}

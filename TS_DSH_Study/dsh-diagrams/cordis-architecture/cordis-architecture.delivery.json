@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "14827cd8-b2c4-401c-864f-9a9d3536ba69",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-architecture\\candidate.json",
+  "output": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-architecture\\cordis-architecture.html",
+  "specification": {
+    "sha256": "a88292daf11146aef0289ca03154cad9e98a6d3cecda34e1c8a16c64a3a2f272",
+    "bytes": 5929
+  },
+  "artifact": {
+    "sha256": "2ea9e9418b59026558f24eb20e091568e9e6c047a9b8f151bd551e1ec758175d",
+    "bytes": 838892
+  }
+}

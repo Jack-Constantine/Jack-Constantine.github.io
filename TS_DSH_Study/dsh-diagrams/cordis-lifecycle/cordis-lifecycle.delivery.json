@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "8e2c4a71-76fb-45b8-a24e-bb838fc464db",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\candidate.json",
+  "output": "C:\\Users\\Jack1\\Desktop\\公众号\\DSH_Typescript\\dsh-diagrams\\cordis-lifecycle\\cordis-lifecycle.html",
+  "specification": {
+    "sha256": "64e8498ff2b43129829b704d0e26f088378e82ac0e6eb40f3323c89345506faa",
+    "bytes": 5917
+  },
+  "artifact": {
+    "sha256": "849e761d171b2b8253314884ef89e616f6b58cac67313e28eabf8819c0f4fb1f",
+    "bytes": 838953
+  }
+}
